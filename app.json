@@ -2,7 +2,7 @@
   "expo": {
     "name": "restrofe",
     "slug": "restrofe",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "restrofe",
@@ -18,7 +18,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.restrofe.app"
+      "package": "com.restrofe.app",
+      "versionCode": 3
     },
     "web": {
       "output": "static",
