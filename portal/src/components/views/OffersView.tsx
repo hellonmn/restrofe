@@ -103,72 +103,69 @@ export const OffersView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16">
-      {/* Restrofe Stacked Discounts Explainer (Slide 02 & 07) */}
-      <div className="bg-gradient-to-r from-orange-600 via-[#FF5A1F] to-amber-600 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
-          <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/30 flex items-center gap-1">
-                <Sparkles size={12} /> Restrofe Killer Feature
-              </span>
-              <span className="text-xs font-bold text-orange-100">Pitch Deck Slide 07</span>
-            </div>
-            <h2 className="text-2xl font-black tracking-tight">
-              Stacked Offers: Restaurant Discount + Restrofe Coin Boost
+    <div className="space-y-6 pb-16">
+      {/* Top Banner: Clean White Card */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+              Promotions & Stacked Discounts
             </h2>
-            <p className="text-xs text-orange-100 leading-relaxed font-medium">
-              Unlike traditional apps where discounts hurt restaurant margins, Restrofe combines your in-store discount with platform Restrofe Coins. Diners get double value (e.g. 30% instant off + 20% bonus coins for repeat visits), driving 2.4x higher check size!
-            </p>
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-orange-50 text-[#FF5A1F] border border-orange-200 flex items-center gap-1">
+              <Sparkles size={11} /> High Conversion
+            </span>
           </div>
-
-          <button
-            onClick={openAddModal}
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black bg-white text-slate-900 hover:bg-slate-50 shadow-lg shadow-black/15 transition flex-shrink-0"
-          >
-            <Plus size={16} className="text-[#FF5A1F]" />
-            <span>Create New Promotion</span>
-          </button>
+          <p className="text-xs text-slate-500 max-w-xl">
+            Combine your restaurant bill discounts with Restrofe Coins to boost table check size and drive repeat diner loyalty.
+          </p>
         </div>
+
+        <button
+          onClick={openAddModal}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-sm transition flex-shrink-0"
+        >
+          <Plus size={15} />
+          <span>Create Promotion</span>
+        </button>
       </div>
 
       {/* Offers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {offers.map((offer) => (
           <div
             key={offer.id}
-            className={`bg-white rounded-3xl p-6 border transition-all flex flex-col justify-between ${
+            className={`bg-white rounded-2xl p-5 border transition-all flex flex-col justify-between ${
               offer.isActive
-                ? 'border-slate-200 shadow-xs hover:shadow-md'
-                : 'border-slate-200/60 opacity-60 bg-slate-50/60'
+                ? 'border-slate-200/80 shadow-2xs hover:shadow-xs'
+                : 'border-slate-200/60 opacity-60 bg-slate-50/50'
             }`}
           >
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               {/* Header row: Code & Badges */}
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 text-white font-mono font-black text-sm tracking-wider">
+                    <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-white font-mono font-bold text-xs tracking-wider">
                       {offer.code}
                     </span>
                     {offer.isStacked && (
-                      <span className="px-2.5 py-0.5 rounded-lg bg-orange-50 text-[#FF5A1F] border border-[#FF5A1F]/30 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
-                        <Layers size={11} /> STACKED (+{offer.coinBoostPercent}% Coins)
+                      <span className="px-2 py-0.5 rounded-md bg-orange-50 text-[#FF5A1F] border border-orange-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                        <Layers size={11} /> +{offer.coinBoostPercent}% Coins
                       </span>
                     )}
                   </div>
-                  <h4 className="font-extrabold text-slate-900 text-base pt-1">
+                  <h3 className="font-extrabold text-slate-900 text-sm pt-0.5">
                     {offer.title}
-                  </h4>
+                  </h3>
                 </div>
 
                 {/* Active switch */}
                 <button
                   onClick={() => toggleOfferActive(offer.id)}
-                  className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition ${
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition ${
                     offer.isActive
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
-                      : 'bg-slate-200 text-slate-600'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : 'bg-slate-100 text-slate-500'
                   }`}
                 >
                   {offer.isActive ? 'Active' : 'Paused'}
@@ -181,22 +178,22 @@ export const OffersView: React.FC = () => {
               </p>
 
               {/* Offer Details Strip */}
-              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+              <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-center">
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 block uppercase">Discount</span>
-                  <span className="text-sm font-black text-slate-800">
+                  <span className="text-xs font-black text-slate-800">
                     {offer.discountPercent}% OFF
                   </span>
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 block uppercase">Min Bill</span>
-                  <span className="text-sm font-black text-slate-800">
+                  <span className="text-xs font-black text-slate-800">
                     ₹{offer.minBill}
                   </span>
                 </div>
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 block uppercase">Max Cap</span>
-                  <span className="text-sm font-black text-slate-800">
+                  <span className="text-xs font-black text-slate-800">
                     {offer.maxDiscount ? `₹${offer.maxDiscount}` : 'No limit'}
                   </span>
                 </div>
@@ -204,7 +201,7 @@ export const OffersView: React.FC = () => {
             </div>
 
             {/* Footer Row */}
-            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
               <div className="flex items-center gap-1.5 text-slate-400 font-medium">
                 <Calendar size={13} />
                 <span>Valid till {offer.validUntil}</span>
@@ -217,13 +214,13 @@ export const OffersView: React.FC = () => {
                   onClick={() => openEditModal(offer)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition"
                 >
-                  <Edit2 size={15} />
+                  <Edit2 size={14} />
                 </button>
                 <button
                   onClick={() => deleteOffer(offer.id)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
                 >
-                  <Trash2 size={15} />
+                  <Trash2 size={14} />
                 </button>
               </div>
             </div>
@@ -233,11 +230,11 @@ export const OffersView: React.FC = () => {
 
       {/* Add / Edit Offer Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <h3 className="text-lg font-extrabold text-slate-900">
-                {editingOffer ? 'Edit Promotion' : 'Create Stacked Promotion'}
+              <h3 className="text-base font-extrabold text-slate-900">
+                {editingOffer ? 'Edit Promotion' : 'Create Promotion'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -247,7 +244,7 @@ export const OffersView: React.FC = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">Promo Code *</label>
@@ -257,7 +254,7 @@ export const OffersView: React.FC = () => {
                     value={formCode}
                     onChange={(e) => setFormCode(e.target.value.toUpperCase())}
                     placeholder="e.g. RESTRO30"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#FF5A1F]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#FF5A1F]"
                   />
                 </div>
 
@@ -266,7 +263,7 @@ export const OffersView: React.FC = () => {
                   <select
                     value={formType}
                     onChange={(e) => setFormType(e.target.value as OfferType)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
                   >
                     <option value="stacked">Stacked Discount (Store + Coins)</option>
                     <option value="bill_flat">Flat Check Off (₹100 on ₹1,000)</option>
@@ -284,7 +281,7 @@ export const OffersView: React.FC = () => {
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
                   placeholder="e.g. 30% Off Dine-In + 20% Coin Boost"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
                 />
               </div>
 
@@ -298,7 +295,7 @@ export const OffersView: React.FC = () => {
                     max="90"
                     value={formPercent}
                     onChange={(e) => setFormPercent(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
                   />
                 </div>
 
@@ -309,7 +306,7 @@ export const OffersView: React.FC = () => {
                     min="0"
                     value={formMinBill}
                     onChange={(e) => setFormMinBill(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
                   />
                 </div>
 
@@ -321,13 +318,13 @@ export const OffersView: React.FC = () => {
                     value={formMaxDiscount}
                     onChange={(e) => setFormMaxDiscount(e.target.value)}
                     placeholder="No limit"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
                   />
                 </div>
               </div>
 
               {/* Restrofe Coin Boost Stack */}
-              <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200 space-y-2">
+              <div className="p-3.5 rounded-xl bg-orange-50/60 border border-orange-200/70 space-y-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -341,7 +338,7 @@ export const OffersView: React.FC = () => {
                   </span>
                 </label>
                 {formIsStacked && (
-                  <div className="pt-2">
+                  <div className="pt-1.5">
                     <label className="block text-[11px] font-bold text-slate-600 mb-1">
                       Bonus Restrofe Coins on Bill Payment (%)
                     </label>
@@ -351,11 +348,8 @@ export const OffersView: React.FC = () => {
                       max="50"
                       value={formCoinBoost}
                       onChange={(e) => setFormCoinBoost(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-orange-200 bg-white text-xs font-bold text-[#FF5A1F] focus:outline-none"
+                      className="w-full px-3 py-1.5 rounded-lg border border-orange-200 bg-white text-xs font-bold text-[#FF5A1F] focus:outline-none"
                     />
-                    <p className="text-[10px] text-slate-500 mt-1">
-                      Platform awards coins back to customer wallet for their next dining visit!
-                    </p>
                   </div>
                 )}
               </div>
@@ -367,7 +361,7 @@ export const OffersView: React.FC = () => {
                   value={formValidUntil}
                   onChange={(e) => setFormValidUntil(e.target.value)}
                   placeholder="31 Dec 2026"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
                 />
               </div>
 
@@ -378,21 +372,21 @@ export const OffersView: React.FC = () => {
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
                   placeholder="Explain terms, valid times, or applicable food items..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-md shadow-[#FF5A1F]/30"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912]"
                 >
                   {editingOffer ? 'Save Changes' : 'Launch Promotion'}
                 </button>

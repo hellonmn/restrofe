@@ -1,41 +1,27 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-brand: #FF5A1F;
+  --color-brand-hover: #E44912;
+  --color-brand-50: #FFF5F0;
+  --color-brand-100: #FFEBE0;
+  --color-brand-200: #FFD4C2;
+  --color-brand-500: #FF5A1F;
+  --color-brand-600: #E44912;
+}
+
 :root {
-  --primary: #FF5A1F;
-  --primary-hover: #E44912;
-  --primary-light: #FFF2EC;
-  --primary-glow: rgba(255, 90, 31, 0.16);
-
-  --sidebar-bg: #0F1115;
-  --sidebar-hover: #1A1D24;
-  --sidebar-active: #242832;
-  --sidebar-border: #222631;
-
-  --bg-page: #F8F9FC;
-  --card-bg: #FFFFFF;
-  --card-border: #E8ECEF;
-
-  --text-main: #14171F;
-  --text-muted: #64748B;
-  --text-light: #94A3B8;
-
-  --success: #10B981;
-  --success-bg: #ECFDF5;
-  --warning: #F59E0B;
-  --warning-bg: #FFFBEB;
-  --danger: #EF4444;
-  --danger-bg: #FEF2F2;
-  --info: #3B82F6;
-  --info-bg: #EFF6FF;
-
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
-
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 4px 20px -2px rgba(20, 24, 38, 0.05), 0 2px 6px -1px rgba(20, 24, 38, 0.03);
-  --shadow-float: 0 20px 40px -8px rgba(20, 24, 38, 0.12), 0 8px 16px -4px rgba(20, 24, 38, 0.06);
+  --bg-page: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --border-subtle: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --brand: #FF5A1F;
 }
 
 * {
@@ -47,13 +33,13 @@
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--bg-page);
-  color: var(--text-main);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -69,60 +55,43 @@ body {
   background: #94A3B8;
 }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  transition: all 0.15s ease-in-out;
-}
-
-input, select, textarea {
-  font-family: inherit;
-}
-
-.mono {
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* Print layout for QR Standee */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #printable-standee, #printable-standee * {
-    visibility: visible;
-  }
-  #printable-standee {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white !important;
-    padding: 0;
-    margin: 0;
-  }
-  .no-print {
-    display: none !important;
-  }
-}
-
-/* Pulse animation */
+/* Pulse animation for live indicators */
 @keyframes softPulse {
   0%, 100% {
     transform: scale(1);
     opacity: 1;
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.15);
     opacity: 0.85;
   }
 }
 
 .pulse-dot {
-  animation: softPulse 2s infinite ease-in-out;
+  animation: softPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Print layout for QR Standee */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-standee, #printable-standee * {
+    visibility: visible !important;
+  }
+  #printable-standee {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) scale(1.1) !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
+    background: #fff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
 }

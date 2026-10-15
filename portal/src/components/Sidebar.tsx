@@ -27,97 +27,94 @@ export const Sidebar: React.FC = () => {
   const navItems: { id: NavTab; label: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'dashboard',
-      label: 'Live Dashboard',
-      icon: <LayoutDashboard size={19} />,
-      badge: 'Live',
+      label: 'Dashboard',
+      icon: <LayoutDashboard size={18} />,
     },
     {
       id: 'menu',
       label: 'Menu Catalog',
-      icon: <UtensilsCrossed size={19} />,
+      icon: <UtensilsCrossed size={18} />,
     },
     {
       id: 'offers',
-      label: 'Stacked Offers',
-      icon: <Tag size={19} />,
-      badge: '30%+20%',
+      label: 'Offers & Promos',
+      icon: <Tag size={18} />,
+      badge: 'Stacked',
     },
     {
       id: 'tables',
       label: 'Table QR Standees',
-      icon: <QrCode size={19} />,
+      icon: <QrCode size={18} />,
     },
     {
       id: 'analytics',
       label: 'Analytics & Reviews',
-      icon: <BarChart3 size={19} />,
+      icon: <BarChart3 size={18} />,
     },
     {
       id: 'settlement',
       label: '0% Settlements',
-      icon: <Landmark size={19} />,
+      icon: <Landmark size={18} />,
       badge: '0% Fee',
     },
     {
       id: 'account',
       label: 'Store & Compliance',
-      icon: <Building2 size={19} />,
+      icon: <Building2 size={18} />,
     },
   ];
 
   return (
-    <aside className="w-72 bg-[#0F1115] text-slate-300 flex flex-col h-screen border-r border-[#1F232D] select-none flex-shrink-0 sticky top-0 z-30">
-      {/* Brand Header */}
-      <div className="p-5 border-b border-[#1F232D]">
+    <aside className="w-64 bg-white text-slate-800 flex flex-col h-screen border-r border-slate-200/80 flex-shrink-0 sticky top-0 z-30 select-none">
+      {/* Brand & Restaurant Profile */}
+      <div className="p-5 border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FF5A1F] to-[#FF8A50] flex items-center justify-center shadow-lg shadow-[#FF5A1F]/30 text-white font-black text-xl">
+          <div className="w-9 h-9 rounded-xl bg-[#FF5A1F] flex items-center justify-center text-white font-extrabold text-lg shadow-sm">
             R
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-white text-lg tracking-tight">Restrofe</span>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded bg-[#FF5A1F]/20 text-[#FF5A1F] border border-[#FF5A1F]/30">
+              <span className="font-extrabold text-slate-900 text-base tracking-tight">Restrofe</span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-50 text-[#FF5A1F] border border-orange-200">
                 PORTAL
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium truncate max-w-[170px]">
+            <p className="text-[11px] text-slate-400 font-medium truncate max-w-[140px]">
               {profile.name}
             </p>
           </div>
         </div>
 
-        {/* Live Status Selector */}
-        <div className="mt-4 p-2.5 rounded-xl bg-[#171A21] border border-[#242A36] flex items-center justify-between">
+        {/* Live Status Pill & Quick Toggle */}
+        <div className="mt-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span
-              className={`w-2.5 h-2.5 rounded-full ${
+              className={`w-2 h-2 rounded-full ${
                 storeStatus === 'open'
-                  ? 'bg-emerald-500 shadow-md shadow-emerald-500/50 pulse-dot'
+                  ? 'bg-emerald-500 pulse-dot'
                   : storeStatus === 'busy'
                   ? 'bg-amber-500'
                   : 'bg-rose-500'
               }`}
             />
-            <span className="text-xs font-semibold text-white capitalize">
-              {storeStatus === 'open' ? 'Accepting Diners' : storeStatus === 'busy' ? 'High Rush Hour' : 'Store Closed'}
+            <span className="text-xs font-semibold text-slate-700 capitalize">
+              {storeStatus === 'open' ? 'Open for Orders' : storeStatus === 'busy' ? 'Busy / Rush' : 'Store Closed'}
             </span>
           </div>
 
-          <div className="flex gap-1">
-            <button
-              onClick={() => setStoreStatus(storeStatus === 'open' ? 'busy' : storeStatus === 'busy' ? 'closed' : 'open')}
-              className="text-[11px] font-bold text-slate-400 hover:text-white px-2 py-1 rounded bg-[#202530] hover:bg-[#2A3140] transition"
-            >
-              Toggle
-            </button>
-          </div>
+          <button
+            onClick={() => setStoreStatus(storeStatus === 'open' ? 'busy' : storeStatus === 'busy' ? 'closed' : 'open')}
+            className="text-[11px] font-bold text-slate-500 hover:text-slate-900 px-2 py-0.5 rounded bg-white border border-slate-200 shadow-2xs hover:bg-slate-50 transition"
+          >
+            Change
+          </button>
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-        <div className="px-3 pb-2 text-[10px] font-bold tracking-wider uppercase text-slate-500">
-          Management
+      {/* Navigation List */}
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div className="px-3 pb-2 text-[11px] font-bold tracking-wider uppercase text-slate-400">
+          Main Menu
         </div>
 
         {navItems.map((item) => {
@@ -126,24 +123,24 @@ export const Sidebar: React.FC = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all group ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 isActive
-                  ? 'bg-[#FF5A1F] text-white shadow-lg shadow-[#FF5A1F]/25 font-bold'
-                  : 'text-slate-400 hover:text-white hover:bg-[#1A1D24]'
+                  ? 'bg-[#FF5A1F] text-white shadow-sm font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className={isActive ? 'text-white' : 'text-slate-400 group-hover:text-white'}>
+                <span className={isActive ? 'text-white' : 'text-slate-400'}>
                   {item.icon}
                 </span>
                 <span>{item.label}</span>
               </div>
               {item.badge && (
                 <span
-                  className={`text-[10px] font-black px-1.5 py-0.5 rounded-md ${
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
                     isActive
-                      ? 'bg-black/30 text-white'
-                      : 'bg-[#FF5A1F]/20 text-[#FF5A1F] border border-[#FF5A1F]/30'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-slate-100 text-slate-500'
                   }`}
                 >
                   {item.badge}
@@ -153,46 +150,42 @@ export const Sidebar: React.FC = () => {
           );
         })}
 
-        {/* Quick Simulator & Actions */}
-        <div className="pt-5 px-3 pb-2 text-[10px] font-bold tracking-wider uppercase text-slate-500">
+        {/* Partner Actions */}
+        <div className="pt-5 px-3 pb-2 text-[11px] font-bold tracking-wider uppercase text-slate-400">
           Partner Tools
         </div>
 
         <button
           onClick={triggerLiveVisit}
-          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-emerald-400 bg-emerald-950/30 border border-emerald-900/50 hover:bg-emerald-900/40 transition"
+          className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition"
         >
-          <Zap size={16} className="text-emerald-400" />
-          <span>Simulate Table Visit</span>
+          <Zap size={15} className="text-[#FF5A1F]" />
+          <span>Simulate Table Scan</span>
         </button>
 
         <button
           onClick={resetAllData}
-          className="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-[#1A1D24] transition mt-1"
+          className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition"
         >
           <RotateCcw size={14} />
-          <span>Reset Demo Data</span>
+          <span>Reset Demo Catalog</span>
         </button>
-      </div>
+      </nav>
 
-      {/* Subscription Banner (Pitch deck Slide 08 & 10) */}
-      <div className="p-4 m-3 rounded-2xl bg-gradient-to-br from-[#1C1F28] to-[#14161D] border border-[#2B313E] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-[#FF5A1F]/10 rounded-full blur-xl -mr-6 -mt-6 pointer-events-none" />
-        <div className="flex items-center gap-2 mb-1.5">
-          <Sparkles size={14} className="text-[#FF5A1F]" />
-          <span className="text-xs font-black text-white uppercase tracking-wider">
-            1-Month Free Trial
+      {/* Trial / 0% Commission Badge */}
+      <div className="p-4 m-3 rounded-2xl bg-gradient-to-br from-orange-50/80 via-white to-amber-50/60 border border-orange-200/80 shadow-2xs">
+        <div className="flex items-center gap-1.5 mb-1">
+          <Sparkles size={13} className="text-[#FF5A1F]" />
+          <span className="text-xs font-extrabold text-slate-900">
+            0% Commission Model
           </span>
         </div>
-        <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
-          <span className="text-emerald-400 font-bold">0% commission</span> forever on all table orders. 24 days remaining.
+        <p className="text-[11px] text-slate-500 leading-snug">
+          Direct customer-to-bank settlements with zero platform cut.
         </p>
-        <div className="w-full bg-[#272D3B] h-1.5 rounded-full overflow-hidden">
-          <div className="bg-[#FF5A1F] h-full w-[20%]" />
-        </div>
-        <div className="flex justify-between items-center mt-2 text-[10px] text-slate-400">
-          <span>Day 6 / 30</span>
-          <span className="text-[#FF5A1F] font-bold">Free Forever</span>
+        <div className="mt-2.5 pt-2 border-t border-orange-200/60 flex items-center justify-between text-[10px] text-slate-600 font-semibold">
+          <span>Free Forever</span>
+          <span className="text-[#FF5A1F] font-bold">24 Days Trial Left</span>
         </div>
       </div>
     </aside>

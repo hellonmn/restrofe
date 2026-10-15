@@ -3,7 +3,6 @@ import {
   Printer,
   Plus,
   Users,
-  Sparkles,
   X,
   CreditCard,
 } from 'lucide-react';
@@ -55,33 +54,30 @@ export const TablesView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16">
-      {/* Banner */}
-      <div className="bg-slate-900 rounded-3xl p-6 text-white border border-slate-800 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="space-y-2 max-w-2xl">
+    <div className="space-y-6 pb-16">
+      {/* Clean Header Bar */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-orange-500/20 text-[#FF5A1F] border border-orange-500/30 flex items-center gap-1">
-              <Sparkles size={12} /> Contactless Table QR & UPI
+            <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+              Table QR Standees & Direct UPI Routing
+            </h2>
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              {tables.length} Tables Active
             </span>
-            <span className="text-xs font-semibold text-slate-400">Direct Merchant Routing</span>
           </div>
-          <h2 className="text-2xl font-black tracking-tight">
-            Print Acrylic Standees for All {tables.length} Tables
-          </h2>
-          <p className="text-xs text-slate-300 leading-relaxed font-medium">
-            Each standee embeds the table number and your direct UPI VPA (<code className="text-[#FF5A1F] font-bold">{profile.upiVpa}</code>). When guests scan, they view your digital menu, order, and pay directly into your bank without staff delays.
+          <p className="text-xs text-slate-500 max-w-xl">
+            Each table has a dedicated QR code mapped to your store's merchant UPI (<strong className="text-slate-800">{profile.upiVpa}</strong>). Diners scan to view your live menu and pay instantly.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-md shadow-[#FF5A1F]/30 transition"
-          >
-            <Plus size={16} />
-            <span>Add New Table</span>
-          </button>
-        </div>
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-sm transition flex-shrink-0"
+        >
+          <Plus size={15} />
+          <span>Add New Table</span>
+        </button>
       </div>
 
       {/* Section Filter Pills */}
@@ -90,9 +86,9 @@ export const TablesView: React.FC = () => {
           <button
             key={sec}
             onClick={() => setFilterSection(sec)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
               filterSection === sec
-                ? 'bg-slate-900 text-white shadow-xs'
+                ? 'bg-slate-900 text-white shadow-2xs'
                 : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
             }`}
           >
@@ -102,31 +98,31 @@ export const TablesView: React.FC = () => {
       </div>
 
       {/* Tables Card Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredTables.map((table) => (
           <div
             key={table.tableNumber}
-            className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs hover:shadow-md transition flex flex-col justify-between"
+            className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition flex flex-col justify-between"
           >
             <div>
               {/* Header */}
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xl font-black text-slate-900">
+                    <span className="text-base font-extrabold text-slate-900">
                       Table {table.tableNumber}
                     </span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 flex items-center gap-1">
-                      <Users size={12} /> {table.capacity} Seater
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 flex items-center gap-1">
+                      <Users size={11} /> {table.capacity}p
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-slate-400 mt-1 block">
+                  <span className="text-[11px] font-medium text-slate-400 mt-0.5 block">
                     {table.section}
                   </span>
                 </div>
 
                 <span
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                     table.status === 'vacant'
                       ? 'bg-slate-100 text-slate-600'
                       : table.status === 'seated'
@@ -141,24 +137,24 @@ export const TablesView: React.FC = () => {
               </div>
 
               {/* Status & Bill Details */}
-              <div className="mt-4 p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="mt-3.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400 font-medium">Occupancy:</span>
-                  <span className="font-bold text-slate-800">
-                    {table.status === 'vacant' ? 'Empty Table' : `${table.activeGuests || 2} Diners Dining`}
+                  <span className="font-semibold text-slate-700">
+                    {table.status === 'vacant' ? 'Empty' : `${table.activeGuests || 2} Guests`}
                   </span>
                 </div>
                 {table.status !== 'vacant' && (
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-medium">Running Check:</span>
-                    <span className="font-extrabold text-[#FF5A1F]">
+                    <span className="text-slate-400 font-medium">Running Bill:</span>
+                    <span className="font-bold text-[#FF5A1F]">
                       ₹{table.currentBill || 0}
                     </span>
                   </div>
                 )}
-                <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-200/50">
+                <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-200/60">
                   <span className="text-slate-400 font-medium">UPI VPA:</span>
-                  <span className="font-mono text-slate-600 font-semibold truncate max-w-[130px]">
+                  <span className="font-mono text-slate-600 font-semibold truncate max-w-[120px]">
                     {table.upiVpa}
                   </span>
                 </div>
@@ -166,12 +162,12 @@ export const TablesView: React.FC = () => {
             </div>
 
             {/* Standee Preview & Actions */}
-            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
               <button
                 onClick={() => setSelectedStandeeTable(table)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold transition shadow-xs"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold transition shadow-2xs"
               >
-                <Printer size={14} />
+                <Printer size={13} />
                 <span>Print Standee</span>
               </button>
 
@@ -181,9 +177,9 @@ export const TablesView: React.FC = () => {
                   setCustomUPI(table.upiVpa);
                 }}
                 title="Edit Table UPI"
-                className="p-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition"
+                className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition"
               >
-                <CreditCard size={15} />
+                <CreditCard size={14} />
               </button>
             </div>
           </div>
@@ -192,10 +188,10 @@ export const TablesView: React.FC = () => {
 
       {/* Add Table Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <h3 className="text-base font-extrabold text-slate-900">Add Table to Floor</h3>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100">
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+              <h3 className="text-base font-extrabold text-slate-900">Add Table</h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
                 className="p-1 rounded-lg text-slate-400 hover:text-slate-700"
@@ -210,7 +206,7 @@ export const TablesView: React.FC = () => {
                 <select
                   value={newSection}
                   onChange={(e) => setNewSection(e.target.value as TableSection)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
                 >
                   <option value="Indoor Main">Indoor Main</option>
                   <option value="Patio Garden">Patio Garden</option>
@@ -224,16 +220,16 @@ export const TablesView: React.FC = () => {
                 <select
                   value={newCapacity}
                   onChange={(e) => setNewCapacity(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
                 >
-                  <option value="2">2 Seater (Couple / High Table)</option>
-                  <option value="4">4 Seater (Standard Dining)</option>
-                  <option value="6">6 Seater (Family Booth)</option>
-                  <option value="8">8 Seater (Large Banquet)</option>
+                  <option value="2">2 Seater</option>
+                  <option value="4">4 Seater</option>
+                  <option value="6">6 Seater</option>
+                  <option value="8">8 Seater</option>
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
@@ -255,9 +251,9 @@ export const TablesView: React.FC = () => {
 
       {/* Edit Table UPI Modal */}
       {editingTableUPI && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100">
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
               <h3 className="text-base font-extrabold text-slate-900">
                 Map UPI for Table {editingTableUPI.tableNumber}
               </h3>
@@ -278,14 +274,11 @@ export const TablesView: React.FC = () => {
                   value={customUPI}
                   onChange={(e) => setCustomUPI(e.target.value)}
                   placeholder="e.g. burgerhouse@hdfcbank"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
                 />
-                <p className="text-[10px] text-slate-400 mt-1">
-                  All dine-in payments made by scanning this table's QR will settle instantly into this VPA.
-                </p>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setEditingTableUPI(null)}

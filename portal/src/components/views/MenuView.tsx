@@ -118,7 +118,7 @@ export const MenuView: React.FC = () => {
   return (
     <div className="space-y-6 pb-16">
       {/* Top Filter and Controls Bar */}
-      <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         {/* Search Input */}
         <div className="relative flex-1 max-w-md">
           <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -191,8 +191,8 @@ export const MenuView: React.FC = () => {
         {filteredItems.map((item) => (
           <div
             key={item.id}
-            className={`bg-white rounded-3xl border transition-all overflow-hidden flex flex-col justify-between ${
-              item.inStock ? 'border-slate-200 shadow-xs hover:shadow-md' : 'border-slate-200/60 opacity-75 bg-slate-50/50'
+            className={`bg-white rounded-2xl border transition-all overflow-hidden flex flex-col justify-between ${
+              item.inStock ? 'border-slate-200/80 shadow-2xs hover:shadow-xs' : 'border-slate-200/60 opacity-75 bg-slate-50/50'
             }`}
           >
             <div>
@@ -325,8 +325,8 @@ export const MenuView: React.FC = () => {
 
       {/* Add / Edit Dish Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <h3 className="text-lg font-extrabold text-slate-900">
                 {editingItem ? 'Edit Menu Dish' : 'Add New Dish to Catalog'}

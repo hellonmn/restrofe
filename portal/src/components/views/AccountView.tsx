@@ -49,17 +49,17 @@ export const AccountView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header Info */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#FF5A1F] to-[#FF8A50] text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-[#FF5A1F]/30">
+          <div className="w-14 h-14 rounded-2xl bg-[#FF5A1F] text-white flex items-center justify-center font-black text-xl shadow-sm">
             {profile.name.charAt(0)}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-black text-slate-900 tracking-tight">{profile.name}</h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+              <h2 className="text-lg font-black text-slate-900 tracking-tight">{profile.name}</h2>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                 <CheckCircle2 size={11} /> FSSAI Verified
               </span>
             </div>
@@ -69,16 +69,16 @@ export const AccountView: React.FC = () => {
 
         <button
           onClick={handleSubmit}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-md shadow-[#FF5A1F]/20 transition"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-sm transition"
         >
-          <Save size={15} />
+          <Save size={14} />
           <span>Save Profile Changes</span>
         </button>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Basic Store Info */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
           <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
             <Building2 size={16} className="text-[#FF5A1F]" />
             Restaurant Store Profile
@@ -161,7 +161,7 @@ export const AccountView: React.FC = () => {
         {/* Regulatory & Bank Details */}
         <div className="space-y-6">
           {/* Statutory */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
+          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <ShieldCheck size={16} className="text-emerald-600" />
               Statutory & FSSAI Compliance
@@ -190,7 +190,7 @@ export const AccountView: React.FC = () => {
           </div>
 
           {/* Direct Settlement Details */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
+          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <CreditCard size={16} className="text-[#FF5A1F]" />
               Direct Settlement Bank Account
