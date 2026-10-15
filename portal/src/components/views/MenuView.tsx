@@ -116,35 +116,97 @@ export const MenuView: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 pb-16">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '48px' }}>
       {/* Top Filter and Controls Bar */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '16px',
+          padding: '16px 20px',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
         {/* Search Input */}
-        <div className="relative flex-1 max-w-md">
-          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+        <div style={{ position: 'relative', flex: 1, minWidth: '280px', maxWidth: '440px' }}>
+          <Search
+            size={17}
+            color="#94A3B8"
+            style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }}
+          />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search dish by name, ingredients, or tags..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold placeholder:text-slate-400 focus:outline-none focus:border-[#FF5A1F] focus:ring-1 focus:ring-[#FF5A1F]"
+            style={{
+              width: '100%',
+              padding: '10px 14px 10px 40px',
+              borderRadius: '12px',
+              border: '1px solid #E2E8F0',
+              fontSize: '12.5px',
+              fontWeight: 500,
+              color: '#0F172A',
+              backgroundColor: '#F8FAFC',
+              outline: 'none',
+              transition: 'border-color 0.15s ease',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = '#FF5A1F';
+              e.currentTarget.style.backgroundColor = '#FFFFFF';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = '#E2E8F0';
+              e.currentTarget.style.backgroundColor = '#F8FAFC';
+            }}
           />
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Action Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {/* Veg Only Toggle */}
           <button
             onClick={() => setVegOnly(!vegOnly)}
-            className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold border transition ${
-              vegOnly
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-            }`}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '9px 14px',
+              borderRadius: '12px',
+              fontSize: '12px',
+              fontWeight: 700,
+              border: `1px solid ${vegOnly ? '#86EFAC' : '#E2E8F0'}`,
+              backgroundColor: vegOnly ? '#F0FDF4' : '#FFFFFF',
+              color: vegOnly ? '#15803D' : '#64748B',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <span className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center ${
-              vegOnly ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-emerald-600'
-            }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${vegOnly ? 'bg-white' : 'bg-emerald-600'}`} />
+            <span
+              style={{
+                width: '14px',
+                height: '14px',
+                borderRadius: '4px',
+                border: '1.5px solid #16A34A',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: vegOnly ? '#16A34A' : '#FFFFFF',
+              }}
+            >
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '9999px',
+                  backgroundColor: vegOnly ? '#FFFFFF' : '#16A34A',
+                }}
+              />
             </span>
             <span>Pure Veg Only</span>
           </button>
@@ -152,16 +214,32 @@ export const MenuView: React.FC = () => {
           {/* Add Dish Button */}
           <button
             onClick={openAddModal}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-md shadow-[#FF5A1F]/20 transition"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '9px 18px',
+              borderRadius: '12px',
+              fontSize: '12.5px',
+              fontWeight: 700,
+              backgroundColor: '#FF5A1F',
+              color: '#FFFFFF',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(255, 90, 31, 0.25)',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E44912')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5A1F')}
           >
-            <Plus size={16} />
+            <Plus size={16} strokeWidth={2.5} />
             <span>Add New Dish</span>
           </button>
         </div>
       </div>
 
-      {/* Category Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+      {/* Category Filter Pills */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
         {CATEGORIES.map((cat) => {
           const count = cat === 'All' ? menuItems.length : menuItems.filter((m) => m.category === cat).length;
           const isActive = activeCategory === cat;
@@ -169,16 +247,33 @@ export const MenuView: React.FC = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 ${
-                isActive
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: isActive ? 700 : 600,
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: `1px solid ${isActive ? '#FFD8C7' : '#E2E8F0'}`,
+                backgroundColor: isActive ? '#FFF4EE' : '#FFFFFF',
+                color: isActive ? '#FF5A1F' : '#64748B',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
             >
               <span>{cat}</span>
-              <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
-              }`}>
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  padding: '1px 6px',
+                  borderRadius: '9999px',
+                  backgroundColor: isActive ? '#FFD8C7' : '#F1F5F9',
+                  color: isActive ? '#C2410C' : '#64748B',
+                }}
+              >
                 {count}
               </span>
             </button>
@@ -187,82 +282,147 @@ export const MenuView: React.FC = () => {
       </div>
 
       {/* Menu Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
         {filteredItems.map((item) => (
           <div
             key={item.id}
-            className={`bg-white rounded-2xl border transition-all overflow-hidden flex flex-col justify-between ${
-              item.inStock ? 'border-slate-200/80 shadow-2xs hover:shadow-xs' : 'border-slate-200/60 opacity-75 bg-slate-50/50'
-            }`}
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8F0',
+              overflow: 'hidden',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              opacity: item.inStock ? 1 : 0.75,
+              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+            }}
           >
             <div>
               {/* Image & Quick Badges */}
-              <div className="h-44 relative bg-slate-100 overflow-hidden">
+              <div style={{ height: '175px', position: 'relative', backgroundColor: '#F1F5F9', overflow: 'hidden' }}>
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-full object-cover"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 100%)',
+                  }}
+                />
 
                 {/* Veg / Non-veg indicator */}
-                <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs p-1.5 rounded-lg shadow-sm">
-                  <div className={`w-3.5 h-3.5 border flex items-center justify-center ${
-                    item.isVeg ? 'border-emerald-600' : 'border-rose-600'
-                  }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${
-                      item.isVeg ? 'bg-emerald-600' : 'bg-rose-600'
-                    }`} />
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    left: '12px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    padding: '5px',
+                    borderRadius: '8px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '14px',
+                      height: '14px',
+                      border: `1.5px solid ${item.isVeg ? '#16A34A' : '#DC2626'}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '9999px',
+                        backgroundColor: item.isVeg ? '#16A34A' : '#DC2626',
+                      }}
+                    />
                   </div>
                 </div>
 
-                {/* Stock Badge */}
-                <div className="absolute top-3 right-3">
+                {/* Stock Toggle Badge */}
+                <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
                   <button
                     onClick={() => toggleStock(item.id)}
-                    className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-sm transition ${
-                      item.inStock
-                        ? 'bg-emerald-500/90 text-white hover:bg-emerald-600'
-                        : 'bg-rose-600/90 text-white hover:bg-rose-700'
-                    }`}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: '9999px',
+                      fontSize: '10px',
+                      fontWeight: 800,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: item.inStock ? '#10B981' : '#EF4444',
+                      color: '#FFFFFF',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
+                    }}
                   >
                     {item.inStock ? 'In Stock' : 'Sold Out'}
                   </button>
                 </div>
 
                 {/* Category & Prep Time */}
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[11px] font-semibold">
-                  <span className="px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-xs">
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '12px',
+                    left: '12px',
+                    right: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    color: '#FFFFFF',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                  }}
+                >
+                  <span style={{ padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
                     {item.category}
                   </span>
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-xs">
-                    <Clock size={12} /> {item.prepTimeMinutes} mins prep
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
+                    <Clock size={12} /> {item.prepTimeMinutes} mins
                   </span>
                 </div>
               </div>
 
               {/* Details */}
-              <div className="p-5 space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <h4 className="font-extrabold text-slate-900 text-base leading-tight">
+              <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0, lineHeight: 1.2 }}>
                     {item.name}
                   </h4>
-                  <div className="flex items-center gap-1 text-amber-500 text-xs font-black flex-shrink-0">
-                    <Star size={13} fill="currentColor" />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#F59E0B', fontSize: '12px', fontWeight: 800, flexShrink: 0 }}>
+                    <Star size={13} fill="#F59E0B" />
                     <span>{item.rating}</span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                <p style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                   {item.description}
                 </p>
 
                 {item.tags && item.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', paddingTop: '4px' }}>
                     {item.tags.map((t) => (
                       <span
                         key={t}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600"
+                        style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          padding: '2px 8px',
+                          borderRadius: '6px',
+                          backgroundColor: '#F1F5F9',
+                          color: '#475569',
+                        }}
                       >
                         {t}
                       </span>
@@ -273,32 +433,72 @@ export const MenuView: React.FC = () => {
             </div>
 
             {/* Price & Action Row */}
-            <div className="px-5 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between">
-              <div className="flex items-baseline gap-2">
-                <span className="text-lg font-black text-slate-900">
+            <div
+              style={{
+                padding: '14px 20px',
+                borderTop: '1px solid #F1F5F9',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#0F172A' }}>
                   ₹{item.discountedPrice || item.price}
                 </span>
                 {item.discountedPrice && (
-                  <span className="text-xs text-slate-400 line-through font-semibold">
+                  <span style={{ fontSize: '12px', color: '#94A3B8', textDecoration: 'line-through', fontWeight: 600 }}>
                     ₹{item.price}
                   </span>
                 )}
               </div>
 
-              <div className="flex items-center gap-1.5">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <button
                   onClick={() => openEditModal(item)}
                   title="Edit Dish"
-                  className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+                  style={{
+                    padding: '8px',
+                    borderRadius: '10px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    color: '#64748B',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F8FAFC';
+                    e.currentTarget.style.color = '#0F172A';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#64748B';
+                  }}
                 >
-                  <Edit2 size={15} />
+                  <Edit2 size={14} />
                 </button>
                 <button
                   onClick={() => deleteMenuItem(item.id)}
                   title="Delete Dish"
-                  className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                  style={{
+                    padding: '8px',
+                    borderRadius: '10px',
+                    border: '1px solid #FEE2E2',
+                    backgroundColor: '#FEF2F2',
+                    color: '#EF4444',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FEE2E2')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FEF2F2')}
                 >
-                  <Trash2 size={15} />
+                  <Trash2 size={14} />
                 </button>
               </div>
             </div>
@@ -306,59 +506,85 @@ export const MenuView: React.FC = () => {
         ))}
       </div>
 
-      {filteredItems.length === 0 && (
-        <div className="bg-white rounded-3xl p-12 text-center border border-slate-200">
-          <p className="text-sm font-bold text-slate-700">No dishes match your filter</p>
-          <p className="text-xs text-slate-400 mt-1">Try resetting the category or search keywords</p>
-          <button
-            onClick={() => {
-              setActiveCategory('All');
-              setSearchQuery('');
-              setVegOnly(false);
-            }}
-            className="mt-4 px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white"
-          >
-            Clear Filters
-          </button>
-        </div>
-      )}
-
-      {/* Add / Edit Dish Modal */}
+      {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <h3 className="text-lg font-extrabold text-slate-900">
-                {editingItem ? 'Edit Menu Dish' : 'Add New Dish to Catalog'}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            backdropFilter: 'blur(3px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+            padding: '16px',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '20px',
+              maxWidth: '520px',
+              width: '100%',
+              padding: '24px 28px',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+              border: '1px solid #E2E8F0',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                {editingItem ? 'Edit Dish' : 'Add New Dish to Catalog'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '4px' }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Dish Name *</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Dish Name *
+                </label>
                 <input
                   type="text"
                   required
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  placeholder="e.g. Smashed Double Truffle Cheeseburger"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  placeholder="e.g. Classic Smash Cheeseburger"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    outline: 'none',
+                  }}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Category</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Category
+                  </label>
                   <select
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                      backgroundColor: '#FFFFFF',
+                    }}
                   >
                     {CATEGORIES.filter((c) => c !== 'All').map((c) => (
                       <option key={c} value={c}>{c}</option>
@@ -367,103 +593,137 @@ export const MenuView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Prep Time (mins)</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Prep Time (mins)
+                  </label>
                   <input
                     type="number"
-                    min="1"
                     value={formPrepTime}
                     onChange={(e) => setFormPrepTime(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="15"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                    }}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Regular Price (₹) *</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Base Price (₹) *
+                  </label>
                   <input
                     type="number"
                     required
-                    min="1"
                     value={formPrice}
                     onChange={(e) => setFormPrice(e.target.value)}
-                    placeholder="e.g. 399"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="299"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                    }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Dine-In Offer Price (₹)</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Discounted Price (₹)
+                  </label>
                   <input
                     type="number"
-                    min="1"
                     value={formDiscountPrice}
                     onChange={(e) => setFormDiscountPrice(e.target.value)}
-                    placeholder="e.g. 349 (Optional)"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="Optional"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                    }}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Dietary Type</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="dietary"
-                      checked={formIsVeg}
-                      onChange={() => setFormIsVeg(true)}
-                    />
-                    <span>Pure Vegetarian (Green)</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="dietary"
-                      checked={!formIsVeg}
-                      onChange={() => setFormIsVeg(false)}
-                    />
-                    <span>Non-Vegetarian (Red)</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Image URL</label>
-                <input
-                  type="url"
-                  value={formImage}
-                  onChange={(e) => setFormImage(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Description & Ingredients</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Description
+                </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
-                  placeholder="Highlight key ingredients, sauces, and house specialties..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  placeholder="Ingredients, spice level, pairing notes..."
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '12.5px',
+                    outline: 'none',
+                    resize: 'none',
+                  }}
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '10px', backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#1E293B' }}>
+                  Pure Vegetarian Dish
+                </span>
+                <input
+                  type="checkbox"
+                  checked={formIsVeg}
+                  onChange={(e) => setFormIsVeg(e.target.checked)}
+                  style={{ width: '16px', height: '16px', accentColor: '#16A34A', cursor: 'pointer' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
+                  style={{
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    color: '#64748B',
+                    cursor: 'pointer',
+                  }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-md shadow-[#FF5A1F]/30"
+                  style={{
+                    padding: '10px 22px',
+                    borderRadius: '10px',
+                    backgroundColor: '#FF5A1F',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    fontSize: '12.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 6px rgba(255, 90, 31, 0.25)',
+                  }}
                 >
-                  {editingItem ? 'Save Changes' : 'Publish Dish'}
+                  {editingItem ? 'Update Dish' : 'Add Dish'}
                 </button>
               </div>
             </form>

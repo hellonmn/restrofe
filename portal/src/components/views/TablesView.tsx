@@ -54,159 +54,378 @@ export const TablesView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-16">
-      {/* Clean Header Bar */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '48px' }}>
+      {/* Top Header Card */}
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '16px',
+          padding: '20px 24px',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
               Table QR Standees & Direct UPI Routing
             </h2>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                color: '#15803D',
+                backgroundColor: '#ECFDF5',
+                border: '1px solid #BBF7D0',
+                padding: '2px 8px',
+                borderRadius: '9999px',
+              }}
+            >
               {tables.length} Tables Active
             </span>
           </div>
-          <p className="text-xs text-slate-500 max-w-xl">
-            Each table has a dedicated QR code mapped to your store's merchant UPI (<strong className="text-slate-800">{profile.upiVpa}</strong>). Diners scan to view your live menu and pay instantly.
+          <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
+            Each table has a dedicated QR code mapped to your store's merchant UPI (<strong style={{ color: '#0F172A' }}>{profile.upiVpa}</strong>). Diners scan to view your live menu and pay directly.
           </p>
         </div>
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-sm transition flex-shrink-0"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 20px',
+            borderRadius: '12px',
+            fontSize: '12.5px',
+            fontWeight: 700,
+            backgroundColor: '#FF5A1F',
+            color: '#FFFFFF',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(255, 90, 31, 0.25)',
+            transition: 'all 0.15s ease',
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E44912')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5A1F')}
         >
-          <Plus size={15} />
+          <Plus size={16} strokeWidth={2.5} />
           <span>Add New Table</span>
         </button>
       </div>
 
       {/* Section Filter Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        {sections.map((sec) => (
-          <button
-            key={sec}
-            onClick={() => setFilterSection(sec)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
-              filterSection === sec
-                ? 'bg-slate-900 text-white shadow-2xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-            }`}
-          >
-            {sec} ({sec === 'All' ? tables.length : tables.filter((t) => t.section === sec).length})
-          </button>
-        ))}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+        {sections.map((sec) => {
+          const count = sec === 'All' ? tables.length : tables.filter((t) => t.section === sec).length;
+          const isActive = filterSection === sec;
+          return (
+            <button
+              key={sec}
+              onClick={() => setFilterSection(sec)}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: isActive ? 700 : 600,
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: `1px solid ${isActive ? '#FFD8C7' : '#E2E8F0'}`,
+                backgroundColor: isActive ? '#FFF4EE' : '#FFFFFF',
+                color: isActive ? '#FF5A1F' : '#64748B',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <span>{sec}</span>
+              <span
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  padding: '1px 6px',
+                  borderRadius: '9999px',
+                  backgroundColor: isActive ? '#FFD8C7' : '#F1F5F9',
+                  color: isActive ? '#C2410C' : '#64748B',
+                }}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Tables Card Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filteredTables.map((table) => (
-          <div
-            key={table.tableNumber}
-            className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition flex flex-col justify-between"
-          >
-            <div>
-              {/* Header */}
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-base font-extrabold text-slate-900">
-                      Table {table.tableNumber}
-                    </span>
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 flex items-center gap-1">
-                      <Users size={11} /> {table.capacity}p
+      {/* Tables Cards Grid: 4 columns on large screens */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+        {filteredTables.map((table) => {
+          const isVacant = table.status === 'vacant';
+          const isSeated = table.status === 'seated';
+          const isPending = table.status === 'bill_pending';
+          const isPaid = table.status === 'paid_verified';
+
+          const statusColor = isPaid
+            ? { bg: '#ECFDF5', text: '#15803D', border: '#BBF7D0', label: 'Paid Verified' }
+            : isPending
+            ? { bg: '#FFFBEB', text: '#B45309', border: '#FDE68A', label: 'Bill Pending' }
+            : isSeated
+            ? { bg: '#EFF6FF', text: '#2563EB', border: '#BFDBFE', label: 'Seated' }
+            : { bg: '#F1F5F9', text: '#475569', border: '#E2E8F0', label: 'Vacant' };
+
+          return (
+            <div
+              key={table.tableNumber}
+              style={{
+                backgroundColor: '#FFFFFF',
+                borderRadius: '16px',
+                padding: '18px 20px',
+                border: '1px solid #E2E8F0',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+              }}
+            >
+              <div>
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '16px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em' }}>
+                        Table {table.tableNumber}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          padding: '2px 7px',
+                          borderRadius: '6px',
+                          backgroundColor: '#F1F5F9',
+                          color: '#475569',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '3px',
+                        }}
+                      >
+                        <Users size={11} /> {table.capacity}p
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '11.5px', fontWeight: 500, color: '#94A3B8', marginTop: '2px', display: 'block' }}>
+                      {table.section}
                     </span>
                   </div>
-                  <span className="text-[11px] font-medium text-slate-400 mt-0.5 block">
-                    {table.section}
+
+                  <span
+                    style={{
+                      padding: '3px 8px',
+                      borderRadius: '9999px',
+                      fontSize: '10px',
+                      fontWeight: 800,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em',
+                      backgroundColor: statusColor.bg,
+                      color: statusColor.text,
+                      border: `1px solid ${statusColor.border}`,
+                    }}
+                  >
+                    {statusColor.label}
                   </span>
                 </div>
 
-                <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                    table.status === 'vacant'
-                      ? 'bg-slate-100 text-slate-600'
-                      : table.status === 'seated'
-                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                      : table.status === 'bill_pending'
-                      ? 'bg-amber-50 text-amber-700 border border-amber-300 pulse-dot'
-                      : 'bg-emerald-50 text-emerald-700 border border-emerald-300'
-                  }`}
+                {/* Status & Bill Details */}
+                <div
+                  style={{
+                    marginTop: '14px',
+                    padding: '12px 14px',
+                    borderRadius: '12px',
+                    backgroundColor: '#F8FAFC',
+                    border: '1px solid #E2E8F0',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px',
+                  }}
                 >
-                  {table.status.replace('_', ' ')}
-                </span>
-              </div>
-
-              {/* Status & Bill Details */}
-              <div className="mt-3.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-medium">Occupancy:</span>
-                  <span className="font-semibold text-slate-700">
-                    {table.status === 'vacant' ? 'Empty' : `${table.activeGuests || 2} Guests`}
-                  </span>
-                </div>
-                {table.status !== 'vacant' && (
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-medium">Running Bill:</span>
-                    <span className="font-bold text-[#FF5A1F]">
-                      ₹{table.currentBill || 0}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
+                    <span style={{ color: '#64748B', fontWeight: 500 }}>Occupancy:</span>
+                    <span style={{ fontWeight: 700, color: '#0F172A' }}>
+                      {isVacant ? 'Empty' : `${table.activeGuests || table.capacity} Guests`}
                     </span>
                   </div>
-                )}
-                <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-200/60">
-                  <span className="text-slate-400 font-medium">UPI VPA:</span>
-                  <span className="font-mono text-slate-600 font-semibold truncate max-w-[120px]">
-                    {table.upiVpa}
-                  </span>
+
+                  {!isVacant && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
+                      <span style={{ color: '#64748B', fontWeight: 500 }}>Running Bill:</span>
+                      <span style={{ fontWeight: 800, color: '#FF5A1F' }}>
+                        ₹{table.currentBill || 0}
+                      </span>
+                    </div>
+                  )}
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '11px',
+                      paddingTop: '6px',
+                      marginTop: '2px',
+                      borderTop: '1px solid #E2E8F0',
+                    }}
+                  >
+                    <span style={{ color: '#94A3B8', fontWeight: 500 }}>UPI VPA:</span>
+                    <span
+                      style={{
+                        fontFamily: 'monospace',
+                        color: '#475569',
+                        fontWeight: 700,
+                        maxWidth: '130px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                      title={table.upiVpa}
+                    >
+                      {table.upiVpa}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Standee Preview & Actions */}
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-              <button
-                onClick={() => setSelectedStandeeTable(table)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-bold transition shadow-2xs"
-              >
-                <Printer size={13} />
-                <span>Print Standee</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setEditingTableUPI(table);
-                  setCustomUPI(table.upiVpa);
+              {/* Standee Preview & Actions */}
+              <div
+                style={{
+                  marginTop: '16px',
+                  paddingTop: '12px',
+                  borderTop: '1px solid #F1F5F9',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
                 }}
-                title="Edit Table UPI"
-                className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition"
               >
-                <CreditCard size={14} />
-              </button>
+                <button
+                  onClick={() => setSelectedStandeeTable(table)}
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '9px 12px',
+                    borderRadius: '10px',
+                    backgroundColor: '#0F172A',
+                    color: '#FFFFFF',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1E293B')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0F172A')}
+                >
+                  <Printer size={13} />
+                  <span>Print Standee</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setEditingTableUPI(table);
+                    setCustomUPI(table.upiVpa);
+                  }}
+                  title="Configure Table UPI"
+                  style={{
+                    padding: '8px 10px',
+                    borderRadius: '10px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    color: '#64748B',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F8FAFC';
+                    e.currentTarget.style.color = '#0F172A';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#64748B';
+                  }}
+                >
+                  <CreditCard size={14} />
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Add Table Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100">
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
-              <h3 className="text-base font-extrabold text-slate-900">Add Table</h3>
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            backdropFilter: 'blur(3px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+            padding: '16px',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '20px',
+              maxWidth: '440px',
+              width: '100%',
+              padding: '24px 28px',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+              border: '1px solid #E2E8F0',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                Add New Table
+              </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700"
+                style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '4px' }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleAddTable} className="mt-4 space-y-4">
+            <form onSubmit={handleAddTable} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Section Area</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Dining Section
+                </label>
                 <select
                   value={newSection}
                   onChange={(e) => setNewSection(e.target.value as TableSection)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    outline: 'none',
+                    backgroundColor: '#FFFFFF',
+                  }}
                 >
                   <option value="Indoor Main">Indoor Main</option>
                   <option value="Patio Garden">Patio Garden</option>
@@ -216,32 +435,61 @@ export const TablesView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Seating Capacity</label>
-                <select
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Guest Capacity (persons)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  required
                   value={newCapacity}
                   onChange={(e) => setNewCapacity(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
-                >
-                  <option value="2">2 Seater</option>
-                  <option value="4">4 Seater</option>
-                  <option value="6">6 Seater</option>
-                  <option value="8">8 Seater</option>
-                </select>
+                  placeholder="4"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    outline: 'none',
+                  }}
+                />
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
+                  style={{
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    color: '#64748B',
+                    cursor: 'pointer',
+                  }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912]"
+                  style={{
+                    padding: '10px 22px',
+                    borderRadius: '10px',
+                    backgroundColor: '#FF5A1F',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    fontSize: '12.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 6px rgba(255, 90, 31, 0.25)',
+                  }}
                 >
-                  Add Table
+                  Create Table
                 </button>
               </div>
             </form>
@@ -251,46 +499,101 @@ export const TablesView: React.FC = () => {
 
       {/* Edit Table UPI Modal */}
       {editingTableUPI && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100">
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
-              <h3 className="text-base font-extrabold text-slate-900">
-                Map UPI for Table {editingTableUPI.tableNumber}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            backdropFilter: 'blur(3px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+            padding: '16px',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '20px',
+              maxWidth: '440px',
+              width: '100%',
+              padding: '24px 28px',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+              border: '1px solid #E2E8F0',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                Configure UPI for Table {editingTableUPI.tableNumber}
               </h3>
               <button
                 onClick={() => setEditingTableUPI(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700"
+                style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '4px' }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleSaveUPI} className="mt-4 space-y-4">
+            <form onSubmit={handleSaveUPI} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Merchant UPI VPA *</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Merchant UPI VPA ID *
+                </label>
                 <input
                   type="text"
                   required
                   value={customUPI}
                   onChange={(e) => setCustomUPI(e.target.value)}
-                  placeholder="e.g. burgerhouse@hdfcbank"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
+                  placeholder="e.g. burgerhouse.table1@hdfcbank"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    fontFamily: 'monospace',
+                    outline: 'none',
+                  }}
                 />
+                <p style={{ fontSize: '11px', color: '#94A3B8', marginTop: '6px' }}>
+                  Diners scanning Table {editingTableUPI.tableNumber}'s QR standee will pay directly into this VPA.
+                </p>
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button
                   type="button"
                   onClick={() => setEditingTableUPI(null)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
+                  style={{
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    color: '#64748B',
+                    cursor: 'pointer',
+                  }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912]"
+                  style={{
+                    padding: '10px 22px',
+                    borderRadius: '10px',
+                    backgroundColor: '#FF5A1F',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    fontSize: '12.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 6px rgba(255, 90, 31, 0.25)',
+                  }}
                 >
-                  Save Mapping
+                  Save UPI
                 </button>
               </div>
             </form>

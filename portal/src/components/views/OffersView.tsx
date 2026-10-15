@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
   Plus,
-  Coins,
   Sparkles,
   Calendar,
   X,
   Layers,
   Trash2,
   Edit2,
+  Coins,
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
 import { Offer, OfferType } from '../../types';
@@ -103,58 +103,133 @@ export const OffersView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-16">
-      {/* Top Banner: Clean White Card */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '48px' }}>
+      {/* Top Banner Card */}
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '16px',
+          padding: '20px 24px',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
               Promotions & Stacked Discounts
             </h2>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-orange-50 text-[#FF5A1F] border border-orange-200 flex items-center gap-1">
-              <Sparkles size={11} /> High Conversion
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                color: '#FF5A1F',
+                backgroundColor: '#FFF4EE',
+                border: '1px solid #FFE0D1',
+                padding: '2px 8px',
+                borderRadius: '9999px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              <Sparkles size={11} color="#FF5A1F" /> High Conversion
             </span>
           </div>
-          <p className="text-xs text-slate-500 max-w-xl">
+          <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
             Combine your restaurant bill discounts with Restrofe Coins to boost table check size and drive repeat diner loyalty.
           </p>
         </div>
 
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-sm transition flex-shrink-0"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 20px',
+            borderRadius: '12px',
+            fontSize: '12.5px',
+            fontWeight: 700,
+            backgroundColor: '#FF5A1F',
+            color: '#FFFFFF',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(255, 90, 31, 0.25)',
+            transition: 'all 0.15s ease',
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E44912')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5A1F')}
         >
-          <Plus size={15} />
+          <Plus size={16} strokeWidth={2.5} />
           <span>Create Promotion</span>
         </button>
       </div>
 
       {/* Offers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))', gap: '20px' }}>
         {offers.map((offer) => (
           <div
             key={offer.id}
-            className={`bg-white rounded-2xl p-5 border transition-all flex flex-col justify-between ${
-              offer.isActive
-                ? 'border-slate-200/80 shadow-2xs hover:shadow-xs'
-                : 'border-slate-200/60 opacity-60 bg-slate-50/50'
-            }`}
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '20px',
+              border: '1px solid #E2E8F0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              opacity: offer.isActive ? 1 : 0.65,
+              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+            }}
           >
-            <div className="space-y-3.5">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {/* Header row: Code & Badges */}
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-white font-mono font-bold text-xs tracking-wider">
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: '8px',
+                        backgroundColor: '#0F172A',
+                        color: '#FFFFFF',
+                        fontFamily: 'monospace',
+                        fontWeight: 800,
+                        fontSize: '12px',
+                        letterSpacing: '0.06em',
+                      }}
+                    >
                       {offer.code}
                     </span>
                     {offer.isStacked && (
-                      <span className="px-2 py-0.5 rounded-md bg-orange-50 text-[#FF5A1F] border border-orange-200 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                        <Layers size={11} /> +{offer.coinBoostPercent}% Coins
+                      <span
+                        style={{
+                          fontSize: '10.5px',
+                          fontWeight: 700,
+                          color: '#FF5A1F',
+                          backgroundColor: '#FFF4EE',
+                          border: '1px solid #FFE0D1',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          letterSpacing: '0.02em',
+                        }}
+                      >
+                        <Layers size={11} color="#FF5A1F" /> +{offer.coinBoostPercent}% Coins
                       </span>
                     )}
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm pt-0.5">
+                  <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
                     {offer.title}
                   </h3>
                 </div>
@@ -162,38 +237,65 @@ export const OffersView: React.FC = () => {
                 {/* Active switch */}
                 <button
                   onClick={() => toggleOfferActive(offer.id)}
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition ${
-                    offer.isActive
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-slate-100 text-slate-500'
-                  }`}
+                  style={{
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                    fontSize: '10.5px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    border: 'none',
+                    cursor: 'pointer',
+                    backgroundColor: offer.isActive ? '#ECFDF5' : '#F1F5F9',
+                    color: offer.isActive ? '#047857' : '#64748B',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    borderColor: offer.isActive ? '#A7F3D0' : '#E2E8F0',
+                  }}
                 >
                   {offer.isActive ? 'Active' : 'Paused'}
                 </button>
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p style={{ fontSize: '12px', color: '#64748B', margin: 0, lineHeight: 1.5 }}>
                 {offer.description}
               </p>
 
               {/* Offer Details Strip */}
-              <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-center">
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '8px',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  backgroundColor: '#F8FAFC',
+                  border: '1px solid #E2E8F0',
+                  textAlign: 'center',
+                }}
+              >
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Discount</span>
-                  <span className="text-xs font-black text-slate-800">
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', display: 'block' }}>
+                    Discount
+                  </span>
+                  <span style={{ fontSize: '14px', fontWeight: 900, color: '#0F172A', marginTop: '2px', display: 'block' }}>
                     {offer.discountPercent}% OFF
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Min Bill</span>
-                  <span className="text-xs font-black text-slate-800">
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', display: 'block' }}>
+                    Min Bill
+                  </span>
+                  <span style={{ fontSize: '14px', fontWeight: 900, color: '#0F172A', marginTop: '2px', display: 'block' }}>
                     ₹{offer.minBill}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Max Cap</span>
-                  <span className="text-xs font-black text-slate-800">
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', display: 'block' }}>
+                    Max Cap
+                  </span>
+                  <span style={{ fontSize: '14px', fontWeight: 900, color: '#0F172A', marginTop: '2px', display: 'block' }}>
                     {offer.maxDiscount ? `₹${offer.maxDiscount}` : 'No limit'}
                   </span>
                 </div>
@@ -201,26 +303,68 @@ export const OffersView: React.FC = () => {
             </div>
 
             {/* Footer Row */}
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-1.5 text-slate-400 font-medium">
-                <Calendar size={13} />
+            <div
+              style={{
+                marginTop: '16px',
+                paddingTop: '12px',
+                borderTop: '1px solid #F1F5F9',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '11.5px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748B', fontWeight: 500 }}>
+                <Calendar size={13} color="#94A3B8" />
                 <span>Valid till {offer.validUntil}</span>
-                <span className="mx-1">•</span>
-                <span className="font-bold text-slate-700">{offer.claimedCount} claims</span>
+                <span style={{ color: '#CBD5E1' }}>•</span>
+                <span style={{ fontWeight: 700, color: '#0F172A' }}>{offer.claimedCount} claims</span>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <button
                   onClick={() => openEditModal(offer)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition"
+                  title="Edit Offer"
+                  style={{
+                    padding: '6px',
+                    borderRadius: '8px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    color: '#64748B',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F8FAFC';
+                    e.currentTarget.style.color = '#0F172A';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#64748B';
+                  }}
                 >
-                  <Edit2 size={14} />
+                  <Edit2 size={13} />
                 </button>
                 <button
                   onClick={() => deleteOffer(offer.id)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                  title="Delete Offer"
+                  style={{
+                    padding: '6px',
+                    borderRadius: '8px',
+                    border: '1px solid #FEE2E2',
+                    backgroundColor: '#FEF2F2',
+                    color: '#EF4444',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FEE2E2')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FEF2F2')}
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={13} />
                 </button>
               </div>
             </div>
@@ -228,167 +372,249 @@ export const OffersView: React.FC = () => {
         ))}
       </div>
 
-      {/* Add / Edit Offer Modal */}
+      {/* Modal: Create / Edit Promotion */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-2xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <h3 className="text-base font-extrabold text-slate-900">
-                {editingOffer ? 'Edit Promotion' : 'Create Promotion'}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            backdropFilter: 'blur(3px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+            padding: '16px',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '20px',
+              maxWidth: '520px',
+              width: '100%',
+              padding: '24px 28px',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+              border: '1px solid #E2E8F0',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                {editingOffer ? 'Edit Promotion' : 'Create New Stacked Promotion'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '4px' }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Promo Code *</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Coupon Code *
+                  </label>
                   <input
                     type="text"
                     required
                     value={formCode}
                     onChange={(e) => setFormCode(e.target.value.toUpperCase())}
-                    placeholder="e.g. RESTRO30"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold uppercase focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="e.g. FESTIVE40"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      fontFamily: 'monospace',
+                      outline: 'none',
+                    }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Promotion Type</label>
-                  <select
-                    value={formType}
-                    onChange={(e) => setFormType(e.target.value as OfferType)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
-                  >
-                    <option value="stacked">Stacked Discount (Store + Coins)</option>
-                    <option value="bill_flat">Flat Check Off (₹100 on ₹1,000)</option>
-                    <option value="happy_hour">Happy Hours (Afternoon)</option>
-                    <option value="loyalty_streak">Repeat Diner Streak</option>
-                  </select>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Discount Percentage (%) *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    value={formPercent}
+                    onChange={(e) => setFormPercent(e.target.value)}
+                    placeholder="30"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                    }}
+                  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Title *</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Promotion Title *
+                </label>
                 <input
                   type="text"
                   required
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
-                  placeholder="e.g. 30% Off Dine-In + 20% Coin Boost"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  placeholder="e.g. Gourmet Burger Feast 30% Off"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    outline: 'none',
+                  }}
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Discount (%) *</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Min Bill Amount (₹)
+                  </label>
                   <input
                     type="number"
-                    required
-                    min="1"
-                    max="90"
-                    value={formPercent}
-                    onChange={(e) => setFormPercent(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Min Bill (₹) *</label>
-                  <input
-                    type="number"
-                    min="0"
                     value={formMinBill}
                     onChange={(e) => setFormMinBill(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="699"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                    }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Max Cap (₹)</label>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                    Max Discount Cap (₹)
+                  </label>
                   <input
                     type="number"
-                    min="1"
                     value={formMaxDiscount}
                     onChange={(e) => setFormMaxDiscount(e.target.value)}
-                    placeholder="No limit"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="300"
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                    }}
                   />
                 </div>
               </div>
 
-              {/* Restrofe Coin Boost Stack */}
-              <div className="p-3.5 rounded-xl bg-orange-50/60 border border-orange-200/70 space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formIsStacked}
-                    onChange={(e) => setFormIsStacked(e.target.checked)}
-                    className="w-4 h-4 accent-[#FF5A1F]"
-                  />
-                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <Coins size={14} className="text-[#FF5A1F]" />
-                    Enable Restrofe Coin Boost (Diner Reward)
-                  </span>
+              <div>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
+                  Description
                 </label>
-                {formIsStacked && (
-                  <div className="pt-1.5">
-                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
-                      Bonus Restrofe Coins on Bill Payment (%)
-                    </label>
-                    <input
-                      type="number"
-                      min="5"
-                      max="50"
-                      value={formCoinBoost}
-                      onChange={(e) => setFormCoinBoost(e.target.value)}
-                      className="w-full px-3 py-1.5 rounded-lg border border-orange-200 bg-white text-xs font-bold text-[#FF5A1F] focus:outline-none"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Valid Until Date</label>
-                <input
-                  type="text"
-                  value={formValidUntil}
-                  onChange={(e) => setFormValidUntil(e.target.value)}
-                  placeholder="31 Dec 2026"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Description & Terms</label>
                 <textarea
                   rows={2}
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
-                  placeholder="Explain terms, valid times, or applicable food items..."
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  placeholder="Terms, applicability on dine-in orders..."
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '12.5px',
+                    outline: 'none',
+                    resize: 'none',
+                  }}
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              {/* Stacked Restrofe Coin Boost Box */}
+              <div style={{ padding: '12px 14px', borderRadius: '12px', backgroundColor: '#FFF7ED', border: '1px solid #FED7AA' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Coins size={16} color="#FF5A1F" />
+                    <span style={{ fontSize: '12.5px', fontWeight: 800, color: '#9A3412' }}>
+                      Restrofe Coin Boost (Stacked)
+                    </span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={formIsStacked}
+                    onChange={(e) => setFormIsStacked(e.target.checked)}
+                    style={{ width: '16px', height: '16px', accentColor: '#FF5A1F', cursor: 'pointer' }}
+                  />
+                </div>
+                {formIsStacked && (
+                  <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '11.5px', color: '#9A3412', fontWeight: 600 }}>Bonus Coins:</span>
+                    <input
+                      type="number"
+                      value={formCoinBoost}
+                      onChange={(e) => setFormCoinBoost(e.target.value)}
+                      style={{
+                        width: '70px',
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid #FDBA74',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        backgroundColor: '#FFFFFF',
+                      }}
+                    />
+                    <span style={{ fontSize: '11.5px', color: '#9A3412', fontWeight: 600 }}>% credited back to diner</span>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', marginTop: '6px' }}>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
+                  style={{
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    border: '1px solid #E2E8F0',
+                    backgroundColor: '#FFFFFF',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    color: '#64748B',
+                    cursor: 'pointer',
+                  }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912]"
+                  style={{
+                    padding: '10px 22px',
+                    borderRadius: '10px',
+                    backgroundColor: '#FF5A1F',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    fontSize: '12.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 6px rgba(255, 90, 31, 0.25)',
+                  }}
                 >
-                  {editingOffer ? 'Save Changes' : 'Launch Promotion'}
+                  {editingOffer ? 'Update Promotion' : 'Publish Promotion'}
                 </button>
               </div>
             </form>
