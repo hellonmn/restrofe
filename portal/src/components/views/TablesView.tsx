@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
 import { TableQR, TableSection } from '../../types';
+import { TableDoodleRenderer, DiningTableIconBadge } from '../Doodles';
 
 export const TablesView: React.FC = () => {
   const {
@@ -70,28 +71,45 @@ export const TablesView: React.FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
-              Table QR Standees & Direct UPI Routing
-            </h2>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                color: '#15803D',
-                backgroundColor: '#ECFDF5',
-                border: '1px solid #BBF7D0',
-                padding: '2px 8px',
-                borderRadius: '9999px',
-              }}
-            >
-              {tables.length} Tables Active
-            </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div
+            style={{
+              width: '46px',
+              height: '46px',
+              borderRadius: '14px',
+              backgroundColor: '#FFF4EE',
+              border: '1px solid #FFE0D1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <DiningTableIconBadge size={26} color="#FF5A1F" />
           </div>
-          <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
-            Each table has a dedicated QR code mapped to your store's merchant UPI (<strong style={{ color: '#0F172A' }}>{profile.upiVpa}</strong>). Diners scan to view your live menu and pay directly.
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                Table QR Standees & Direct UPI Routing
+              </h2>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#15803D',
+                  backgroundColor: '#ECFDF5',
+                  border: '1px solid #BBF7D0',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                {tables.length} Tables Active
+              </span>
+            </div>
+            <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
+              Each table has a dedicated QR code mapped to your store's merchant UPI (<strong style={{ color: '#0F172A' }}>{profile.upiVpa}</strong>). Diners scan to view your live menu and pay directly.
+            </p>
+          </div>
         </div>
 
         <button
@@ -197,30 +215,54 @@ export const TablesView: React.FC = () => {
               <div>
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '16px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em' }}>
-                        Table {table.tableNumber}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          padding: '2px 7px',
-                          borderRadius: '6px',
-                          backgroundColor: '#F1F5F9',
-                          color: '#475569',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '3px',
-                        }}
-                      >
-                        <Users size={11} /> {table.capacity}p
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div
+                      style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '12px',
+                        backgroundColor: '#F8FAFC',
+                        border: '1px solid #E2E8F0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <TableDoodleRenderer
+                        tableNumber={table.tableNumber}
+                        section={table.section}
+                        capacity={table.capacity}
+                        size={32}
+                        color="#64748B"
+                        opacity={0.8}
+                      />
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '16px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em' }}>
+                          Table {table.tableNumber}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            padding: '2px 7px',
+                            borderRadius: '6px',
+                            backgroundColor: '#F1F5F9',
+                            color: '#475569',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '3px',
+                          }}
+                        >
+                          <Users size={11} /> {table.capacity}p
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '11.5px', fontWeight: 500, color: '#94A3B8', marginTop: '2px', display: 'block' }}>
+                        {table.section}
                       </span>
                     </div>
-                    <span style={{ fontSize: '11.5px', fontWeight: 500, color: '#94A3B8', marginTop: '2px', display: 'block' }}>
-                      {table.section}
-                    </span>
                   </div>
 
                   <span

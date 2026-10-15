@@ -9,6 +9,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useRestaurant } from '../context/RestaurantContext';
+import { TableDoodleRenderer } from './Doodles';
 
 export const StandeeModal: React.FC = () => {
   const { selectedStandeeTable, setSelectedStandeeTable, profile } = useRestaurant();
@@ -108,11 +109,21 @@ export const StandeeModal: React.FC = () => {
               />
             </div>
 
-            <div className="pt-2">
-              <span className="inline-block px-3 py-1 rounded-full bg-[#FF5A1F]/20 text-[#FF5A1F] border border-[#FF5A1F]/40 text-xs font-black uppercase tracking-widest">
-                TABLE {selectedStandeeTable.tableNumber}
-              </span>
-              <h2 className="text-base font-extrabold text-white mt-1.5 truncate">
+            <div className="pt-2 flex flex-col items-center">
+              <div className="flex items-center justify-center gap-2">
+                <span className="inline-block px-3 py-1 rounded-full bg-[#FF5A1F]/20 text-[#FF5A1F] border border-[#FF5A1F]/40 text-xs font-black uppercase tracking-widest">
+                  TABLE {selectedStandeeTable.tableNumber}
+                </span>
+                <TableDoodleRenderer
+                  tableNumber={selectedStandeeTable.tableNumber}
+                  section={selectedStandeeTable.section}
+                  capacity={selectedStandeeTable.capacity}
+                  size={22}
+                  color="#FF7A45"
+                  opacity={0.9}
+                />
+              </div>
+              <h2 className="text-base font-extrabold text-white mt-1.5 truncate max-w-[260px]">
                 {profile.name}
               </h2>
               <p className="text-[10px] text-slate-400 font-medium">

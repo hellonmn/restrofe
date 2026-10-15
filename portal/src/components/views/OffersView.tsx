@@ -7,10 +7,10 @@ import {
   Layers,
   Trash2,
   Edit2,
-  Coins,
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
 import { Offer, OfferType } from '../../types';
+import { PromoGiftCoinsDoodle } from '../Doodles';
 
 export const OffersView: React.FC = () => {
   const { offers, addOffer, updateOffer, deleteOffer, toggleOfferActive } = useRestaurant();
@@ -119,32 +119,49 @@ export const OffersView: React.FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
-              Promotions & Stacked Discounts
-            </h2>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                color: '#FF5A1F',
-                backgroundColor: '#FFF4EE',
-                border: '1px solid #FFE0D1',
-                padding: '2px 8px',
-                borderRadius: '9999px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              <Sparkles size={11} color="#FF5A1F" /> High Conversion
-            </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div
+            style={{
+              width: '46px',
+              height: '46px',
+              borderRadius: '14px',
+              backgroundColor: '#FFF4EE',
+              border: '1px solid #FFE0D1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <PromoGiftCoinsDoodle size={26} color="#FF5A1F" />
           </div>
-          <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                Promotions & Stacked Discounts
+              </h2>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#FF5A1F',
+                  backgroundColor: '#FFF4EE',
+                  border: '1px solid #FFE0D1',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <Sparkles size={11} color="#FF5A1F" /> High Conversion
+              </span>
+            </div>
+            <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
             Combine your restaurant bill discounts with Restrofe Coins to boost table check size and drive repeat diner loyalty.
           </p>
         </div>
+      </div>
 
         <button
           onClick={openAddModal}
@@ -549,7 +566,7 @@ export const OffersView: React.FC = () => {
               <div style={{ padding: '12px 14px', borderRadius: '12px', backgroundColor: '#FFF7ED', border: '1px solid #FED7AA' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Coins size={16} color="#FF5A1F" />
+                    <PromoGiftCoinsDoodle size={20} color="#FF5A1F" />
                     <span style={{ fontSize: '12.5px', fontWeight: 800, color: '#9A3412' }}>
                       Restrofe Coin Boost (Stacked)
                     </span>

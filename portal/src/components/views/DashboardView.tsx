@@ -8,12 +8,20 @@ import {
   Percent,
   TrendingUp,
   Layers,
-  ShieldCheck,
   SlidersHorizontal,
   ChevronRight,
-  Store,
+  Home,
+  Sun,
+  Wine,
+  Umbrella,
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
+import {
+  TableDoodleRenderer,
+  CoffeeSproutDoodle,
+  CoffeeBeansPairDoodle,
+  DiningTableIconBadge,
+} from '../Doodles';
 
 export const DashboardView: React.FC = () => {
   const {
@@ -71,6 +79,8 @@ export const DashboardView: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -89,9 +99,12 @@ export const DashboardView: React.FC = () => {
             >
               <IndianRupee size={18} strokeWidth={2.5} />
             </div>
-            <TrendingUp size={16} color="#10B981" />
+            {/* Delicate Coffee Sprout Doodle */}
+            <div title="Artisanal Cafe Metric Accent" style={{ pointerEvents: 'none' }}>
+              <CoffeeSproutDoodle size={28} color="#10B981" />
+            </div>
           </div>
-          <div style={{ marginTop: '14px' }}>
+          <div style={{ marginTop: '14px', position: 'relative', zIndex: 1 }}>
             <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               TODAY'S REVENUE
             </div>
@@ -119,6 +132,11 @@ export const DashboardView: React.FC = () => {
               Directly settled via table UPI
             </p>
           </div>
+
+          {/* Sparkline wave */}
+          <svg width="56" height="22" viewBox="0 0 56 22" fill="none" style={{ position: 'absolute', bottom: '12px', right: '16px', opacity: 0.85, pointerEvents: 'none' }}>
+            <path d="M2 18C12 16 18 6 30 12C42 18 48 6 54 3" stroke="#10B981" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </div>
 
         {/* Metric 2: Table Occupancy */}
@@ -132,6 +150,8 @@ export const DashboardView: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -149,9 +169,9 @@ export const DashboardView: React.FC = () => {
             >
               <Users size={18} strokeWidth={2.3} />
             </div>
-            <Users size={16} color="#3B82F6" />
+            <Users size={16} color="#3B82F6" style={{ opacity: 0.8 }} />
           </div>
-          <div style={{ marginTop: '14px' }}>
+          <div style={{ marginTop: '14px', position: 'relative', zIndex: 1 }}>
             <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               TABLE OCCUPANCY
             </div>
@@ -176,6 +196,16 @@ export const DashboardView: React.FC = () => {
               1 bills waiting payment
             </p>
           </div>
+
+          {/* Occupancy mini bars */}
+          <div style={{ position: 'absolute', bottom: '14px', right: '16px', display: 'flex', alignItems: 'flex-end', gap: '3px', height: '22px', opacity: 0.85, pointerEvents: 'none' }}>
+            <div style={{ width: '4px', height: '7px', backgroundColor: '#BFDBFE', borderRadius: '1.5px' }} />
+            <div style={{ width: '4px', height: '12px', backgroundColor: '#93C5FD', borderRadius: '1.5px' }} />
+            <div style={{ width: '4px', height: '9px', backgroundColor: '#BFDBFE', borderRadius: '1.5px' }} />
+            <div style={{ width: '4px', height: '18px', backgroundColor: '#60A5FA', borderRadius: '1.5px' }} />
+            <div style={{ width: '4px', height: '14px', backgroundColor: '#3B82F6', borderRadius: '1.5px' }} />
+            <div style={{ width: '4px', height: '22px', backgroundColor: '#2563EB', borderRadius: '1.5px' }} />
+          </div>
         </div>
 
         {/* Metric 3: Average Table Bill */}
@@ -189,6 +219,8 @@ export const DashboardView: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -206,9 +238,9 @@ export const DashboardView: React.FC = () => {
             >
               <TrendingUp size={18} strokeWidth={2.5} />
             </div>
-            <TrendingUp size={16} color="#FF5A1F" />
+            <TrendingUp size={16} color="#FF5A1F" style={{ opacity: 0.8 }} />
           </div>
-          <div style={{ marginTop: '14px' }}>
+          <div style={{ marginTop: '14px', position: 'relative', zIndex: 1 }}>
             <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               AVERAGE TABLE BILL
             </div>
@@ -233,6 +265,11 @@ export const DashboardView: React.FC = () => {
               Driven by stacked coin offers
             </p>
           </div>
+
+          {/* Sparkline wave */}
+          <svg width="56" height="22" viewBox="0 0 56 22" fill="none" style={{ position: 'absolute', bottom: '12px', right: '16px', opacity: 0.85, pointerEvents: 'none' }}>
+            <path d="M2 17C12 15 20 20 32 10C42 2 48 12 54 7" stroke="#FF5A1F" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </div>
 
         {/* Metric 4: Commission Saved */}
@@ -246,6 +283,8 @@ export const DashboardView: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -263,9 +302,12 @@ export const DashboardView: React.FC = () => {
             >
               <Layers size={18} strokeWidth={2.3} />
             </div>
-            <ShieldCheck size={16} color="#F59E0B" />
+            {/* Delicate Coffee Beans Pair Doodle */}
+            <div title="Restrofe Zero Commission Boost" style={{ pointerEvents: 'none' }}>
+              <CoffeeBeansPairDoodle size={28} color="#8B5CF6" />
+            </div>
           </div>
-          <div style={{ marginTop: '14px' }}>
+          <div style={{ marginTop: '14px', position: 'relative', zIndex: 1 }}>
             <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               COMMISSION SAVED
             </div>
@@ -290,6 +332,11 @@ export const DashboardView: React.FC = () => {
               Saved vs 22% aggregator cuts
             </p>
           </div>
+
+          {/* Sparkline wave */}
+          <svg width="56" height="22" viewBox="0 0 56 22" fill="none" style={{ position: 'absolute', bottom: '12px', right: '16px', opacity: 0.85, pointerEvents: 'none' }}>
+            <path d="M2 19C14 17 24 8 36 14C46 19 50 7 54 3" stroke="#10B981" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </div>
       </div>
 
@@ -309,19 +356,46 @@ export const DashboardView: React.FC = () => {
           >
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
-              <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
-                  Live Table Floor Plan
-                </h3>
-                <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0' }}>
-                  Tap table actions to update dining status or print QR standee
-                </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '12px',
+                    backgroundColor: '#FFF7ED',
+                    border: '1px solid #FED7AA',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <DiningTableIconBadge size={22} color="#9A3412" />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                    Live Table Floor Plan
+                  </h3>
+                  <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0' }}>
+                    Tap table actions to update dining status or print QR standee
+                  </p>
+                </div>
               </div>
 
               {/* Area filter tabs */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 {sections.map((sec) => {
                   const isActive = selectedSection === sec;
+                  const secIcon =
+                    sec === 'Indoor Main' ? (
+                      <Home size={12} color={isActive ? '#FF5A1F' : '#94A3B8'} />
+                    ) : sec === 'Patio Garden' ? (
+                      <Umbrella size={12} color={isActive ? '#FF5A1F' : '#94A3B8'} />
+                    ) : sec === 'Rooftop Terrace' ? (
+                      <Sun size={12} color={isActive ? '#FF5A1F' : '#94A3B8'} />
+                    ) : (
+                      <Wine size={12} color={isActive ? '#FF5A1F' : '#94A3B8'} />
+                    );
                   return (
                     <button
                       key={sec}
@@ -341,7 +415,7 @@ export const DashboardView: React.FC = () => {
                         transition: 'all 0.15s ease',
                       }}
                     >
-                      <Store size={12} color={isActive ? '#FF5A1F' : '#94A3B8'} />
+                      {secIcon}
                       <span>{sec}</span>
                     </button>
                   );
@@ -376,24 +450,38 @@ export const DashboardView: React.FC = () => {
                     }}
                   >
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span
-                            style={{
-                              width: '6px',
-                              height: '6px',
-                              borderRadius: '9999px',
-                              backgroundColor: dotColor,
-                              display: 'inline-block',
-                            }}
-                          />
-                          <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F172A' }}>
-                            {t.name} <span style={{ fontSize: '10.5px', color: '#94A3B8', fontWeight: 500 }}>({t.capacity}p)</span>
-                          </span>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span
+                              style={{
+                                width: '6px',
+                                height: '6px',
+                                borderRadius: '9999px',
+                                backgroundColor: dotColor,
+                                display: 'inline-block',
+                              }}
+                            />
+                            <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F172A' }}>
+                              {t.name} <span style={{ fontSize: '10.5px', color: '#94A3B8', fontWeight: 500 }}>({t.capacity}p)</span>
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '10.5px', color: '#94A3B8', fontWeight: 500, marginTop: '2px' }}>
+                            {t.section}
+                          </div>
                         </div>
-                      </div>
-                      <div style={{ fontSize: '10.5px', color: '#94A3B8', fontWeight: 500, marginTop: '2px' }}>
-                        {t.section}
+
+                        {/* Top-Right Dining Table Doodle */}
+                        <div style={{ marginTop: '-4px', marginRight: '-4px', pointerEvents: 'none' }}>
+                          <TableDoodleRenderer
+                            tableNumber={t.tableNumber}
+                            section={t.section}
+                            capacity={t.capacity}
+                            size={34}
+                            color={isOccupied ? '#059669' : isPending ? '#D97706' : '#94A3B8'}
+                            opacity={isVacant ? 0.65 : 0.85}
+                          />
+                        </div>
                       </div>
                     </div>
 

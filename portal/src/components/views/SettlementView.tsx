@@ -7,6 +7,7 @@ import {
   Landmark,
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
+import { CoffeeBeansPairDoodle } from '../Doodles';
 
 export const SettlementView: React.FC = () => {
   const { profile, visits } = useRestaurant();
@@ -52,31 +53,48 @@ export const SettlementView: React.FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
-              Direct UPI Settlements & 0% Commission
-            </h2>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                color: '#15803D',
-                backgroundColor: '#ECFDF5',
-                border: '1px solid #BBF7D0',
-                padding: '2px 8px',
-                borderRadius: '9999px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              <CheckCircle2 size={11} /> 0% Platform Fee
-            </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div
+            style={{
+              width: '46px',
+              height: '46px',
+              borderRadius: '14px',
+              backgroundColor: '#ECFDF5',
+              border: '1px solid #BBF7D0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <CoffeeBeansPairDoodle size={26} color="#10B981" />
           </div>
-          <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
-            Customer payments bypass intermediary hold periods and settle directly into your linked bank account (<strong style={{ color: '#0F172A' }}>{profile.bankDetails.bankName}</strong>).
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                Direct UPI Settlements & 0% Commission
+              </h2>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#15803D',
+                  backgroundColor: '#ECFDF5',
+                  border: '1px solid #BBF7D0',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <CheckCircle2 size={11} /> 0% Platform Fee
+              </span>
+            </div>
+            <p style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, margin: 0, maxWidth: '640px' }}>
+              Customer payments bypass intermediary hold periods and settle directly into your linked bank account (<strong style={{ color: '#0F172A' }}>{profile.bankDetails.bankName}</strong>).
+            </p>
+          </div>
         </div>
 
         <button

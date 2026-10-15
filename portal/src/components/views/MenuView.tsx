@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
 import { MenuItem, MenuCategory } from '../../types';
+import { ChefClocheDoodle } from '../Doodles';
 
 const CATEGORIES: MenuCategory[] = [
   'All',
@@ -132,18 +133,34 @@ export const MenuView: React.FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        {/* Search Input */}
-        <div style={{ position: 'relative', flex: 1, minWidth: '280px', maxWidth: '440px' }}>
-          <Search
-            size={17}
-            color="#94A3B8"
-            style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }}
-          />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search dish by name, ingredients, or tags..."
+        {/* Search Input with Chef Cloche Accent */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px', maxWidth: '440px' }}>
+          <div
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '12px',
+              backgroundColor: '#FFF4EE',
+              border: '1px solid #FFE0D1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <ChefClocheDoodle size={24} color="#FF5A1F" />
+          </div>
+          <div style={{ position: 'relative', flex: 1 }}>
+            <Search
+              size={17}
+              color="#94A3B8"
+              style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }}
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search dish by name, ingredients, or tags..."
             style={{
               width: '100%',
               padding: '10px 14px 10px 40px',
@@ -166,6 +183,7 @@ export const MenuView: React.FC = () => {
             }}
           />
         </div>
+      </div>
 
         {/* Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

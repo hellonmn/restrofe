@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useRestaurant, NavTab } from '../context/RestaurantContext';
 import { StoreStatus } from '../types';
+import { SidebarCoffeeDoodle } from './Doodles';
 
 export const Sidebar: React.FC = () => {
   const {
@@ -375,6 +376,21 @@ export const Sidebar: React.FC = () => {
           <span style={{ fontSize: '13.5px' }}>Reset Demo Catalog</span>
         </button>
       </nav>
+
+      {/* Artisanal Coffee & Leaves Doodle Accent */}
+      <div
+        style={{
+          padding: '0 16px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          pointerEvents: 'none',
+          userSelect: 'none',
+          marginBottom: '-6px',
+        }}
+      >
+        <SidebarCoffeeDoodle color="#E2A96B" style={{ opacity: 0.85, maxHeight: '90px' }} />
+      </div>
 
       {/* Bottom 0% Commission Card */}
       <div
