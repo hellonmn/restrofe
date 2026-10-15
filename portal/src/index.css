@@ -3,7 +3,7 @@
 
 :root {
   --bg-page: #F8FAFC;
-  --bg-sidebar: #FFFFFF;
+  --bg-sidebar: #0F172A;
   --brand: #FF5A1F;
   --brand-light: #FFF4EE;
   --text-main: #0F172A;
@@ -43,13 +43,13 @@ html, body, #root {
   background: #94A3B8;
 }
 
-/* Side panel specific classes */
+/* Side panel specific classes (Dark Theme matching reference screenshot) */
 .restrofe-sidebar {
   width: 260px !important;
   min-width: 260px !important;
   max-width: 260px !important;
-  background: #FFFFFF !important;
-  border-right: 1px solid #E2E8F0 !important;
+  background: #0F172A !important;
+  border-right: 1px solid #1E293B !important;
   display: flex !important;
   flex-direction: column !important;
   height: 100vh !important;
@@ -61,7 +61,7 @@ html, body, #root {
 
 .sidebar-header {
   padding: 22px 20px 16px 20px;
-  border-bottom: 1px solid #F1F5F9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .sidebar-nav-item {
@@ -73,23 +73,24 @@ html, body, #root {
   border-radius: 12px;
   font-size: 13.5px;
   font-weight: 500;
-  color: #475569;
+  color: #94A3B8;
   text-decoration: none;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   width: calc(100% - 28px);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 }
 
 .sidebar-nav-item:hover {
-  background-color: #F8FAFC;
-  color: #0F172A;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #F8FAFC;
 }
 
 .sidebar-nav-item.active {
-  background-color: #FFF4EE !important;
-  color: #FF5A1F !important;
+  background: linear-gradient(135deg, rgba(255, 90, 31, 0.22) 0%, rgba(255, 90, 31, 0.12) 100%) !important;
+  border: 1px solid rgba(255, 90, 31, 0.35) !important;
+  color: #FFFFFF !important;
   font-weight: 700 !important;
 }
 
@@ -98,16 +99,16 @@ html, body, #root {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #94A3B8;
-  padding: 16px 20px 6px 20px;
+  color: #64748B;
+  padding: 18px 20px 6px 20px;
 }
 
 .bottom-commission-card {
   margin: 16px;
   padding: 14px 16px;
   border-radius: 16px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
+  background: #151D2C;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Pulse animation */

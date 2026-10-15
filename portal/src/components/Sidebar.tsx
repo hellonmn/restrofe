@@ -11,6 +11,7 @@ import {
   RotateCcw,
   Percent,
   Check,
+  ChevronDown,
 } from 'lucide-react';
 import { useRestaurant, NavTab } from '../context/RestaurantContext';
 import { StoreStatus } from '../types';
@@ -32,37 +33,37 @@ export const Sidebar: React.FC = () => {
     {
       id: 'dashboard',
       label: 'Dashboard',
-      icon: (active) => <LayoutGrid size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <LayoutGrid size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'menu',
       label: 'Menu Catalog',
-      icon: (active) => <UtensilsCrossed size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <UtensilsCrossed size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'offers',
       label: 'Offers & Promos',
-      icon: (active) => <Tag size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <Tag size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'tables',
       label: 'Table QR Standees',
-      icon: (active) => <QrCode size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <QrCode size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'analytics',
       label: 'Analytics & Reviews',
-      icon: (active) => <BarChart3 size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <BarChart3 size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'settlement',
       label: '0% Settlements',
-      icon: (active) => <Landmark size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <Landmark size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'account',
       label: 'Store & Compliance',
-      icon: (active) => <Store size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
+      icon: (active) => <Store size={18} color={active ? '#FF7A45' : '#94A3B8'} strokeWidth={active ? 2.3 : 1.9} />,
     },
   ];
 
@@ -79,8 +80,8 @@ export const Sidebar: React.FC = () => {
         width: '260px',
         minWidth: '260px',
         maxWidth: '260px',
-        backgroundColor: '#FFFFFF',
-        borderRight: '1px solid #E2E8F0',
+        backgroundColor: '#0F172A',
+        borderRight: '1px solid #1E293B',
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
@@ -96,7 +97,7 @@ export const Sidebar: React.FC = () => {
         className="sidebar-header"
         style={{
           padding: '22px 20px 16px 20px',
-          borderBottom: '1px solid #F1F5F9',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -120,7 +121,7 @@ export const Sidebar: React.FC = () => {
           </div>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontWeight: 800, fontSize: '17px', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+              <span style={{ fontWeight: 800, fontSize: '17px', color: '#FFFFFF', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
                 Restrofe
               </span>
               <span
@@ -130,53 +131,61 @@ export const Sidebar: React.FC = () => {
                   letterSpacing: '0.06em',
                   textTransform: 'uppercase',
                   padding: '2px 6px',
-                  borderRadius: '5px',
-                  backgroundColor: '#FFF4EE',
-                  color: '#FF5A1F',
-                  border: '1px solid #FFE0D1',
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgba(255, 90, 31, 0.15)',
+                  color: '#FF7A45',
+                  border: '1px solid rgba(255, 90, 31, 0.35)',
                   lineHeight: 1,
                 }}
               >
                 PORTAL
               </span>
             </div>
-            <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '3px 0 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {profile.name}
             </p>
           </div>
         </div>
 
-        {/* Live Status Row */}
+        {/* Live Status Button Container */}
         <div style={{ position: 'relative', marginTop: '14px' }}>
           <button
             onClick={() => setIsStatusMenuOpen(!isStatusMenuOpen)}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
+              justifyContent: 'space-between',
+              width: '100%',
               fontSize: '12.5px',
               fontWeight: 600,
-              color: '#1E293B',
-              background: 'transparent',
-              border: 'none',
-              padding: '0',
+              color: '#F8FAFC',
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.07)',
+              borderRadius: '10px',
+              padding: '8px 12px',
               cursor: 'pointer',
+              transition: 'background-color 0.15s ease',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)')}
           >
-            <span
-              className="pulse-dot"
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '9999px',
-                backgroundColor: storeStatus === 'open' ? '#10B981' : storeStatus === 'busy' ? '#F59E0B' : '#EF4444',
-                display: 'inline-block',
-                flexShrink: 0,
-              }}
-            />
-            <span>
-              {storeStatus === 'open' ? 'Open for Orders' : storeStatus === 'busy' ? 'Busy / Rush' : 'Store Closed'}
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                className="pulse-dot"
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '9999px',
+                  backgroundColor: storeStatus === 'open' ? '#10B981' : storeStatus === 'busy' ? '#F59E0B' : '#EF4444',
+                  display: 'inline-block',
+                  flexShrink: 0,
+                }}
+              />
+              <span>
+                {storeStatus === 'open' ? 'Open for Orders' : storeStatus === 'busy' ? 'Busy / Rush' : 'Store Closed'}
+              </span>
+            </div>
+            <ChevronDown size={13} color="#64748B" />
           </button>
 
           {/* Status Dropdown */}
@@ -187,11 +196,11 @@ export const Sidebar: React.FC = () => {
                 top: '100%',
                 left: 0,
                 marginTop: '6px',
-                width: '180px',
-                backgroundColor: '#FFFFFF',
+                width: '100%',
+                backgroundColor: '#1E293B',
                 borderRadius: '12px',
-                boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-                border: '1px solid #E2E8F0',
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
+                border: '1px solid #334155',
                 padding: '4px',
                 zIndex: 50,
               }}
@@ -209,7 +218,7 @@ export const Sidebar: React.FC = () => {
                     textAlign: 'left',
                     fontSize: '12px',
                     fontWeight: 600,
-                    color: '#334155',
+                    color: '#F1F5F9',
                     borderRadius: '8px',
                     border: 'none',
                     background: 'transparent',
@@ -218,11 +227,11 @@ export const Sidebar: React.FC = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
                   <span>{opt.label}</span>
-                  {storeStatus === opt.value && <Check size={13} color="#FF5A1F" />}
+                  {storeStatus === opt.value && <Check size={13} color="#FF7A45" />}
                 </button>
               ))}
             </div>
@@ -239,7 +248,7 @@ export const Sidebar: React.FC = () => {
             fontWeight: 700,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#94A3B8',
+            color: '#64748B',
             padding: '16px 20px 6px 20px',
           }}
         >
@@ -262,9 +271,11 @@ export const Sidebar: React.FC = () => {
                 borderRadius: '12px',
                 fontSize: '13.5px',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? '#FF5A1F' : '#475569',
-                backgroundColor: isActive ? '#FFF4EE' : 'transparent',
-                border: 'none',
+                color: isActive ? '#FFFFFF' : '#CBD5E1',
+                background: isActive
+                  ? 'linear-gradient(135deg, rgba(255, 90, 31, 0.22) 0%, rgba(255, 90, 31, 0.12) 100%)'
+                  : 'transparent',
+                border: isActive ? '1px solid rgba(255, 90, 31, 0.35)' : '1px solid transparent',
                 width: 'calc(100% - 28px)',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease-in-out',
@@ -272,14 +283,14 @@ export const Sidebar: React.FC = () => {
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.backgroundColor = '#F8FAFC';
-                  e.currentTarget.style.color = '#0F172A';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                  e.currentTarget.style.color = '#FFFFFF';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isActive) {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.color = '#CBD5E1';
                 }
               }}
             >
@@ -297,7 +308,7 @@ export const Sidebar: React.FC = () => {
             fontWeight: 700,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#94A3B8',
+            color: '#64748B',
             padding: '20px 20px 6px 20px',
           }}
         >
@@ -316,24 +327,24 @@ export const Sidebar: React.FC = () => {
             borderRadius: '12px',
             fontSize: '13.5px',
             fontWeight: 500,
-            color: '#475569',
+            color: '#CBD5E1',
             backgroundColor: 'transparent',
-            border: 'none',
+            border: '1px solid transparent',
             width: 'calc(100% - 28px)',
             cursor: 'pointer',
             transition: 'all 0.15s ease-in-out',
             textAlign: 'left',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#F8FAFC';
-            e.currentTarget.style.color = '#0F172A';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.color = '#FFFFFF';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = '#475569';
+            e.currentTarget.style.color = '#CBD5E1';
           }}
         >
-          <ShieldCheck size={18} color="#64748B" strokeWidth={1.9} />
+          <ShieldCheck size={18} color="#94A3B8" strokeWidth={1.9} />
           <span style={{ fontSize: '13.5px' }}>Simulate Table Scan</span>
         </button>
 
@@ -349,24 +360,24 @@ export const Sidebar: React.FC = () => {
             borderRadius: '12px',
             fontSize: '13.5px',
             fontWeight: 500,
-            color: '#475569',
+            color: '#CBD5E1',
             backgroundColor: 'transparent',
-            border: 'none',
+            border: '1px solid transparent',
             width: 'calc(100% - 28px)',
             cursor: 'pointer',
             transition: 'all 0.15s ease-in-out',
             textAlign: 'left',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#F8FAFC';
-            e.currentTarget.style.color = '#0F172A';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.color = '#FFFFFF';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = '#475569';
+            e.currentTarget.style.color = '#CBD5E1';
           }}
         >
-          <RotateCcw size={18} color="#64748B" strokeWidth={1.9} />
+          <RotateCcw size={18} color="#94A3B8" strokeWidth={1.9} />
           <span style={{ fontSize: '13.5px' }}>Reset Demo Catalog</span>
         </button>
       </nav>
@@ -378,8 +389,8 @@ export const Sidebar: React.FC = () => {
           margin: '16px',
           padding: '14px 16px',
           borderRadius: '16px',
-          backgroundColor: '#F8FAFC',
-          border: '1px solid #E2E8F0',
+          backgroundColor: '#151D2C',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
@@ -389,8 +400,8 @@ export const Sidebar: React.FC = () => {
                 width: '22px',
                 height: '22px',
                 borderRadius: '6px',
-                backgroundColor: '#DCFCE7',
-                color: '#15803D',
+                backgroundColor: 'rgba(16, 185, 129, 0.18)',
+                color: '#10B981',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -399,7 +410,7 @@ export const Sidebar: React.FC = () => {
             >
               <Percent size={12} strokeWidth={3} />
             </div>
-            <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+            <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#FFFFFF' }}>
               0% Commission
             </span>
           </div>
@@ -407,9 +418,9 @@ export const Sidebar: React.FC = () => {
             style={{
               fontSize: '10px',
               fontWeight: 700,
-              color: '#15803D',
-              backgroundColor: '#DCFCE7',
-              border: '1px solid #BBF7D0',
+              color: '#34D399',
+              backgroundColor: 'rgba(16, 185, 129, 0.18)',
+              border: '1px solid rgba(16, 185, 129, 0.35)',
               padding: '2px 8px',
               borderRadius: '9999px',
             }}
@@ -418,7 +429,7 @@ export const Sidebar: React.FC = () => {
           </span>
         </div>
 
-        <p style={{ fontSize: '11px', color: '#64748B', fontWeight: 500, margin: '8px 0 0 0', lineHeight: 1.4 }}>
+        <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, margin: '8px 0 0 0', lineHeight: 1.4 }}>
           Direct peer-to-merchant UPI payouts.
         </p>
 
@@ -426,15 +437,15 @@ export const Sidebar: React.FC = () => {
           style={{
             marginTop: '8px',
             paddingTop: '8px',
-            borderTop: '1px solid #E2E8F0',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             fontSize: '11px',
           }}
         >
-          <span style={{ color: '#94A3B8', fontWeight: 500 }}>HDFC Settlement</span>
-          <span style={{ color: '#FF5A1F', fontWeight: 700 }}>24 Days Left</span>
+          <span style={{ color: '#64748B', fontWeight: 500 }}>HDFC Settlement</span>
+          <span style={{ color: '#FF7A45', fontWeight: 700 }}>24 Days Left</span>
         </div>
       </div>
     </aside>
