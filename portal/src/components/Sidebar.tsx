@@ -9,7 +9,6 @@ import {
   Store,
   ShieldCheck,
   RotateCcw,
-  Percent,
   Check,
   ChevronDown,
 } from 'lucide-react';
@@ -377,86 +376,19 @@ export const Sidebar: React.FC = () => {
         </button>
       </nav>
 
-      {/* Artisanal Coffee & Leaves Doodle Accent */}
+      {/* Artisanal Coffee & Leaves Doodle Footer */}
       <div
         style={{
-          padding: '0 16px',
+          margin: 'auto 16px 20px 16px',
+          padding: '16px 14px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           pointerEvents: 'none',
           userSelect: 'none',
-          marginBottom: '-6px',
         }}
       >
-        <SidebarCoffeeDoodle color="#E2A96B" style={{ opacity: 0.85, maxHeight: '90px' }} />
-      </div>
-
-      {/* Bottom 0% Commission Card */}
-      <div
-        className="bottom-commission-card"
-        style={{
-          margin: '16px',
-          padding: '14px 16px',
-          borderRadius: '16px',
-          backgroundColor: '#151D2C',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                borderRadius: '6px',
-                backgroundColor: 'rgba(16, 185, 129, 0.18)',
-                color: '#10B981',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              <Percent size={12} strokeWidth={3} />
-            </div>
-            <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#FFFFFF' }}>
-              0% Commission
-            </span>
-          </div>
-          <span
-            style={{
-              fontSize: '10px',
-              fontWeight: 700,
-              color: '#34D399',
-              backgroundColor: 'rgba(16, 185, 129, 0.18)',
-              border: '1px solid rgba(16, 185, 129, 0.35)',
-              padding: '2px 8px',
-              borderRadius: '9999px',
-            }}
-          >
-            Active
-          </span>
-        </div>
-
-        <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, margin: '8px 0 0 0', lineHeight: 1.4 }}>
-          Direct peer-to-merchant UPI payouts.
-        </p>
-
-        <div
-          style={{
-            marginTop: '8px',
-            paddingTop: '8px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: '11px',
-          }}
-        >
-          <span style={{ color: '#64748B', fontWeight: 500 }}>HDFC Settlement</span>
-          <span style={{ color: '#FF7A45', fontWeight: 700 }}>24 Days Left</span>
-        </div>
+        <SidebarCoffeeDoodle color="#E2A96B" style={{ opacity: 0.9, width: '100%', maxWidth: '175px' }} />
       </div>
     </aside>
   );
