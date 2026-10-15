@@ -49,203 +49,451 @@ export const AccountView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-16">
-      {/* Header Info */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#FF5A1F] text-white flex items-center justify-center font-black text-xl shadow-sm">
-            {profile.name.charAt(0)}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '48px' }}>
+      {/* Header Info Banner */}
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '16px',
+          padding: '20px 24px',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div
+            style={{
+              width: '52px',
+              height: '52px',
+              borderRadius: '14px',
+              backgroundColor: '#FF5A1F',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 900,
+              fontSize: '22px',
+              boxShadow: '0 3px 8px rgba(255, 90, 31, 0.28)',
+              flexShrink: 0,
+            }}
+          >
+            {name ? name.charAt(0) : 'R'}
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-black text-slate-900 tracking-tight">{profile.name}</h2>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 900, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                {name}
+              </h2>
+              <span
+                style={{
+                  fontSize: '10.5px',
+                  fontWeight: 700,
+                  color: '#15803D',
+                  backgroundColor: '#ECFDF5',
+                  border: '1px solid #BBF7D0',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
                 <CheckCircle2 size={11} /> FSSAI Verified
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">{profile.tagline}</p>
+            <p style={{ fontSize: '12px', color: '#64748B', fontWeight: 500, margin: '2px 0 0 0' }}>
+              {tagline}
+            </p>
           </div>
         </div>
 
         <button
           onClick={handleSubmit}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912] shadow-sm transition"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 20px',
+            borderRadius: '12px',
+            fontSize: '12.5px',
+            fontWeight: 700,
+            backgroundColor: '#FF5A1F',
+            color: '#FFFFFF',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(255, 90, 31, 0.25)',
+            transition: 'all 0.15s ease',
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E44912')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF5A1F')}
         >
-          <Save size={14} />
+          <Save size={15} />
           <span>Save Profile Changes</span>
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '20px' }}>
         {/* Basic Store Info */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-          <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <Building2 size={16} className="text-[#FF5A1F]" />
-            Restaurant Store Profile
-          </h3>
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid #F1F5F9' }}>
+            <Building2 size={17} color="#FF5A1F" />
+            <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0F172A', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Restaurant Store Profile
+            </h3>
+          </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Restaurant Name *</label>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+              Restaurant Name *
+            </label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                borderRadius: '10px',
+                border: '1px solid #CBD5E1',
+                fontSize: '13px',
+                fontWeight: 600,
+                outline: 'none',
+              }}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Tagline / Brand Bio</label>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+              Tagline / Brand Bio
+            </label>
             <input
               type="text"
               value={tagline}
               onChange={(e) => setTagline(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                borderRadius: '10px',
+                border: '1px solid #CBD5E1',
+                fontSize: '13px',
+                fontWeight: 500,
+                outline: 'none',
+              }}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Primary Phone</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                Primary Phone
+              </label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  outline: 'none',
+                }}
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Official Email</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                Official Email
+              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  outline: 'none',
+                }}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Street Address</label>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+              Street Address
+            </label>
             <textarea
               rows={2}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                borderRadius: '10px',
+                border: '1px solid #CBD5E1',
+                fontSize: '12.5px',
+                outline: 'none',
+                resize: 'none',
+              }}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">City & State</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                City & State
+              </label>
               <input
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  outline: 'none',
+                }}
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Operating Hours</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                Operating Hours
+              </label>
               <input
                 type="text"
                 value={openingHours}
                 onChange={(e) => setOpeningHours(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  outline: 'none',
+                }}
               />
             </div>
           </div>
         </div>
 
         {/* Regulatory & Bank Details */}
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Statutory */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <ShieldCheck size={16} className="text-emerald-600" />
-              Statutory & FSSAI Compliance
-            </h3>
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '24px',
+              border: '1px solid #E2E8F0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid #F1F5F9' }}>
+              <ShieldCheck size={17} color="#15803D" />
+              <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0F172A', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Statutory & FSSAI Compliance
+              </h3>
+            </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">FSSAI License No.</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  FSSAI License No.
+                </label>
                 <input
                   type="text"
                   value={fssaiNumber}
                   onChange={(e) => setFssaiNumber(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '12.5px',
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    outline: 'none',
+                  }}
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">GSTIN Number</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  GSTIN Number
+                </label>
                 <input
                   type="text"
                   value={gstin}
                   onChange={(e) => setGstin(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '12.5px',
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    outline: 'none',
+                  }}
                 />
               </div>
             </div>
           </div>
 
           {/* Direct Settlement Details */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-4">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <CreditCard size={16} className="text-[#FF5A1F]" />
-              Direct Settlement Bank Account
-            </h3>
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '24px',
+              border: '1px solid #E2E8F0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid #F1F5F9' }}>
+              <CreditCard size={17} color="#FF5A1F" />
+              <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0F172A', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Direct Settlement Bank Account
+              </h3>
+            </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Primary Merchant UPI VPA *</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                Primary Merchant UPI VPA *
+              </label>
               <input
                 type="text"
                 required
                 value={upiVpa}
                 onChange={(e) => setUpiVpa(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-[#FF5A1F] focus:outline-none focus:border-[#FF5A1F]"
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #CBD5E1',
+                  fontSize: '13px',
+                  fontFamily: 'monospace',
+                  fontWeight: 800,
+                  color: '#FF5A1F',
+                  outline: 'none',
+                }}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Bank Name</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Bank Name
+                </label>
                 <input
                   type="text"
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    outline: 'none',
+                  }}
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">IFSC Code</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  IFSC Code
+                </label>
                 <input
                   type="text"
                   value={ifsc}
                   onChange={(e) => setIfsc(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    outline: 'none',
+                  }}
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Account Number</label>
-              <input
-                type="text"
-                value={accountNumber}
-                onChange={(e) => setAccountNumber(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:outline-none focus:border-[#FF5A1F]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Beneficiary Entity Name</label>
-              <input
-                type="text"
-                value={beneficiaryName}
-                onChange={(e) => setBeneficiaryName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F]"
-              />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Account Number
+                </label>
+                <input
+                  type="text"
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    outline: 'none',
+                  }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  Beneficiary Entity Name
+                </label>
+                <input
+                  type="text"
+                  value={beneficiaryName}
+                  onChange={(e) => setBeneficiaryName(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    outline: 'none',
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -16,7 +16,7 @@ export const AnalyticsView: React.FC = () => {
   const [replyText, setReplyText] = useState('');
 
   const avgRating = (
-    reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+    reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1)
   ).toFixed(1);
 
   const handleSendReply = (reviewId: string) => {
@@ -27,105 +27,240 @@ export const AnalyticsView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-16">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '48px' }}>
       {/* Top Analytics Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px' }}>
+        {/* Metric 1: Guest Rating */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               Guest Rating
             </span>
-            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center">
-              <Star size={16} fill="currentColor" />
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                backgroundColor: '#FFFBEB',
+                color: '#F59E0B',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Star size={17} fill="#F59E0B" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-900 tracking-tight">{avgRating}</span>
-            <span className="text-xs font-semibold text-slate-400">/ 5.0</span>
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded ml-auto">
-              Top 5%
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+              <span style={{ fontSize: '28px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                {avgRating}
+              </span>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: '#94A3B8' }}>/ 5.0</span>
+              <span
+                style={{
+                  marginLeft: 'auto',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#15803D',
+                  backgroundColor: '#ECFDF5',
+                  border: '1px solid #BBF7D0',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                Top 5%
+              </span>
+            </div>
+            <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '6px 0 0 0' }}>
+              Based on verified table QR visits
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400">Based on verified table QR visits</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+        {/* Metric 2: Repeat Diner Rate */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               Repeat Diner Rate
             </span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-              <Users size={16} />
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                backgroundColor: '#EFF6FF',
+                color: '#3B82F6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Users size={17} strokeWidth={2.3} />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-900 tracking-tight">68.4%</span>
-            <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded ml-auto">
-              +14% vs avg
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+              <span style={{ fontSize: '28px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                68.4%
+              </span>
+              <span
+                style={{
+                  marginLeft: 'auto',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#2563EB',
+                  backgroundColor: '#EFF6FF',
+                  border: '1px solid #BFDBFE',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                +14% vs avg
+              </span>
+            </div>
+            <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '6px 0 0 0' }}>
+              Boosted by Restrofe Coin streaks
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400">Boosted by Restrofe Coin streaks</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Payment Method
+        {/* Metric 3: Payment Method */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              Settlement Routing
             </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <ShieldCheck size={16} />
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                backgroundColor: '#ECFDF5',
+                color: '#10B981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <ShieldCheck size={18} strokeWidth={2.3} />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-900 tracking-tight">94%</span>
-            <span className="text-xs font-semibold text-slate-500">Direct UPI</span>
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded ml-auto">
-              Instant
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+              <span style={{ fontSize: '28px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                94%
+              </span>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: '#0F172A' }}>Direct UPI</span>
+              <span
+                style={{
+                  marginLeft: 'auto',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#15803D',
+                  backgroundColor: '#ECFDF5',
+                  border: '1px solid #BBF7D0',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                Instant
+              </span>
+            </div>
+            <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '6px 0 0 0' }}>
+              6% Restrofe Wallet Coins
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400">6% Restrofe Wallet Coins</p>
         </div>
       </div>
 
       {/* Hourly Dining Heatmap */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-3">
-        <div className="flex items-center justify-between">
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '16px',
+          border: '1px solid #E2E8F0',
+          padding: '22px 24px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900">
+            <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
               Peak Hours Traffic Distribution
             </h3>
-            <p className="text-xs text-slate-500">
-              Real-time diner footfall across operating hours
+            <p style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0' }}>
+              Real-time diner footfall and rush hours across operating hours
             </p>
           </div>
-          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-orange-50 text-[#FF5A1F] border border-orange-200">
-            Dinner Peak: 7:30 PM - 10:00 PM
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 700,
+              padding: '3px 10px',
+              borderRadius: '9999px',
+              backgroundColor: '#FFF4EE',
+              color: '#FF5A1F',
+              border: '1px solid #FFD8C7',
+            }}
+          >
+            Dinner Peak: 7:30 PM – 10:00 PM
           </span>
         </div>
 
-        <div className="flex items-end gap-2 h-32 pt-4">
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '110px', gap: '8px', padding: '0 4px' }}>
           {HOURLY_TRAFFIC.map((item) => {
             const max = 86;
             const heightPct = Math.round((item.diners / max) * 100);
             return (
-              <div key={item.hour} className="flex-1 flex flex-col items-center gap-1.5 group relative">
-                <div className="w-full bg-slate-100 rounded-t h-24 flex items-end overflow-hidden">
-                  <div
-                    style={{ height: `${heightPct}%` }}
-                    className={`w-full rounded-t transition-all group-hover:opacity-80 ${
-                      item.isPeak
-                        ? 'bg-[#FF5A1F]'
-                        : 'bg-slate-300'
-                    }`}
-                  />
-                </div>
-                <span className="text-[10px] font-semibold text-slate-400 group-hover:text-slate-800">
+              <div key={item.hour} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+                <div
+                  style={{
+                    width: '100%',
+                    maxWidth: '42px',
+                    height: `${Math.max(16, heightPct * 0.9)}px`,
+                    backgroundColor: item.isPeak ? '#FF5A1F' : '#E2E8F0',
+                    borderRadius: '5px 5px 0 0',
+                    transition: 'all 0.2s ease',
+                  }}
+                  title={`${item.hour}: ${item.diners} diners`}
+                />
+                <span style={{ fontSize: '10px', fontWeight: 600, color: '#94A3B8', marginTop: '6px' }}>
                   {item.hour.replace(' ', '')}
                 </span>
-
-                <div className="absolute -top-7 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow pointer-events-none transition whitespace-nowrap z-20">
-                  {item.diners} diners {item.isPeak ? '🔥 Peak' : ''}
-                </div>
               </div>
             );
           })}
@@ -133,76 +268,113 @@ export const AnalyticsView: React.FC = () => {
       </div>
 
       {/* Verified Diner Reviews with Manager Reply */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-5">
-        <div className="flex items-center justify-between">
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '16px',
+          border: '1px solid #E2E8F0',
+          padding: '22px 24px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid #F1F5F9' }}>
           <div>
-            <div className="flex items-center gap-2">
-              <MessageSquareQuote size={18} className="text-[#FF5A1F]" />
-              <h3 className="text-base font-extrabold text-slate-900">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <MessageSquareQuote size={18} color="#FF5A1F" />
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
                 Verified Guest Reviews
               </h3>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0' }}>
               Only guests who completed payment via table QR code can submit reviews
             </p>
           </div>
-          <span className="text-xs font-bold text-slate-400">
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748B' }}>
             {reviews.length} Verified Reviews
           </span>
         </div>
 
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
           {reviews.map((rev) => (
             <div
               key={rev.id}
-              className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2.5"
+              style={{
+                padding: '16px 18px',
+                borderRadius: '14px',
+                backgroundColor: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+              }}
             >
               {/* Review Header */}
-              <div className="flex items-start justify-between">
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-slate-900 text-sm">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0F172A' }}>
                       {rev.customerName}
                     </span>
                     {rev.verifiedDiner && (
-                      <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          padding: '2px 8px',
+                          borderRadius: '9999px',
+                          backgroundColor: '#ECFDF5',
+                          color: '#15803D',
+                          border: '1px solid #BBF7D0',
+                        }}
+                      >
                         <ShieldCheck size={11} /> Table {rev.tableNumber}
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94A3B8', marginTop: '2px' }}>
                     <span>{rev.date}</span>
                     <span>•</span>
-                    <span>Check: ₹{rev.billAmount}</span>
+                    <span style={{ fontWeight: 600, color: '#475569' }}>Check: ₹{rev.billAmount}</span>
                   </div>
                 </div>
 
                 {/* Stars */}
-                <div className="flex items-center gap-0.5 text-amber-500">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       size={13}
-                      fill={i < rev.rating ? 'currentColor' : 'none'}
-                      className={i < rev.rating ? 'text-amber-500' : 'text-slate-300'}
+                      fill={i < rev.rating ? '#F59E0B' : 'none'}
+                      color={i < rev.rating ? '#F59E0B' : '#CBD5E1'}
                     />
                   ))}
                 </div>
               </div>
 
               {/* Comment */}
-              <p className="text-xs text-slate-700 leading-relaxed font-medium">
+              <p style={{ fontSize: '12.5px', color: '#334155', lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
                 "{rev.comment}"
               </p>
 
               {/* Manager Reply If exists */}
               {rev.reply && (
-                <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
-                  <div className="flex items-center justify-between text-[11px] font-bold text-[#FF5A1F]">
+                <div
+                  style={{
+                    padding: '12px 14px',
+                    borderRadius: '12px',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E2E8F0',
+                    marginTop: '4px',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700, color: '#FF5A1F' }}>
                     <span>Manager Reply:</span>
-                    <span className="text-slate-400 font-normal">{rev.reply.repliedAt}</span>
+                    <span style={{ color: '#94A3B8', fontWeight: 500 }}>{rev.reply.repliedAt}</span>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5, margin: '4px 0 0 0' }}>
                     {rev.reply.text}
                   </p>
                 </div>
@@ -212,29 +384,60 @@ export const AnalyticsView: React.FC = () => {
               {!rev.reply && (
                 <div>
                   {activeReplyId === rev.id ? (
-                    <div className="space-y-2 mt-2">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px' }}>
                       <textarea
                         rows={2}
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                         placeholder="Write a warm, professional reply..."
-                        className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-[#FF5A1F] bg-white"
+                        style={{
+                          width: '100%',
+                          padding: '10px 12px',
+                          borderRadius: '10px',
+                          border: '1px solid #CBD5E1',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          outline: 'none',
+                          backgroundColor: '#FFFFFF',
+                          resize: 'none',
+                        }}
                       />
-                      <div className="flex justify-end gap-2">
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
                         <button
                           onClick={() => {
                             setActiveReplyId(null);
                             setReplyText('');
                           }}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-200"
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '8px',
+                            fontSize: '11.5px',
+                            fontWeight: 600,
+                            color: '#64748B',
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #E2E8F0',
+                            cursor: 'pointer',
+                          }}
                         >
                           Cancel
                         </button>
                         <button
                           onClick={() => handleSendReply(rev.id)}
-                          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#FF5A1F] text-white hover:bg-[#E44912]"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '6px 14px',
+                            borderRadius: '8px',
+                            fontSize: '11.5px',
+                            fontWeight: 700,
+                            backgroundColor: '#FF5A1F',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            cursor: 'pointer',
+                          }}
                         >
-                          <Send size={12} />
+                          <Send size={11} />
                           <span>Publish Reply</span>
                         </button>
                       </div>
@@ -245,7 +448,15 @@ export const AnalyticsView: React.FC = () => {
                         setActiveReplyId(rev.id);
                         setReplyText('');
                       }}
-                      className="text-xs font-bold text-[#FF5A1F] hover:underline"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        color: '#FF5A1F',
+                        cursor: 'pointer',
+                      }}
                     >
                       Reply to guest →
                     </button>
