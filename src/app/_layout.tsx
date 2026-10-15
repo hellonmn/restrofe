@@ -15,7 +15,6 @@ export default function RootLayout() {
           <Stack.Screen name="welcome" options={{ animation: 'fade', gestureEnabled: false }} />
           <Stack.Screen name="restaurant/[id]" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="cart" options={{ animation: 'slide_from_bottom' }} />
-          <Stack.Screen name="partner" options={{ animation: 'slide_from_right' }} />
         </Stack>
       </CartProvider>
     </RestaurantProvider>

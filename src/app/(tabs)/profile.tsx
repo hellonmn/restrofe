@@ -137,45 +137,6 @@ export default function ProfileScreen() {
           ))}
         </View>
 
-        {/* Restrofe for Restaurants & Owners (Pitch Deck Slide 02 & 07) */}
-        <Text style={styles.sectionTitle}>Restrofe for Business</Text>
-        <View style={[styles.partnerCard, SHADOW.md]}>
-          <View style={styles.partnerTopRow}>
-            <View style={styles.partnerIconBox}>
-              <PackIcon name="restaurant" size={24} color="#FFFFFF" />
-            </View>
-            <View style={{ flex: 1, marginLeft: 12 }}>
-              <View style={styles.partnerBadge}>
-                <Text style={styles.partnerBadgeText}>PARTNER PORTAL</Text>
-              </View>
-              <Text style={styles.partnerCardTitle}>Restaurant Admin & Portal</Text>
-              <Text style={styles.partnerCardSub}>
-                Manage your menus, live pricing, in-restaurant QR standees, stacked offers, and visit records.
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.partnerBtnRow}>
-            <PressableScale
-              haptic="medium"
-              style={[styles.partnerMainBtn, SHADOW.sm]}
-              onPress={() => router.push("/partner" as any)}
-            >
-              <PackIcon name="flash" size={16} color="#FFFFFF" />
-              <Text style={styles.partnerMainBtnText}>Open Partner Portal</Text>
-            </PressableScale>
-
-            <PressableScale
-              haptic="light"
-              style={styles.partnerSecondaryBtn}
-              onPress={() => router.push("/partner/list-restaurant" as any)}
-            >
-              <PackIcon name="plus" size={14} color={COLORS.primary} />
-              <Text style={styles.partnerSecondaryBtnText}>List Restaurant</Text>
-            </PressableScale>
-          </View>
-        </View>
-
         {/* Account */}
         <Text style={styles.sectionTitle}>Account</Text>
         <View style={styles.group}>{renderRows(account)}</View>
@@ -304,89 +265,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     marginTop: 22,
     marginBottom: 10,
-  },
-  partnerCard: {
-    backgroundColor: "#1C1C1E",
-    borderRadius: 20,
-    padding: 18,
-    marginBottom: 8,
-  },
-  partnerTopRow: {
-    flexDirection: "row",
-  },
-  partnerIconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    backgroundColor: COLORS.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  partnerBadge: {
-    backgroundColor: "#3A3A3C",
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    alignSelf: "flex-start",
-    marginBottom: 4,
-  },
-  partnerBadgeText: {
-    fontSize: 9,
-    fontWeight: "900",
-    color: "#FFFFFF",
-    letterSpacing: 0.8,
-  },
-  partnerCardTitle: {
-    fontSize: 17,
-    fontWeight: "900",
-    color: "#FFFFFF",
-  },
-  partnerCardSub: {
-    fontSize: 12,
-    color: "#B4B4BB",
-    lineHeight: 16,
-    marginTop: 4,
-  },
-  partnerBtnRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginTop: 16,
-    paddingTop: 14,
-    borderTopWidth: 1,
-    borderTopColor: "#2C2C2E",
-  },
-  partnerMainBtn: {
-    flex: 1.3,
-    backgroundColor: COLORS.primary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    borderRadius: 14,
-    gap: 6,
-  },
-  partnerMainBtnText: {
-    color: "#FFFFFF",
-    fontSize: 13,
-    fontWeight: "900",
-  },
-  partnerSecondaryBtn: {
-    flex: 1,
-    backgroundColor: "#2C2C2E",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    borderRadius: 14,
-    gap: 4,
-    borderWidth: 1,
-    borderColor: "#3A3A3C",
-  },
-  partnerSecondaryBtnText: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "800",
   },
   group: {
     backgroundColor: COLORS.card,

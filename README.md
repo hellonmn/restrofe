@@ -1,56 +1,74 @@
-# Welcome to your Expo app 👋
+# Restrofe 🍽️
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> **"One app for customers. One portal for restaurants."**  
+> Direct Diners • Stacked Discounts • Table QR & Instant UPI • 0% Commission Forever
 
-## Get started
+Restrofe is an F&B ecosystem designed to eliminate high aggregator commissions (20–30%) by connecting diners directly with dine-in restaurants through table QR ordering, stacked promotions (store discounts + Restrofe coin boosts), and direct merchant UPI settlements.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Architecture Overview
 
-2. Start the app
+| Component | Platform | Tech Stack | Purpose |
+|---|---|---|---|
+| **Diner Mobile App** | iOS & Android | Expo SDK 57, React Native 0.86, Expo Router | Table QR scanner, live digital menus, stacked coin wallet, table checkouts |
+| **Restaurant Partner Portal** | Web Desktop | React 19, TypeScript, Vite, Tailwind CSS | Menu manager, stacked offers engine, table QR standee generator, analytics & 0% settlement ledger |
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 1. Restaurant Web Portal (`portal/`)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+The Restaurant Partner Portal allows restaurant owners and managers to control live store operations, menus, pricing, stacked discounts, and print physical table standees.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Features
+* **Live Operations Dashboard:** Track active tables, verified QR revenue, average check value, and live aggregator savings (0% commission).
+* **Menu Catalog & Stock Control:** Add/edit dishes, manage dietary flags (Veg/Non-Veg), prep times, prices, and instant 86 / Sold-Out toggles.
+* **Restrofe Stacked Discounts Engine:** Launch promotions combining store discounts with Restrofe Coin boosts (e.g. 30% Off Dine-In + 20% Coin Boost).
+* **Table QR & Standees Generator:** Table-specific QR codes with direct UPI routing (`burgerhouse@hdfcbank`), high-resolution canvas rendering, and print-ready acrylic standee previews.
+* **Guest Analytics & Verified Reviews:** Peak dining hours heatmap, repeat diner streak tracking, and manager reply functionality for verified reviews.
+* **0% Commission & Bank Settlements:** Direct peer-to-merchant settlement tracking, 1-month free trial monitor, and linked bank account management.
 
-## Get a fresh project
+### Running the Web Portal
 
-When you're ready, run:
-
+From the repository root:
 ```bash
-npm run reset-project
+# Start the web portal dev server (runs on http://localhost:3000)
+npm run portal
+
+# Or navigate directly to the portal directory:
+cd portal
+npm run dev
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+To build for production:
+```bash
+npm run portal:build
+```
 
-### Other setup steps
+---
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## 2. Diner Mobile App (`src/`)
 
-## Learn more
+The customer-facing mobile application built with Expo Router.
 
-To learn more about developing your project with Expo, look at the following resources:
+### Running the Mobile App
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+From the repository root:
+```bash
+# Install root dependencies (if not already installed)
+npm install
 
-## Join the community
+# Start the Expo development server
+npx expo start
+```
 
-Join our community of developers creating universal apps.
+Press `a` for Android Emulator, `i` for iOS Simulator, or scan the QR code with Expo Go on a physical device.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Quality Checks
+```bash
+# Check TypeScript types
+npx tsc --noEmit
+
+# Run ESLint
+npm run lint
+```

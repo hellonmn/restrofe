@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #FF5A1F;
+  --primary-hover: #E44912;
+  --primary-light: #FFF2EC;
+  --primary-glow: rgba(255, 90, 31, 0.16);
+
+  --sidebar-bg: #0F1115;
+  --sidebar-hover: #1A1D24;
+  --sidebar-active: #242832;
+  --sidebar-border: #222631;
+
+  --bg-page: #F8F9FC;
+  --card-bg: #FFFFFF;
+  --card-border: #E8ECEF;
+
+  --text-main: #14171F;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+
+  --success: #10B981;
+  --success-bg: #ECFDF5;
+  --warning: #F59E0B;
+  --warning-bg: #FFFBEB;
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
+  --info: #3B82F6;
+  --info-bg: #EFF6FF;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 20px -2px rgba(20, 24, 38, 0.05), 0 2px 6px -1px rgba(20, 24, 38, 0.03);
+  --shadow-float: 0 20px 40px -8px rgba(20, 24, 38, 0.12), 0 8px 16px -4px rgba(20, 24, 38, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.15s ease-in-out;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Print layout for QR Standee */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-standee, #printable-standee * {
+    visibility: visible;
+  }
+  #printable-standee {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white !important;
+    padding: 0;
+    margin: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Pulse animation */
+@keyframes softPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+}
+
+.pulse-dot {
+  animation: softPulse 2s infinite ease-in-out;
+}

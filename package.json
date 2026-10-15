@@ -44,7 +44,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "portal": "npm --prefix portal run dev",
+    "portal:build": "npm --prefix portal run build"
   },
   "private": true
 }
