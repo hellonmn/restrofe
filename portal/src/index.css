@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -8,30 +9,27 @@
   --color-brand-hover: #E44912;
   --color-brand-50: #FFF5F0;
   --color-brand-100: #FFEBE0;
-  --color-brand-200: #FFD4C2;
-  --color-brand-500: #FF5A1F;
-  --color-brand-600: #E44912;
 }
 
 :root {
   --bg-page: #F8FAFC;
   --bg-surface: #FFFFFF;
   --border-subtle: #E2E8F0;
-  --border-strong: #CBD5E1;
   --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
   --brand: #FF5A1F;
 }
 
-* {
+*, ::before, ::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html, body, #root, button, input, select, textarea {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--bg-page);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -62,8 +60,8 @@ body {
     opacity: 1;
   }
   50% {
-    transform: scale(1.15);
-    opacity: 0.85;
+    transform: scale(1.2);
+    opacity: 0.8;
   }
 }
 

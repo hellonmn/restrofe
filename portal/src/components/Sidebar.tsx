@@ -32,37 +32,37 @@ export const Sidebar: React.FC = () => {
     {
       id: 'dashboard',
       label: 'Dashboard',
-      icon: <LayoutGrid size={18} strokeWidth={2} />,
+      icon: <LayoutGrid size={20} strokeWidth={2.2} />,
     },
     {
       id: 'menu',
       label: 'Menu Catalog',
-      icon: <UtensilsCrossed size={18} strokeWidth={2} />,
+      icon: <UtensilsCrossed size={20} strokeWidth={1.8} />,
     },
     {
       id: 'offers',
       label: 'Offers & Promos',
-      icon: <Tag size={18} strokeWidth={2} />,
+      icon: <Tag size={20} strokeWidth={1.8} />,
     },
     {
       id: 'tables',
       label: 'Table QR Standees',
-      icon: <QrCode size={18} strokeWidth={2} />,
+      icon: <QrCode size={20} strokeWidth={1.8} />,
     },
     {
       id: 'analytics',
       label: 'Analytics & Reviews',
-      icon: <BarChart3 size={18} strokeWidth={2} />,
+      icon: <BarChart3 size={20} strokeWidth={1.8} />,
     },
     {
       id: 'settlement',
       label: '0% Settlements',
-      icon: <Landmark size={18} strokeWidth={2} />,
+      icon: <Landmark size={20} strokeWidth={1.8} />,
     },
     {
       id: 'account',
       label: 'Store & Compliance',
-      icon: <Store size={18} strokeWidth={2} />,
+      icon: <Store size={20} strokeWidth={1.8} />,
     },
   ];
 
@@ -73,11 +73,11 @@ export const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-[260px] min-w-[260px] max-w-[260px] bg-white text-slate-800 flex flex-col h-screen border-r border-slate-100 flex-shrink-0 sticky top-0 z-30 select-none">
+    <aside className="w-72 min-w-[288px] max-w-[288px] bg-white text-slate-800 flex flex-col h-screen border-r border-slate-200/90 flex-shrink-0 sticky top-0 z-30 select-none">
       {/* Brand Header */}
-      <div className="p-4 pb-3">
+      <div className="p-6 pb-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FF5A1F] flex items-center justify-center text-white font-black text-xl shadow-xs flex-shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-[#FF5A1F] flex items-center justify-center text-white font-black text-2xl shadow-xs flex-shrink-0">
             R
           </div>
           <div className="min-w-0 flex-1">
@@ -94,10 +94,10 @@ export const Sidebar: React.FC = () => {
         </div>
 
         {/* Live Status Row */}
-        <div className="relative mt-3 pt-1">
+        <div className="relative mt-3.5">
           <button
             onClick={() => setIsStatusMenuOpen(!isStatusMenuOpen)}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-slate-900 transition group py-1"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-slate-900 transition py-0.5 group"
           >
             <span
               className={`w-2 h-2 rounded-full flex-shrink-0 ${
@@ -108,14 +108,14 @@ export const Sidebar: React.FC = () => {
                   : 'bg-rose-500'
               }`}
             />
-            <span className="font-medium text-slate-800">
+            <span className="font-semibold text-slate-800">
               {storeStatus === 'open' ? 'Open for Orders' : storeStatus === 'busy' ? 'Busy / Rush' : 'Store Closed'}
             </span>
           </button>
 
-          {/* Quick status dropdown */}
+          {/* Status dropdown */}
           {isStatusMenuOpen && (
-            <div className="absolute top-full left-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50">
+            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
               {statusOptions.map((opt) => (
                 <button
                   key={opt.value}
@@ -123,10 +123,10 @@ export const Sidebar: React.FC = () => {
                     setStoreStatus(opt.value);
                     setIsStatusMenuOpen(false);
                   }}
-                  className="w-full px-3 py-1.5 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                  className="w-full px-3.5 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between"
                 >
                   <span>{opt.label}</span>
-                  {storeStatus === opt.value && <Check size={13} className="text-[#FF5A1F]" />}
+                  {storeStatus === opt.value && <Check size={14} className="text-[#FF5A1F]" />}
                 </button>
               ))}
             </div>
@@ -135,8 +135,8 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-1 space-y-1 overflow-y-auto">
-        <div className="px-3 pt-3 pb-1 text-[11px] font-bold tracking-wider uppercase text-slate-400">
+      <nav className="flex-1 px-4 py-3 space-y-1.5 overflow-y-auto">
+        <div className="px-3 pt-3 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">
           MAIN MENU
         </div>
 
@@ -146,13 +146,13 @@ export const Sidebar: React.FC = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition-all group ${
                 isActive
-                  ? 'bg-[#FFF2EB] text-[#FF5A1F] font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-[#FFF4EE] text-[#FF5A1F] font-bold shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium'
               }`}
             >
-              <span className={isActive ? 'text-[#FF5A1F]' : 'text-slate-500'}>
+              <span className={isActive ? 'text-[#FF5A1F]' : 'text-slate-400 group-hover:text-slate-600'}>
                 {item.icon}
               </span>
               <span className="truncate">{item.label}</span>
@@ -161,44 +161,44 @@ export const Sidebar: React.FC = () => {
         })}
 
         {/* Partner Tools */}
-        <div className="px-3 pt-5 pb-1 text-[11px] font-bold tracking-wider uppercase text-slate-400">
+        <div className="px-3 pt-6 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">
           PARTNER TOOLS
         </div>
 
         <button
           onClick={triggerLiveVisit}
-          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition"
+          className="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition group"
         >
-          <ShieldCheck size={18} strokeWidth={2} className="text-slate-500 flex-shrink-0" />
+          <ShieldCheck size={20} strokeWidth={1.8} className="text-slate-400 group-hover:text-slate-600 flex-shrink-0" />
           <span className="truncate">Simulate Table Scan</span>
         </button>
 
         <button
           onClick={resetAllData}
-          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition"
+          className="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition group"
         >
-          <RotateCcw size={18} strokeWidth={2} className="text-slate-500 flex-shrink-0" />
+          <RotateCcw size={20} strokeWidth={1.8} className="text-slate-400 group-hover:text-slate-600 flex-shrink-0" />
           <span className="truncate">Reset Demo Catalog</span>
         </button>
       </nav>
 
       {/* Bottom 0% Commission Card */}
-      <div className="p-3 m-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
+      <div className="p-4 m-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/90 shadow-2xs space-y-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
-              <Percent size={11} strokeWidth={3} />
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-md bg-emerald-100/70 text-emerald-600 flex items-center justify-center flex-shrink-0">
+              <Percent size={12} strokeWidth={2.8} />
             </div>
             <span className="text-xs font-bold text-slate-900">0% Commission</span>
           </div>
-          <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/70">
             Active
           </span>
         </div>
-        <p className="text-[11px] text-slate-500 leading-snug font-medium">
+        <p className="text-xs text-slate-500 leading-snug font-medium">
           Direct peer-to-merchant UPI payouts.
         </p>
-        <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px]">
+        <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
           <span className="text-slate-400 font-medium">HDFC Settlement</span>
           <span className="font-bold text-[#FF5A1F]">24 Days Left</span>
         </div>
