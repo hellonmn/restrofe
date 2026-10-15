@@ -5,12 +5,15 @@ import {
   QrCode,
   ArrowUpRight,
   Plus,
-  Tag,
-  ShieldCheck,
+  Percent,
   TrendingUp,
+  Layers,
+  ShieldCheck,
+  SlidersHorizontal,
+  ChevronRight,
+  Store,
 } from 'lucide-react';
 import { useRestaurant } from '../../context/RestaurantContext';
-import { HOURLY_TRAFFIC } from '../../data/mockData';
 
 export const DashboardView: React.FC = () => {
   const {
@@ -21,375 +24,694 @@ export const DashboardView: React.FC = () => {
     updateTableStatus,
   } = useRestaurant();
 
-  const [selectedSection, setSelectedSection] = useState<string>('All');
+  const [selectedSection, setSelectedSection] = useState<string>('Indoor Main');
 
   const todayRevenue = visits.reduce((acc, v) => acc + v.amount, 0);
-  const activeTables = tables.filter((t) => t.status !== 'vacant');
   const avgBill = visits.length ? Math.round(todayRevenue / visits.length) : 0;
   const commissionSaved = Math.round(todayRevenue * 0.22); // 22% typical aggregator commission
 
-  const filteredTables = tables.filter(
-    (t) => selectedSection === 'All' || t.section === selectedSection
-  );
+  const sections = ['Indoor Main', 'Patio Garden', 'Rooftop Terrace', 'Bar Counter'];
 
-  const sections = ['All', 'Indoor Main', 'Patio Garden', 'Rooftop Terrace', 'Bar Counter'];
+  // 12 tables mapped directly for floor plan
+  const sampleTables = [
+    { tableNumber: 1, name: 'T-1', capacity: 2, section: 'Indoor Main', status: 'vacant', amount: 0, timeAgo: '' },
+    { tableNumber: 2, name: 'T-2', capacity: 4, section: 'Indoor Main', status: 'occupied', amount: 890, timeAgo: '12m ago' },
+    { tableNumber: 3, name: 'T-3', capacity: 4, section: 'Indoor Main', status: 'bill_pending', amount: 1420, timeAgo: '3m ago' },
+    { tableNumber: 4, name: 'T-4', capacity: 6, section: 'Rooftop Terrace', status: 'occupied', amount: 2150, timeAgo: 'Just now' },
+    { tableNumber: 5, name: 'T-5', capacity: 2, section: 'Patio Garden', status: 'vacant', amount: 0, timeAgo: '' },
+    { tableNumber: 6, name: 'T-6', capacity: 4, section: 'Patio Garden', status: 'occupied', amount: 640, timeAgo: '18m ago' },
+    { tableNumber: 7, name: 'T-7', capacity: 4, section: 'Patio Garden', status: 'vacant', amount: 0, timeAgo: '' },
+    { tableNumber: 8, name: 'T-8', capacity: 6, section: 'Rooftop Terrace', status: 'occupied', amount: 2890, timeAgo: '5m ago' },
+    { tableNumber: 9, name: 'T-9', capacity: 6, section: 'Rooftop Terrace', status: 'vacant', amount: 0, timeAgo: '' },
+    { tableNumber: 10, name: 'T-10', capacity: 2, section: 'Bar Counter', status: 'vacant', amount: 0, timeAgo: '' },
+    { tableNumber: 11, name: 'T-11', capacity: 2, section: 'Bar Counter', status: 'occupied', amount: 410, timeAgo: '8m ago' },
+    { tableNumber: 12, name: 'T-12', capacity: 2, section: 'Bar Counter', status: 'vacant', amount: 0, timeAgo: '' },
+  ];
+
+  const dinerActivity = [
+    { table: 'Table 4', diner: 'Aarav Mehta', time: '12m ago', method: 'UPI • +20 coins', amount: 2150 },
+    { table: 'Table 8', diner: 'Priya Sharma & Friends', time: '5 mins ago', method: 'Direct QR', amount: 2890 },
+    { table: 'Table 3', diner: 'Karan Verma', time: '14 mins ago', method: 'Restrofe Wallet • +40 coins', amount: 1420 },
+    { table: 'Table 6', diner: 'Sneha Patil', time: '28 mins ago', method: 'UPI • +8 coins', amount: 980 },
+    { table: 'Table 1', diner: 'Rohan Nambiar', time: '42 mins ago', method: 'UPI • +40 coins', amount: 1120 },
+  ];
 
   return (
-    <div className="space-y-6 pb-12">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '40px' }}>
       {/* 4 Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1 */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Today's Revenue
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <IndianRupee size={16} />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '16px' }}>
+        {/* Metric 1: Today's Revenue */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '18px 20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '12px',
+                backgroundColor: '#ECFDF5',
+                color: '#10B981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+              }}
+            >
+              <IndianRupee size={18} strokeWidth={2.5} />
             </div>
+            <TrendingUp size={16} color="#10B981" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 tracking-tight">
-              ₹{todayRevenue.toLocaleString('en-IN')}
-            </span>
-            <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-              <ArrowUpRight size={12} /> 18.4%
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              TODAY'S REVENUE
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
+              <span style={{ fontSize: '26px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                ₹{todayRevenue ? todayRevenue.toLocaleString('en-IN') : '8,560'}
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#10B981',
+                  backgroundColor: '#ECFDF5',
+                  padding: '2px 6px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '2px',
+                }}
+              >
+                <ArrowUpRight size={11} /> 18.4%
+              </span>
+            </div>
+            <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, margin: '4px 0 0 0' }}>
+              Directly settled via table UPI
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400 font-medium">
-            Directly settled via table UPI
-          </p>
         </div>
 
-        {/* Metric 2 */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Table Occupancy
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-              <Users size={16} />
+        {/* Metric 2: Table Occupancy */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '18px 20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '12px',
+                backgroundColor: '#EFF6FF',
+                color: '#3B82F6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Users size={18} strokeWidth={2.3} />
             </div>
+            <Users size={16} color="#3B82F6" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 tracking-tight">
-              {activeTables.length} <span className="text-base text-slate-400 font-normal">/ {tables.length}</span>
-            </span>
-            <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
-              {Math.round((activeTables.length / tables.length) * 100)}% Full
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              TABLE OCCUPANCY
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
+              <span style={{ fontSize: '26px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                6 <span style={{ fontSize: '16px', color: '#94A3B8', fontWeight: 500 }}>/ 12</span>
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#3B82F6',
+                  backgroundColor: '#EFF6FF',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                50% Full
+              </span>
+            </div>
+            <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, margin: '4px 0 0 0' }}>
+              1 bills waiting payment
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400 font-medium">
-            {tables.filter((t) => t.status === 'bill_pending').length} bills waiting payment
-          </p>
         </div>
 
-        {/* Metric 3 */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Average Table Bill
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-orange-50 text-[#FF5A1F] flex items-center justify-center">
-              <TrendingUp size={16} />
+        {/* Metric 3: Average Table Bill */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '18px 20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '12px',
+                backgroundColor: '#FFF7ED',
+                color: '#FF5A1F',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <TrendingUp size={18} strokeWidth={2.5} />
             </div>
+            <TrendingUp size={16} color="#FF5A1F" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 tracking-tight">
-              ₹{avgBill.toLocaleString('en-IN')}
-            </span>
-            <span className="text-[11px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">
-              +₹140 vs avg
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              AVERAGE TABLE BILL
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
+              <span style={{ fontSize: '26px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                ₹{avgBill ? avgBill.toLocaleString('en-IN') : '1,712'}
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#FF5A1F',
+                  backgroundColor: '#FFF7ED',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                +₹140 vs avg
+              </span>
+            </div>
+            <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, margin: '4px 0 0 0' }}>
+              Driven by stacked coin offers
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400 font-medium">
-            Driven by stacked coin offers
-          </p>
         </div>
 
-        {/* Metric 4 */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs hover:shadow-xs transition">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Commission Saved
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-              <ShieldCheck size={16} />
+        {/* Metric 4: Commission Saved */}
+        <div
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '18px 20px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '12px',
+                backgroundColor: '#F5F3FF',
+                color: '#8B5CF6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Layers size={18} strokeWidth={2.3} />
             </div>
+            <ShieldCheck size={16} color="#F59E0B" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-slate-900 tracking-tight">
-              ₹{commissionSaved.toLocaleString('en-IN')}
-            </span>
-            <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
-              0% Fee
-            </span>
+          <div style={{ marginTop: '14px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              COMMISSION SAVED
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
+              <span style={{ fontSize: '26px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
+                ₹{commissionSaved ? commissionSaved.toLocaleString('en-IN') : '1,883'}
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  color: '#10B981',
+                  backgroundColor: '#ECFDF5',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                }}
+              >
+                0% Fee
+              </span>
+            </div>
+            <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, margin: '4px 0 0 0' }}>
+              Saved vs 22% aggregator cuts
+            </p>
           </div>
-          <p className="mt-2 text-xs text-slate-400 font-medium">
-            Saved vs 22% aggregator cuts
-          </p>
         </div>
       </div>
 
-      {/* Main Floor Grid + Side Feed */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Left Column (2 Cols): Live Table Matrix */}
-        <div className="xl:col-span-2 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-2xs space-y-5">
-          {/* Section Header & Area Filter */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
-                Live Table Floor Plan
-              </h2>
-              <p className="text-xs text-slate-500">
-                Tap table actions to update dining status or print QR standee
-              </p>
+      {/* Main Split: Left Floor Plan & Rush Hours (1.85fr) + Right Quick Actions & Diner Activity (1fr) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.85fr) minmax(0, 1fr)', gap: '20px' }}>
+        {/* Left Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Live Table Floor Plan */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8F0',
+              padding: '20px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            }}
+          >
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+              <div>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                  Live Table Floor Plan
+                </h3>
+                <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0' }}>
+                  Tap table actions to update dining status or print QR standee
+                </p>
+              </div>
+
+              {/* Area filter tabs */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {sections.map((sec) => {
+                  const isActive = selectedSection === sec;
+                  return (
+                    <button
+                      key={sec}
+                      onClick={() => setSelectedSection(sec)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        fontSize: '11.5px',
+                        fontWeight: isActive ? 700 : 500,
+                        backgroundColor: isActive ? '#FFF4EE' : '#F8FAFC',
+                        color: isActive ? '#FF5A1F' : '#64748B',
+                        border: `1px solid ${isActive ? '#FFD8C7' : '#E2E8F0'}`,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      <Store size={12} color={isActive ? '#FF5A1F' : '#94A3B8'} />
+                      <span>{sec}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-              {sections.map((sec) => (
-                <button
-                  key={sec}
-                  onClick={() => setSelectedSection(sec)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-                    selectedSection === sec
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {sec}
-                </button>
-              ))}
-            </div>
-          </div>
+            {/* 12 Tables Grid: 4 columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '12px', marginTop: '16px' }}>
+              {sampleTables.map((t) => {
+                const isVacant = t.status === 'vacant';
+                const isOccupied = t.status === 'occupied';
+                const isPending = t.status === 'bill_pending';
 
-          {/* Tables Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
-            {filteredTables.map((table) => {
-              const isOccupied = table.status !== 'vacant';
-              return (
-                <div
-                  key={table.tableNumber}
-                  className={`p-3.5 rounded-xl border transition-all text-left flex flex-col justify-between ${
-                    table.status === 'vacant'
-                      ? 'bg-slate-50/60 border-slate-200 hover:border-slate-300'
-                      : table.status === 'seated'
-                      ? 'bg-blue-50/50 border-blue-200 shadow-2xs'
-                      : table.status === 'bill_pending'
-                      ? 'bg-amber-50/60 border-amber-300 shadow-2xs'
-                      : 'bg-emerald-50/60 border-emerald-300 shadow-2xs'
-                  }`}
-                >
-                  <div>
-                    {/* Top Row: Table number + Capacity */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-extrabold text-slate-900 text-sm">
-                          T-{table.tableNumber}
-                        </span>
-                        <span className="text-[11px] text-slate-400 font-medium">
-                          ({table.capacity}p)
-                        </span>
+                const borderColor = isOccupied ? '#86EFAC' : isPending ? '#FDE68A' : '#E2E8F0';
+                const bgColor = isOccupied ? '#F0FDF4' : isPending ? '#FFFBEB' : '#FFFFFF';
+                const dotColor = isOccupied ? '#10B981' : isPending ? '#F59E0B' : '#94A3B8';
+
+                return (
+                  <div
+                    key={t.tableNumber}
+                    style={{
+                      borderRadius: '12px',
+                      border: `1px solid ${borderColor}`,
+                      backgroundColor: bgColor,
+                      padding: '12px 14px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      minHeight: '94px',
+                      position: 'relative',
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span
+                            style={{
+                              width: '6px',
+                              height: '6px',
+                              borderRadius: '9999px',
+                              backgroundColor: dotColor,
+                              display: 'inline-block',
+                            }}
+                          />
+                          <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F172A' }}>
+                            {t.name} <span style={{ fontSize: '10.5px', color: '#94A3B8', fontWeight: 500 }}>({t.capacity}p)</span>
+                          </span>
+                        </div>
                       </div>
-
-                      <span
-                        className={`w-2 h-2 rounded-full ${
-                          table.status === 'vacant'
-                            ? 'bg-slate-300'
-                            : table.status === 'seated'
-                            ? 'bg-blue-500'
-                            : table.status === 'bill_pending'
-                            ? 'bg-amber-500 pulse-dot'
-                            : 'bg-emerald-500'
-                        }`}
-                      />
+                      <div style={{ fontSize: '10.5px', color: '#94A3B8', fontWeight: 500, marginTop: '2px' }}>
+                        {t.section}
+                      </div>
                     </div>
 
-                    <span className="text-[11px] font-medium text-slate-400 block truncate mt-0.5">
-                      {table.section}
-                    </span>
-
-                    {/* Middle details */}
-                    <div className="my-2.5">
-                      {isOccupied ? (
-                        <div className="space-y-0.5">
-                          <div className="text-xs font-bold text-slate-800">
-                            ₹{table.currentBill || 0}
-                          </div>
-                          <div className="text-[10px] text-slate-400 font-medium">
-                            {table.lastScannedTime || 'Dining'}
-                          </div>
+                    <div style={{ marginTop: '6px' }}>
+                      {isVacant ? (
+                        <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>
+                          Vacant
                         </div>
                       ) : (
-                        <span className="text-xs text-slate-400 font-medium">Vacant</span>
+                        <div>
+                          <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F172A' }}>
+                            ₹{t.amount}
+                          </div>
+                          <div style={{ fontSize: '10px', color: '#94A3B8' }}>
+                            {t.timeAgo}
+                          </div>
+                        </div>
                       )}
                     </div>
-                  </div>
 
-                  {/* Actions Bar */}
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-200/60">
-                    <button
-                      onClick={() => setSelectedStandeeTable(table)}
-                      title="Print Standee"
-                      className="p-1 rounded text-slate-400 hover:text-slate-800 hover:bg-white transition"
-                    >
-                      <QrCode size={14} />
-                    </button>
+                    {/* Bottom QR and Action */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px' }}>
+                      <button
+                        onClick={() => {
+                          const realTable = tables.find((x) => x.tableNumber === t.tableNumber) || tables[0];
+                          if (realTable) setSelectedStandeeTable(realTable);
+                        }}
+                        title="Print Table QR"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                          color: '#94A3B8',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <QrCode size={13} />
+                      </button>
 
-                    <button
-                      onClick={() =>
-                        updateTableStatus(
-                          table.tableNumber,
-                          table.status === 'vacant'
-                            ? 'seated'
-                            : table.status === 'seated'
-                            ? 'bill_pending'
-                            : table.status === 'bill_pending'
-                            ? 'paid_verified'
-                            : 'vacant'
-                        )
-                      }
-                      className="text-[11px] font-bold text-[#FF5A1F] hover:text-[#E44912] px-2 py-0.5 rounded bg-white border border-slate-200 shadow-2xs hover:bg-slate-50 transition"
-                    >
-                      {table.status === 'vacant'
-                        ? 'Seat'
-                        : table.status === 'seated'
-                        ? 'Bill'
-                        : table.status === 'bill_pending'
-                        ? 'Paid'
-                        : 'Free'}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Peak Hours Traffic Heatmap */}
-          <div className="pt-4 border-t border-slate-100">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Dining Rush Hours
-              </span>
-              <span className="text-xs text-slate-500 font-medium">
-                Peak: <strong className="text-slate-800">7:30 PM - 9:45 PM</strong>
-              </span>
-            </div>
-
-            <div className="flex items-end gap-2 h-24 pt-2">
-              {HOURLY_TRAFFIC.map((item) => {
-                const max = 86;
-                const heightPct = Math.round((item.diners / max) * 100);
-                return (
-                  <div key={item.hour} className="flex-1 flex flex-col items-center gap-1.5 group relative">
-                    <div className="w-full bg-slate-100 rounded-t h-16 flex items-end overflow-hidden">
-                      <div
-                        style={{ height: `${heightPct}%` }}
-                        className={`w-full rounded-t transition-all group-hover:opacity-80 ${
-                          item.isPeak
-                            ? 'bg-[#FF5A1F]'
-                            : 'bg-slate-300'
-                        }`}
-                      />
-                    </div>
-                    <span className="text-[10px] font-semibold text-slate-400 group-hover:text-slate-800">
-                      {item.hour.replace(' ', '')}
-                    </span>
-
-                    {/* Tooltip */}
-                    <div className="absolute -top-7 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow pointer-events-none transition whitespace-nowrap z-20">
-                      {item.diners} diners {item.isPeak ? '🔥 Peak' : ''}
+                      {isVacant ? (
+                        <button
+                          onClick={() => {
+                            updateTableStatus(t.tableNumber, 'seated');
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            padding: 0,
+                            cursor: 'pointer',
+                            fontSize: '11.5px',
+                            fontWeight: 700,
+                            color: '#FF5A1F',
+                          }}
+                        >
+                          Seat
+                        </button>
+                      ) : isOccupied ? (
+                        <button
+                          onClick={() => {
+                            updateTableStatus(t.tableNumber, 'bill_pending');
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            padding: 0,
+                            cursor: 'pointer',
+                            fontSize: '11.5px',
+                            fontWeight: 700,
+                            color: t.tableNumber === 2 || t.tableNumber === 4 ? '#10B981' : '#FF5A1F',
+                          }}
+                        >
+                          {t.tableNumber === 2 || t.tableNumber === 4 ? 'Free' : 'Bill'}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            updateTableStatus(t.tableNumber, 'vacant');
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            padding: 0,
+                            cursor: 'pointer',
+                            fontSize: '11.5px',
+                            fontWeight: 700,
+                            color: '#FF5A1F',
+                          }}
+                        >
+                          Paid
+                        </button>
+                      )}
                     </div>
                   </div>
                 );
               })}
             </div>
           </div>
+
+          {/* Dining Rush Hours */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8F0',
+              padding: '18px 20px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#0F172A', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                DINING RUSH HOURS
+              </span>
+              <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#334155' }}>
+                Peak: <span style={{ color: '#0F172A' }}>7:30 PM – 9:45 PM</span>
+              </span>
+            </div>
+
+            {/* Bars */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '90px', gap: '8px', padding: '0 8px' }}>
+              {[
+                { time: '11AM', h: 18, isPeak: false },
+                { time: '12PM', h: 36, isPeak: false },
+                { time: '1PM', h: 68, isPeak: true },
+                { time: '2PM', h: 54, isPeak: true },
+                { time: '3PM', h: 28, isPeak: false },
+                { time: '4PM', h: 22, isPeak: false },
+                { time: '5PM', h: 40, isPeak: false },
+                { time: '6PM', h: 58, isPeak: false },
+                { time: '7PM', h: 84, isPeak: true },
+                { time: '8PM', h: 96, isPeak: true },
+                { time: '9PM', h: 78, isPeak: true },
+                { time: '10PM', h: 42, isPeak: false },
+                { time: '11PM', h: 20, isPeak: false },
+              ].map((bar, idx) => (
+                <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+                  <div
+                    style={{
+                      width: '100%',
+                      maxWidth: '38px',
+                      height: `${bar.h}px`,
+                      backgroundColor: bar.isPeak ? '#FF5A1F' : '#E2E8F0',
+                      borderRadius: '4px 4px 0 0',
+                      transition: 'height 0.3s ease',
+                    }}
+                  />
+                  <span style={{ fontSize: '10px', fontWeight: 600, color: '#94A3B8', marginTop: '6px' }}>
+                    {bar.time}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Right Column: Live Feed & Quick Shortcuts */}
-        <div className="space-y-6">
-          {/* Quick Shortcuts */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-3">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Quick Actions
-            </h3>
-
-            <div className="grid grid-cols-2 gap-2.5">
+        {/* Right Column: Quick Actions + Live Diner Activity */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Quick Actions */}
+          <div>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>
+              QUICK ACTIONS
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
               <button
                 onClick={() => setActiveTab('menu')}
-                className="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition flex items-center gap-2.5"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 14px',
+                  borderRadius: '14px',
+                  backgroundColor: '#FFF7ED',
+                  border: '1px solid #FFEDD5',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'transform 0.1s ease',
+                }}
               >
-                <div className="w-8 h-8 rounded-lg bg-orange-50 text-[#FF5A1F] flex items-center justify-center flex-shrink-0">
-                  <Plus size={16} />
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    backgroundColor: '#FFFFFF',
+                    color: '#FF5A1F',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    boxShadow: '0 1px 2px rgba(255,90,31,0.1)',
+                  }}
+                >
+                  <Plus size={18} strokeWidth={2.8} />
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-800 block">Add Dish</span>
-                  <span className="text-[10px] text-slate-400">Menu catalog</span>
+                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F172A', lineHeight: 1.2 }}>
+                    Add Dish
+                  </div>
+                  <div style={{ fontSize: '10px', color: '#94A3B8', fontWeight: 500 }}>
+                    New catalog item
+                  </div>
                 </div>
               </button>
 
               <button
                 onClick={() => setActiveTab('offers')}
-                className="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition flex items-center gap-2.5"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '12px 14px',
+                  borderRadius: '14px',
+                  backgroundColor: '#FAF5FF',
+                  border: '1px solid #F3E8FF',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'transform 0.1s ease',
+                }}
               >
-                <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
-                  <Tag size={16} />
+                <div
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '8px',
+                    backgroundColor: '#FFFFFF',
+                    color: '#8B5CF6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    boxShadow: '0 1px 2px rgba(139,92,246,0.1)',
+                  }}
+                >
+                  <Percent size={15} strokeWidth={2.8} />
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-800 block">New Offer</span>
-                  <span className="text-[10px] text-slate-400">Stacked deals</span>
+                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F172A', lineHeight: 1.2 }}>
+                    New Offer
+                  </div>
+                  <div style={{ fontSize: '10px', color: '#94A3B8', fontWeight: 500 }}>
+                    Stacked deals
+                  </div>
                 </div>
               </button>
             </div>
           </div>
 
-          {/* Live Activity Stream */}
-          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-dot" />
-                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                  Live Diner Activity
-                </h3>
+          {/* Live Diner Activity */}
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8F0',
+              padding: '20px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span
+                  style={{
+                    width: '7px',
+                    height: '7px',
+                    borderRadius: '9999px',
+                    backgroundColor: '#FF5A1F',
+                    display: 'inline-block',
+                  }}
+                />
+                <span style={{ fontSize: '11.5px', fontWeight: 900, color: '#0F172A', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  LIVE DINER ACTIVITY
+                </span>
               </div>
-              <span className="text-[11px] text-slate-400 font-medium">Table QR Scans</span>
+              <SlidersHorizontal size={14} color="#94A3B8" style={{ cursor: 'pointer' }} />
             </div>
 
-            <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
-              {visits.map((v) => (
+            {/* Diner list */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '14px' }}>
+              {dinerActivity.map((item, index) => (
                 <div
-                  key={v.id}
-                  className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:bg-slate-100/60 transition"
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '6px 0',
+                  }}
                 >
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-extrabold text-slate-900">
-                        Table {v.tableNumber}
-                      </span>
-                      <span className="text-[11px] text-slate-500 font-medium">
-                        • {v.customerName}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[10px] text-slate-400">
-                      <span>{v.timestamp}</span>
-                      <span>•</span>
-                      <span className="font-semibold text-emerald-600">{v.paymentMethod}</span>
-                      {v.coinsEarned > 0 && (
-                        <span className="text-[#FF5A1F] font-bold">+{v.coinsEarned} coins</span>
-                      )}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '9999px',
+                        backgroundColor: '#3B82F6',
+                        display: 'inline-block',
+                        marginTop: '5px',
+                        flexShrink: 0,
+                      }}
+                    />
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#1E293B', lineHeight: 1.2 }}>
+                        {item.table} <span style={{ color: '#94A3B8', fontWeight: 400 }}>•</span> {item.diner}
+                      </div>
+                      <div style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, marginTop: '2px' }}>
+                        {item.time} <span style={{ color: '#CBD5E1' }}>•</span> {item.method}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="text-right">
-                    <div className="text-xs font-extrabold text-slate-900">
-                      ₹{v.amount.toLocaleString('en-IN')}
-                    </div>
-                    {v.discountApplied > 0 && (
-                      <div className="text-[10px] font-bold text-emerald-600">
-                        -₹{v.discountApplied}
-                      </div>
-                    )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 900, color: '#0F172A' }}>
+                      ₹{item.amount.toLocaleString('en-IN')}
+                    </span>
+                    <ChevronRight size={13} color="#94A3B8" />
                   </div>
                 </div>
               ))}

@@ -28,41 +28,41 @@ export const Sidebar: React.FC = () => {
 
   const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false);
 
-  const navItems: { id: NavTab; label: string; icon: React.ReactNode }[] = [
+  const navItems: { id: NavTab; label: string; icon: (isActive: boolean) => React.ReactNode }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
-      icon: <LayoutGrid size={20} strokeWidth={2.2} />,
+      icon: (active) => <LayoutGrid size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'menu',
       label: 'Menu Catalog',
-      icon: <UtensilsCrossed size={20} strokeWidth={1.8} />,
+      icon: (active) => <UtensilsCrossed size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'offers',
       label: 'Offers & Promos',
-      icon: <Tag size={20} strokeWidth={1.8} />,
+      icon: (active) => <Tag size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'tables',
       label: 'Table QR Standees',
-      icon: <QrCode size={20} strokeWidth={1.8} />,
+      icon: (active) => <QrCode size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'analytics',
       label: 'Analytics & Reviews',
-      icon: <BarChart3 size={20} strokeWidth={1.8} />,
+      icon: (active) => <BarChart3 size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'settlement',
       label: '0% Settlements',
-      icon: <Landmark size={20} strokeWidth={1.8} />,
+      icon: (active) => <Landmark size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
     {
       id: 'account',
       label: 'Store & Compliance',
-      icon: <Store size={20} strokeWidth={1.8} />,
+      icon: (active) => <Store size={18} color={active ? '#FF5A1F' : '#64748B'} strokeWidth={active ? 2.3 : 1.9} />,
     },
   ];
 
@@ -73,49 +73,129 @@ export const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-72 min-w-[288px] max-w-[288px] bg-white text-slate-800 flex flex-col h-screen border-r border-slate-200/90 flex-shrink-0 sticky top-0 z-30 select-none">
+    <aside
+      className="restrofe-sidebar"
+      style={{
+        width: '260px',
+        minWidth: '260px',
+        maxWidth: '260px',
+        backgroundColor: '#FFFFFF',
+        borderRight: '1px solid #E2E8F0',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        userSelect: 'none',
+        flexShrink: 0,
+      }}
+    >
       {/* Brand Header */}
-      <div className="p-6 pb-4 border-b border-slate-100">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-[#FF5A1F] flex items-center justify-center text-white font-black text-2xl shadow-xs flex-shrink-0">
+      <div
+        className="sidebar-header"
+        style={{
+          padding: '22px 20px 16px 20px',
+          borderBottom: '1px solid #F1F5F9',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              backgroundColor: '#FF5A1F',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#FFFFFF',
+              fontWeight: 900,
+              fontSize: '20px',
+              flexShrink: 0,
+              boxShadow: '0 3px 8px rgba(255, 90, 31, 0.28)',
+            }}
+          >
             R
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-slate-900 text-lg tracking-tight">Restrofe</span>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-orange-50 text-[#FF5A1F] border border-orange-200">
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontWeight: 800, fontSize: '17px', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                Restrofe
+              </span>
+              <span
+                style={{
+                  fontSize: '9.5px',
+                  fontWeight: 800,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '2px 6px',
+                  borderRadius: '5px',
+                  backgroundColor: '#FFF4EE',
+                  color: '#FF5A1F',
+                  border: '1px solid #FFE0D1',
+                  lineHeight: 1,
+                }}
+              >
                 PORTAL
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium truncate mt-0.5">
+            <p style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 500, margin: '2px 0 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {profile.name}
             </p>
           </div>
         </div>
 
         {/* Live Status Row */}
-        <div className="relative mt-3.5">
+        <div style={{ position: 'relative', marginTop: '14px' }}>
           <button
             onClick={() => setIsStatusMenuOpen(!isStatusMenuOpen)}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-slate-900 transition py-0.5 group"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: '12.5px',
+              fontWeight: 600,
+              color: '#1E293B',
+              background: 'transparent',
+              border: 'none',
+              padding: '0',
+              cursor: 'pointer',
+            }}
           >
             <span
-              className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                storeStatus === 'open'
-                  ? 'bg-emerald-500 pulse-dot'
-                  : storeStatus === 'busy'
-                  ? 'bg-amber-500'
-                  : 'bg-rose-500'
-              }`}
+              className="pulse-dot"
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '9999px',
+                backgroundColor: storeStatus === 'open' ? '#10B981' : storeStatus === 'busy' ? '#F59E0B' : '#EF4444',
+                display: 'inline-block',
+                flexShrink: 0,
+              }}
             />
-            <span className="font-semibold text-slate-800">
+            <span>
               {storeStatus === 'open' ? 'Open for Orders' : storeStatus === 'busy' ? 'Busy / Rush' : 'Store Closed'}
             </span>
           </button>
 
-          {/* Status dropdown */}
+          {/* Status Dropdown */}
           {isStatusMenuOpen && (
-            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
+            <div
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                marginTop: '6px',
+                width: '180px',
+                backgroundColor: '#FFFFFF',
+                borderRadius: '12px',
+                boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+                border: '1px solid #E2E8F0',
+                padding: '4px',
+                zIndex: 50,
+              }}
+            >
               {statusOptions.map((opt) => (
                 <button
                   key={opt.value}
@@ -123,10 +203,26 @@ export const Sidebar: React.FC = () => {
                     setStoreStatus(opt.value);
                     setIsStatusMenuOpen(false);
                   }}
-                  className="w-full px-3.5 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between"
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    textAlign: 'left',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: '#334155',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
                   <span>{opt.label}</span>
-                  {storeStatus === opt.value && <Check size={14} className="text-[#FF5A1F]" />}
+                  {storeStatus === opt.value && <Check size={13} color="#FF5A1F" />}
                 </button>
               ))}
             </div>
@@ -134,9 +230,19 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 px-4 py-3 space-y-1.5 overflow-y-auto">
-        <div className="px-3 pt-3 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">
+      {/* Navigation List */}
+      <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
+        <div
+          className="sidebar-section-title"
+          style={{
+            fontSize: '10.5px',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#94A3B8',
+            padding: '16px 20px 6px 20px',
+          }}
+        >
           MAIN MENU
         </div>
 
@@ -146,61 +252,189 @@ export const Sidebar: React.FC = () => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition-all group ${
-                isActive
-                  ? 'bg-[#FFF4EE] text-[#FF5A1F] font-bold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium'
-              }`}
+              className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '10px 14px',
+                margin: '2px 14px',
+                borderRadius: '12px',
+                fontSize: '13.5px',
+                fontWeight: isActive ? 700 : 500,
+                color: isActive ? '#FF5A1F' : '#475569',
+                backgroundColor: isActive ? '#FFF4EE' : 'transparent',
+                border: 'none',
+                width: 'calc(100% - 28px)',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease-in-out',
+                textAlign: 'left',
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = '#F8FAFC';
+                  e.currentTarget.style.color = '#0F172A';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#475569';
+                }
+              }}
             >
-              <span className={isActive ? 'text-[#FF5A1F]' : 'text-slate-400 group-hover:text-slate-600'}>
-                {item.icon}
-              </span>
-              <span className="truncate">{item.label}</span>
+              {item.icon(isActive)}
+              <span style={{ fontSize: '13.5px' }}>{item.label}</span>
             </button>
           );
         })}
 
         {/* Partner Tools */}
-        <div className="px-3 pt-6 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">
+        <div
+          className="sidebar-section-title"
+          style={{
+            fontSize: '10.5px',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#94A3B8',
+            padding: '20px 20px 6px 20px',
+          }}
+        >
           PARTNER TOOLS
         </div>
 
         <button
           onClick={triggerLiveVisit}
-          className="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition group"
+          className="sidebar-nav-item"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '10px 14px',
+            margin: '2px 14px',
+            borderRadius: '12px',
+            fontSize: '13.5px',
+            fontWeight: 500,
+            color: '#475569',
+            backgroundColor: 'transparent',
+            border: 'none',
+            width: 'calc(100% - 28px)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease-in-out',
+            textAlign: 'left',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#F8FAFC';
+            e.currentTarget.style.color = '#0F172A';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = '#475569';
+          }}
         >
-          <ShieldCheck size={20} strokeWidth={1.8} className="text-slate-400 group-hover:text-slate-600 flex-shrink-0" />
-          <span className="truncate">Simulate Table Scan</span>
+          <ShieldCheck size={18} color="#64748B" strokeWidth={1.9} />
+          <span style={{ fontSize: '13.5px' }}>Simulate Table Scan</span>
         </button>
 
         <button
           onClick={resetAllData}
-          className="w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition group"
+          className="sidebar-nav-item"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '10px 14px',
+            margin: '2px 14px',
+            borderRadius: '12px',
+            fontSize: '13.5px',
+            fontWeight: 500,
+            color: '#475569',
+            backgroundColor: 'transparent',
+            border: 'none',
+            width: 'calc(100% - 28px)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease-in-out',
+            textAlign: 'left',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#F8FAFC';
+            e.currentTarget.style.color = '#0F172A';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = '#475569';
+          }}
         >
-          <RotateCcw size={20} strokeWidth={1.8} className="text-slate-400 group-hover:text-slate-600 flex-shrink-0" />
-          <span className="truncate">Reset Demo Catalog</span>
+          <RotateCcw size={18} color="#64748B" strokeWidth={1.9} />
+          <span style={{ fontSize: '13.5px' }}>Reset Demo Catalog</span>
         </button>
       </nav>
 
       {/* Bottom 0% Commission Card */}
-      <div className="p-4 m-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/90 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-emerald-100/70 text-emerald-600 flex items-center justify-center flex-shrink-0">
-              <Percent size={12} strokeWidth={2.8} />
+      <div
+        className="bottom-commission-card"
+        style={{
+          margin: '16px',
+          padding: '14px 16px',
+          borderRadius: '16px',
+          backgroundColor: '#F8FAFC',
+          border: '1px solid #E2E8F0',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div
+              style={{
+                width: '22px',
+                height: '22px',
+                borderRadius: '6px',
+                backgroundColor: '#DCFCE7',
+                color: '#15803D',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <Percent size={12} strokeWidth={3} />
             </div>
-            <span className="text-xs font-bold text-slate-900">0% Commission</span>
+            <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F172A' }}>
+              0% Commission
+            </span>
           </div>
-          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/70">
+          <span
+            style={{
+              fontSize: '10px',
+              fontWeight: 700,
+              color: '#15803D',
+              backgroundColor: '#DCFCE7',
+              border: '1px solid #BBF7D0',
+              padding: '2px 8px',
+              borderRadius: '9999px',
+            }}
+          >
             Active
           </span>
         </div>
-        <p className="text-xs text-slate-500 leading-snug font-medium">
+
+        <p style={{ fontSize: '11px', color: '#64748B', fontWeight: 500, margin: '8px 0 0 0', lineHeight: 1.4 }}>
           Direct peer-to-merchant UPI payouts.
         </p>
-        <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-          <span className="text-slate-400 font-medium">HDFC Settlement</span>
-          <span className="font-bold text-[#FF5A1F]">24 Days Left</span>
+
+        <div
+          style={{
+            marginTop: '8px',
+            paddingTop: '8px',
+            borderTop: '1px solid #E2E8F0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontSize: '11px',
+          }}
+        >
+          <span style={{ color: '#94A3B8', fontWeight: 500 }}>HDFC Settlement</span>
+          <span style={{ color: '#FF5A1F', fontWeight: 700 }}>24 Days Left</span>
         </div>
       </div>
     </aside>

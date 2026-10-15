@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Bell,
   ChevronDown,
-  Sparkles,
+  ArrowUpRight,
 } from 'lucide-react';
 import { useRestaurant, NavTab } from '../context/RestaurantContext';
 
@@ -44,93 +44,151 @@ export const Header: React.FC = () => {
   const todayRevenue = visits.reduce((acc, v) => acc + v.amount, 0);
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between sticky top-0 z-20 flex-shrink-0">
+    <header
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '24px 32px 18px 32px',
+        backgroundColor: '#F8FAFC',
+        flexShrink: 0,
+      }}
+    >
       {/* Title */}
       <div>
-        <h1 className="text-lg font-extrabold text-slate-900 tracking-tight">
+        <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.2 }}>
           {TITLES[activeTab].title}
         </h1>
-        <p className="text-xs text-slate-500 font-medium">
+        <p style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, margin: '4px 0 0 0' }}>
           {TITLES[activeTab].subtitle}
         </p>
       </div>
 
       {/* Right controls */}
-      <div className="flex items-center gap-3.5">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
         {/* Live occupancy pill */}
-        <div className="hidden lg:flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs">
-          <div className="flex items-center gap-1.5 font-semibold text-slate-700">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-dot" />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '7px 16px',
+            borderRadius: '9999px',
+            backgroundColor: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            fontSize: '12.5px',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', fontWeight: 600, color: '#334155' }}>
+            <span
+              style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '9999px',
+                backgroundColor: '#10B981',
+                display: 'inline-block',
+              }}
+            />
             <span>{activeTablesCount} / {tables.length} Tables Active</span>
           </div>
-          <span className="text-slate-300">|</span>
-          <div className="font-semibold text-slate-700">
-            Today: <span className="text-[#FF5A1F] font-bold">₹{todayRevenue.toLocaleString('en-IN')}</span>
+          <span style={{ color: '#CBD5E1' }}>|</span>
+          <div style={{ fontWeight: 600, color: '#334155' }}>
+            Today: <span style={{ color: '#FF5A1F', fontWeight: 800 }}>₹{todayRevenue.toLocaleString('en-IN')}</span>
           </div>
         </div>
 
-        {/* Store Status Toggle Dropdown */}
-        <div className="relative group">
-          <button className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
-            storeStatus === 'open'
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-              : storeStatus === 'busy'
-              ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
-              : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
-          }`}>
-            <span className={`w-2 h-2 rounded-full ${
-              storeStatus === 'open' ? 'bg-emerald-500' : storeStatus === 'busy' ? 'bg-amber-500' : 'bg-rose-500'
-            }`} />
-            <span className="capitalize">{storeStatus === 'open' ? 'Accepting Orders' : storeStatus === 'busy' ? 'Rush Hour' : 'Closed'}</span>
-            <ChevronDown size={13} className="opacity-60" />
+        {/* Store Status Toggle Pill */}
+        <div style={{ position: 'relative' }} className="group">
+          <button
+            onClick={() => setStoreStatus(storeStatus === 'open' ? 'busy' : storeStatus === 'busy' ? 'closed' : 'open')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '7px 16px',
+              borderRadius: '9999px',
+              fontSize: '12.5px',
+              fontWeight: 700,
+              backgroundColor: storeStatus === 'open' ? '#ECFDF5' : storeStatus === 'busy' ? '#FFFBEB' : '#FEF2F2',
+              color: storeStatus === 'open' ? '#047857' : storeStatus === 'busy' ? '#B45309' : '#B91C1C',
+              border: `1px solid ${storeStatus === 'open' ? '#A7F3D0' : storeStatus === 'busy' ? '#FDE68A' : '#FECACA'}`,
+              cursor: 'pointer',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            }}
+          >
+            <span
+              style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '9999px',
+                backgroundColor: storeStatus === 'open' ? '#10B981' : storeStatus === 'busy' ? '#F59E0B' : '#EF4444',
+                display: 'inline-block',
+              }}
+            />
+            <span>{storeStatus === 'open' ? 'Accepting Orders' : storeStatus === 'busy' ? 'Rush Hour' : 'Closed'}</span>
+            <ChevronDown size={13} style={{ opacity: 0.7 }} />
           </button>
-
-          <div className="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-slate-200 py-1 hidden group-hover:block z-30">
-            <button
-              onClick={() => setStoreStatus('open')}
-              className="w-full text-left px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>Accepting Orders</span>
-            </button>
-            <button
-              onClick={() => setStoreStatus('busy')}
-              className="w-full text-left px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-            >
-              <span className="w-2 h-2 rounded-full bg-amber-500" />
-              <span>Rush Hour / Busy</span>
-            </button>
-            <button
-              onClick={() => setStoreStatus('closed')}
-              className="w-full text-left px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-            >
-              <span className="w-2 h-2 rounded-full bg-rose-500" />
-              <span>Store Closed</span>
-            </button>
-          </div>
         </div>
 
-        {/* Notifications */}
+        {/* Notifications Bell */}
         <button
           title="Notifications"
-          className="w-9 h-9 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 flex items-center justify-center transition relative"
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '9999px',
+            backgroundColor: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            color: '#475569',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            position: 'relative',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+          }}
         >
           <Bell size={16} />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-[#FF5A1F] rounded-full" />
+          <span
+            style={{
+              position: 'absolute',
+              top: '9px',
+              right: '9px',
+              width: '6px',
+              height: '6px',
+              backgroundColor: '#FF5A1F',
+              borderRadius: '9999px',
+            }}
+          />
         </button>
 
-        {/* Manager Avatar */}
-        <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-          <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center font-bold text-xs text-[#FF5A1F]">
+        {/* Manager Avatar Pill */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '9999px',
+              backgroundColor: '#FFEDD5',
+              border: '1px solid #FED7AA',
+              color: '#EA580C',
+              fontWeight: 800,
+              fontSize: '13px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             BH
           </div>
-          <div className="hidden md:block text-left">
-            <div className="text-xs font-bold text-slate-800 flex items-center gap-1 leading-tight">
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '2px', lineHeight: 1.1 }}>
               <span>Manager</span>
-              <Sparkles size={11} className="text-[#FF5A1F]" />
+              <ArrowUpRight size={12} color="#FF5A1F" />
             </div>
-            <div className="text-[10px] text-slate-400 font-medium truncate max-w-[100px]">
-              {profile.upiVpa}
+            <div style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 500, maxWidth: '110px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {profile.upiVpa || 'burgerhouse@hdf...'}
             </div>
           </div>
         </div>
