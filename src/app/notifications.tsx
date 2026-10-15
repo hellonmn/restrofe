@@ -65,7 +65,7 @@ export default function NotificationsScreen() {
           <View style={styles.emptyCircle}>
             <Ionicons name="notifications-off-outline" size={42} color={COLORS.primary} />
           </View>
-          <Text style={styles.emptyTitle}>You're all caught up</Text>
+          <Text style={styles.emptyTitle}>{"You're all caught up"}</Text>
           <Text style={styles.emptySub}>New offers and order updates will show up here.</Text>
         </View>
       ) : (

@@ -22,7 +22,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [tableNumber, setTableNumber] = useState('12');
+  const [tableNumber] = useState('12');
 
   const addToCart = (item: CartItem) => {
     setCart((prev) => {

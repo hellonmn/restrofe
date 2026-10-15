@@ -16,10 +16,11 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 import { useCart } from "@/context/cart";
-import { IMG, MENUS, REVIEWS, getRestaurant, type MenuItem } from "@/constants/catalog";
+import { useRestaurant } from "@/context/restaurant";
+import { IMG, REVIEWS, type MenuItem } from "@/constants/catalog";
 
 /* -------------------------------------------------------------------------- */
 /*  Theme + haptics (same as home screen)                                     */
@@ -148,23 +149,23 @@ export default function RestaurantDetail() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
+  const { restaurants, menus: dynamicMenus } = useRestaurant();
 
   const restId = first(params.id) || "r";
-  const known = getRestaurant(restId);
+  const known = restaurants.find((r) => r.id === restId);
   const name = first(params.name) || known?.name || "Italian Bites";
   const image = first(params.image) || known?.image || IMG.pizza;
   const rating = Number(first(params.rating) || known?.rating || 4.7);
   const reviews = first(params.reviews) || known?.reviews || "856";
   const mins = first(params.mins) || String(known?.mins ?? 25);
   const price = first(params.price) || known?.price || "₹200 for two";
-  const cuisines = (first(params.cuisines) || known?.cuisines.join("|") || "Italian|Pizza|Pasta")
-    .split("|")
-    .filter(Boolean);
+  const cuisinesStr = first(params.cuisines) || known?.cuisines.join("|") || "Italian|Pizza|Pasta";
+  const cuisines = useMemo(() => cuisinesStr.split("|").filter(Boolean), [cuisinesStr]);
 
   const menu = useMemo(() => {
-    const key = cuisines.find((c) => MENUS[c]) ?? "Pizza";
-    return MENUS[key];
-  }, [cuisines.join("|")]);
+    const key = cuisines.find((c) => dynamicMenus[c]) ?? "Pizza";
+    return dynamicMenus[key] || [];
+  }, [cuisines, dynamicMenus]);
 
   const [tab, setTab] = useState<TabKey>("Menu");
   const {

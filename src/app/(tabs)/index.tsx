@@ -23,7 +23,8 @@ import { PackIcon } from "@/components/pack-icon";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useCart } from "@/context/cart";
-import { DISHES, RESTAURANTS, type Dish, type Restaurant } from "@/constants/catalog";
+import { useRestaurant } from "@/context/restaurant";
+import { DISHES, type Dish } from "@/constants/catalog";
 import * as Haptics from "expo-haptics";
 
 /* -------------------------------------------------------------------------- */
@@ -302,6 +303,7 @@ export default function HomeScreen() {
     tabBarVisible,
     onScrollHideTabBar,
   } = useCart();
+  const { restaurants } = useRestaurant();
 
   const addDish = (d: Dish) => {
     fire("success");
@@ -345,7 +347,7 @@ export default function HomeScreen() {
 
   const visibleRestaurants = useMemo(
     () =>
-      RESTAURANTS.filter((r) => {
+      restaurants.filter((r) => {
         if (activeCat && !r.cuisines.includes(activeCat)) return false;
         if (activeFilters.includes("veg") && !r.veg) return false;
         if (activeFilters.includes("rating") && r.rating < 4.5) return false;
@@ -353,7 +355,7 @@ export default function HomeScreen() {
         if (activeFilters.includes("offers") && !r.offer) return false;
         return true;
       }),
-    [activeCat, activeFilters]
+    [restaurants, activeCat, activeFilters]
   );
 
   /* ---- banner scroll ---- */

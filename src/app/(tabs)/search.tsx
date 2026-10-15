@@ -14,9 +14,9 @@ import { PackIcon } from "@/components/pack-icon";
 import { useRouter } from "expo-router";
 
 import { useCart } from "@/context/cart";
+import { useRestaurant } from "@/context/restaurant";
 import {
   DISHES,
-  RESTAURANTS as PLACES,
   type Restaurant as Place,
 } from "@/constants/catalog";
 import {
@@ -48,6 +48,7 @@ const CUISINES = [
 export default function SearchScreen() {
   const router = useRouter();
   const { items, add, inc, dec, count, total } = useCart();
+  const { restaurants } = useRestaurant();
 
   const [query, setQuery] = useState("");
   const [recent, setRecent] = useState<string[]>(["Pizza", "Cold coffee"]);
@@ -57,13 +58,13 @@ export default function SearchScreen() {
   const placeResults = useMemo(
     () =>
       q
-        ? PLACES.filter(
+        ? restaurants.filter(
             (p) =>
               p.name.toLowerCase().includes(q) ||
               p.cuisines.some((c) => c.toLowerCase().includes(q))
           )
         : [],
-    [q]
+    [q, restaurants]
   );
 
   const dishResults = useMemo(
@@ -317,8 +318,8 @@ export default function SearchScreen() {
         {q.length > 0 && !hasResults && (
           <View style={styles.empty}>
             <Text style={{ fontSize: 48 }}>🔍</Text>
-            <Text style={styles.emptyTitle}>No results for "{query.trim()}"</Text>
-            <Text style={styles.emptySub}>Try a dish, a café or a cuisine like "pizza".</Text>
+            <Text style={styles.emptyTitle}>{'No results for "' + query.trim() + '"'}</Text>
+            <Text style={styles.emptySub}>{'Try a dish, a café or a cuisine like "pizza".'}</Text>
           </View>
         )}
       </ScrollView>

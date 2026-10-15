@@ -21,9 +21,9 @@ type KV = {
   setItem: (k: string, v: string) => Promise<void>;
 };
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 function getStorage(): KV | null {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { NativeModules, Platform } = require("react-native");
     if (Platform.OS !== "web") {
       const hasNative =
@@ -34,13 +34,13 @@ function getStorage(): KV | null {
         return null;
       }
     }
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const mod = require("@react-native-async-storage/async-storage");
     return (mod?.default ?? mod) as KV;
   } catch {
     return null;
   }
 }
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 /** Set to false while developing if you don't want to log in on every app reload. */
 export const AUTH_ENABLED = false;
@@ -99,20 +99,28 @@ export type Coupon = {
   title: string;
   desc: string;
   min: number;
-  kind: "percent" | "flat" | "freedel";
+  kind: "percent" | "flat" | "stacked" | "freedel";
   value: number;
+  stackedValue?: number;
   max?: number;
-  icon: string; // Ionicons name
+  icon: string; // Ionicons or PackIcon name
 };
 
 export const COUPONS: Coupon[] = [
   { code: "RESTRO60", title: "60% OFF up to ₹120", desc: "On orders above ₹149", min: 149, kind: "percent", value: 60, max: 120, icon: "pricetag" },
+  { code: "STACK50", title: "30% + 20% Stacked Discount", desc: "Team offer on bills above ₹499", min: 499, kind: "stacked", value: 30, stackedValue: 20, icon: "flame" },
+  { code: "BILL100", title: "₹100 OFF on ₹1,000 Bill", desc: "Table QR & Dine-in special", min: 1000, kind: "flat", value: 100, icon: "pricetag" },
   { code: "CAFE50", title: "Flat ₹50 OFF", desc: "On orders above ₹199", min: 199, kind: "flat", value: 50, icon: "cafe" },
   { code: "FREEDEL", title: "Free delivery", desc: "On orders above ₹299", min: 299, kind: "freedel", value: 0, icon: "bicycle" },
 ];
 
-export function evaluateCoupon(code: string | null, itemTotal: number, deliveryFee: number) {
-  const coupon = COUPONS.find((x) => x.code === code);
+export function evaluateCoupon(
+  code: string | null,
+  itemTotal: number,
+  deliveryFee: number,
+  customList: Coupon[] = COUPONS
+) {
+  const coupon = customList.find((x) => x.code === code);
   if (!coupon) return { coupon: undefined, discount: 0, valid: false, message: "" };
   if (itemTotal < coupon.min) {
     return {
@@ -125,6 +133,11 @@ export function evaluateCoupon(code: string | null, itemTotal: number, deliveryF
   let discount = 0;
   if (coupon.kind === "percent") {
     discount = Math.min(Math.round((itemTotal * coupon.value) / 100), coupon.max ?? Infinity);
+  } else if (coupon.kind === "stacked") {
+    const baseDiscount = Math.round((itemTotal * coupon.value) / 100);
+    const remaining = Math.max(0, itemTotal - baseDiscount);
+    const extraDiscount = Math.round((remaining * (coupon.stackedValue ?? 20)) / 100);
+    discount = Math.min(baseDiscount + extraDiscount, coupon.max ?? Infinity);
   } else if (coupon.kind === "flat") {
     discount = coupon.value;
   } else {

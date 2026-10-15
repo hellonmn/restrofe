@@ -18,6 +18,7 @@ import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 
 import { evaluateCoupon, useCart } from "@/context/cart";
+import { useRestaurant } from "@/context/restaurant";
 
 /* -------------------------------------------------------------------------- */
 /*  Theme + haptics                                                           */
@@ -167,6 +168,7 @@ export default function CartScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { list, count, total: itemTotal, inc, dec, placeOrder: saveOrder, payment, selectedAddress, couponCode, setCoupon } = useCart();
+  const { logVisit } = useRestaurant();
 
   const [ordered, setOrdered] = useState(false);
   const [paid, setPaid] = useState(0);
@@ -198,6 +200,14 @@ export default function CartScreen() {
     fire("success");
     setPaid(grandTotal);
     saveOrder(grandTotal);
+    logVisit({
+      customerName: "Diner (Online Checkout)",
+      phone: "+91 98765*****",
+      amount: grandTotal,
+      tableNumber: "Delivery",
+      status: "Verified",
+      method: (payment.label.includes("UPI") ? "UPI" : "Card") as any,
+    });
     setOrdered(true);
   };
 

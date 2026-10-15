@@ -27,6 +27,12 @@ export type Restaurant = {
   cuisines: string[];
   offer?: string;
   veg: boolean;
+  isOpen?: boolean;
+  address?: string;
+  phone?: string;
+  tablesCount?: number;
+  upiId?: string;
+  tagline?: string;
 };
 
 export const RESTAURANTS: Restaurant[] = [

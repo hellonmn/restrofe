@@ -13,7 +13,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { PackIcon } from "@/components/pack-icon";
 import { useRouter } from "expo-router";
 
-import { COUPONS, evaluateCoupon, useCart } from "@/context/cart";
+import { Coupon, evaluateCoupon, useCart } from "@/context/cart";
+import { useRestaurant } from "@/context/restaurant";
 import { COLORS, PressableScale, SHADOW, fire } from "@/components/restro-ui";
 
 const DELIVERY_FEE = 30; // keep in sync with cart.tsx
@@ -21,9 +22,26 @@ const DELIVERY_FEE = 30; // keep in sync with cart.tsx
 export default function OffersScreen() {
   const router = useRouter();
   const { couponCode, setCoupon, total, count } = useCart();
+  const { offers } = useRestaurant();
 
   const [manual, setManual] = useState("");
   const [error, setError] = useState("");
+
+  const activeCoupons: Coupon[] = React.useMemo(() => {
+    return offers
+      .filter((o) => o.active)
+      .map((o) => ({
+        code: o.code,
+        title: o.title,
+        desc: o.desc,
+        min: o.min,
+        kind: o.kind,
+        value: o.value,
+        stackedValue: o.stackedValue,
+        max: o.max,
+        icon: o.icon || "ticket",
+      }));
+  }, [offers]);
 
   const goBack = () => {
     fire("light");
@@ -43,7 +61,7 @@ export default function OffersScreen() {
   const applyManual = () => {
     const code = manual.trim().toUpperCase();
     if (!code) return;
-    if (!COUPONS.some((c) => c.code === code)) {
+    if (!activeCoupons.some((c) => c.code === code)) {
       fire("medium");
       setError("This code isn't valid. Check and try again.");
       return;
@@ -105,9 +123,9 @@ export default function OffersScreen() {
 
           <Text style={styles.section}>Available coupons</Text>
 
-          {COUPONS.map((c) => {
+          {activeCoupons.map((c) => {
             const on = couponCode === c.code;
-            const result = evaluateCoupon(c.code, total, DELIVERY_FEE);
+            const result = evaluateCoupon(c.code, total, DELIVERY_FEE, activeCoupons);
             const eligible = result.valid;
             return (
               <View key={c.code} style={[styles.card, on && styles.cardOn]}>

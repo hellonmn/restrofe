@@ -61,9 +61,9 @@ export default function LoginScreen() {
             <Ionicons name="phone-portrait-outline" size={30} color={COLORS.primary} />
           </View>
 
-          <Text style={styles.title}>What's your number?</Text>
+          <Text style={styles.title}>{"What's your number?"}</Text>
           <Text style={styles.sub}>
-            We'll send you a 4-digit OTP to verify your mobile number.
+            {"We'll send you a 4-digit OTP to verify your mobile number."}
           </Text>
 
           <View
