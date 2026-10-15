@@ -100,11 +100,12 @@ export const StandeeModal: React.FC = () => {
         >
           {/* Top Brand Header */}
           <div className="bg-gradient-to-br from-[#0F1115] via-[#171A21] to-[#0F1115] text-white p-6 space-y-2 border-b-4 border-[#FF5A1F]">
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#FF5A1F] flex items-center justify-center text-white font-black text-base shadow-sm">
-                R
-              </div>
-              <span className="font-extrabold text-lg tracking-tight">Restrofe</span>
+            <div className="flex items-center justify-center">
+              <img
+                src="/logo-light.png"
+                alt="Restrofe"
+                className="h-8 max-w-[170px] object-contain drop-shadow"
+              />
             </div>
 
             <div className="pt-2">

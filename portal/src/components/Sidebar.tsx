@@ -101,24 +101,18 @@ export const Sidebar: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div
+          <img
+            src="/icon.png"
+            alt="Restrofe"
             style={{
               width: '40px',
               height: '40px',
               borderRadius: '12px',
-              backgroundColor: '#FF5A1F',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF',
-              fontWeight: 900,
-              fontSize: '20px',
+              objectFit: 'cover',
               flexShrink: 0,
               boxShadow: '0 3px 8px rgba(255, 90, 31, 0.28)',
             }}
-          >
-            R
-          </div>
+          />
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontWeight: 800, fontSize: '17px', color: '#FFFFFF', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
