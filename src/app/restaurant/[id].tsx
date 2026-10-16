@@ -14,12 +14,12 @@ import {
   ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
+import { PackIcon } from "@/components/pack-icon";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCart } from "@/context/cart";
-import { IMG, MENUS, REVIEWS, getRestaurant, type MenuItem } from "@/constants/catalog";
+import { DISHES, IMG, MENUS, REVIEWS, getRestaurant, type MenuItem } from "@/constants/catalog";
 
 /* -------------------------------------------------------------------------- */
 /*  Theme + haptics (same as home screen)                                     */
@@ -160,11 +160,38 @@ export default function RestaurantDetail() {
   const cuisines = (first(params.cuisines) || known?.cuisines.join("|") || "Italian|Pizza|Pasta")
     .split("|")
     .filter(Boolean);
+  const highlightDish = first(params.highlightDish);
 
   const menu = useMemo(() => {
     const key = cuisines.find((c) => MENUS[c]) ?? "Pizza";
-    return MENUS[key];
-  }, [cuisines.join("|")]);
+    const base = MENUS[key] || [];
+    let items = [...base];
+
+    if (highlightDish) {
+      const existingIndex = items.findIndex(
+        (m) => m.name.toLowerCase() === highlightDish.toLowerCase()
+      );
+      if (existingIndex >= 0) {
+        const [found] = items.splice(existingIndex, 1);
+        items.unshift(found);
+      } else {
+        const d = DISHES.find(
+          (dish) => dish.name.toLowerCase() === highlightDish.toLowerCase()
+        );
+        if (d) {
+          items.unshift({
+            id: d.id,
+            name: d.name,
+            desc: d.desc || "Signature dish from this restaurant",
+            price: d.price,
+            image: d.image,
+            veg: d.veg,
+          });
+        }
+      }
+    }
+    return items;
+  }, [cuisines.join("|"), highlightDish]);
 
   const [tab, setTab] = useState<TabKey>("Menu");
   const {
@@ -187,6 +214,8 @@ export default function RestaurantDetail() {
       price: m.price,
       image: m.image,
       veg: m.veg,
+      restaurantId: restId,
+      restaurantName: name,
     });
   };
   const inc = (cid: string) => {
@@ -242,7 +271,7 @@ export default function RestaurantDetail() {
 
           <View style={[styles.heroActions, { top: insets.top + 8 }]}>
             <PressableScale haptic="none" scaleTo={0.9} onPress={goBack} style={styles.circleBtn}>
-              <Ionicons name="chevron-back" size={22} color={COLORS.text} />
+              <PackIcon name="chevron-back" size={22} color={COLORS.text} />
             </PressableScale>
             <View style={styles.row}>
               <PressableScale
@@ -263,8 +292,8 @@ export default function RestaurantDetail() {
                 }}
                 style={styles.circleBtn}
               >
-                <Ionicons
-                  name={liked ? "heart" : "heart-outline"}
+                <PackIcon
+                  name="heart"
                   size={21}
                   color={liked ? COLORS.red : COLORS.text}
                 />
@@ -275,13 +304,13 @@ export default function RestaurantDetail() {
                 onPress={onShare}
                 style={[styles.circleBtn, { marginLeft: 10 }]}
               >
-                <Ionicons name="share-outline" size={21} color={COLORS.text} />
+                <PackIcon name="share" size={21} color={COLORS.text} />
               </PressableScale>
             </View>
           </View>
 
           <View style={styles.timePill}>
-            <Ionicons name="time-outline" size={14} color={COLORS.text} />
+            <PackIcon name="clock" size={14} color={COLORS.text} />
             <Text style={styles.timeText}>{mins} min</Text>
           </View>
         </View>
@@ -291,7 +320,7 @@ export default function RestaurantDetail() {
           <Text style={styles.name}>{name}</Text>
 
           <View style={[styles.row, { marginTop: 6 }]}>
-            <Ionicons name="star" size={16} color={COLORS.star} />
+            <PackIcon name="star" size={16} color={COLORS.star} />
             <Text style={styles.ratingValue}>{rating}</Text>
             <Text style={styles.ratingCount}>({reviews} reviews)</Text>
           </View>
@@ -331,13 +360,28 @@ export default function RestaurantDetail() {
           {/* Menu */}
           {tab === "Menu" && (
             <View style={{ paddingTop: 18 }}>
-              <Text style={styles.sectionTitle}>Popular Items</Text>
+              <Text style={styles.sectionTitle}>
+                {highlightDish ? `Selected Dish & Menu` : "Popular Items"}
+              </Text>
               {menu.map((m) => {
                 const cid = `${restId}-${m.id}`;
                 const qty = cartItems[cid]?.qty ?? 0;
+                const isHighlighted =
+                  highlightDish && m.name.toLowerCase() === highlightDish.toLowerCase();
                 return (
-                  <View key={m.id} style={styles.menuCard}>
-                    <Image source={{ uri: m.image }} style={styles.menuImg} />
+                  <View
+                    key={m.id}
+                    style={[styles.menuCard, isHighlighted && styles.menuCardHighlighted]}
+                  >
+                    <View style={{ position: "relative" }}>
+                      <Image source={{ uri: m.image }} style={styles.menuImg} />
+                      {isHighlighted && (
+                        <View style={styles.highlightBadge}>
+                          <PackIcon name="star" size={9} color="#fff" />
+                          <Text style={styles.highlightBadgeText}>Selected</Text>
+                        </View>
+                      )}
+                    </View>
                     <View style={styles.menuBody}>
                       <View style={styles.row}>
                         <VegBadge veg={m.veg} />
@@ -355,18 +399,25 @@ export default function RestaurantDetail() {
                             haptic="none"
                             scaleTo={0.92}
                             onPress={() => add(m)}
-                            style={styles.addBtn}
+                            style={[styles.addBtn, isHighlighted && styles.addBtnHighlighted]}
                           >
-                            <Text style={styles.addText}>Add</Text>
+                            <Text
+                              style={[
+                                styles.addText,
+                                isHighlighted && { color: "#fff" },
+                              ]}
+                            >
+                              Add
+                            </Text>
                           </PressableScale>
                         ) : (
                           <View style={styles.stepper}>
                             <Pressable onPress={() => dec(cid)} hitSlop={8}>
-                              <Ionicons name="remove" size={18} color="#fff" />
+                              <PackIcon name="minus" size={18} color="#fff" />
                             </Pressable>
                             <Text style={styles.stepperQty}>{qty}</Text>
                             <Pressable onPress={() => inc(cid)} hitSlop={8}>
-                              <Ionicons name="add" size={18} color="#fff" />
+                              <PackIcon name="plus" size={18} color="#fff" />
                             </Pressable>
                           </View>
                         )}
@@ -386,11 +437,11 @@ export default function RestaurantDetail() {
                 <View style={{ marginLeft: 14 }}>
                   <View style={styles.row}>
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <Ionicons
+                      <PackIcon
                         key={i}
-                        name={i <= Math.round(rating) ? "star" : "star-outline"}
+                        name="star"
                         size={16}
-                        color={COLORS.star}
+                        color={i <= Math.round(rating) ? COLORS.star : COLORS.border}
                       />
                     ))}
                   </View>
@@ -412,7 +463,7 @@ export default function RestaurantDetail() {
                     </View>
                     <View style={styles.ratingPill}>
                       <Text style={styles.ratingPillText}>{r.rating}</Text>
-                      <Ionicons name="star" size={11} color="#fff" />
+                      <PackIcon name="star" size={11} color="#fff" />
                     </View>
                   </View>
                   <Text style={styles.reviewText}>{r.text}</Text>
@@ -432,7 +483,7 @@ export default function RestaurantDetail() {
               ].map((row) => (
                 <View key={row.label} style={styles.aboutRow}>
                   <View style={styles.aboutIcon}>
-                    <Ionicons name={row.icon as any} size={20} color={COLORS.primary} />
+                    <PackIcon name={row.icon as any} size={20} color={COLORS.primary} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.aboutLabel}>{row.label}</Text>
@@ -478,7 +529,7 @@ export default function RestaurantDetail() {
           </View>
           <View style={styles.row}>
             <Text style={styles.cartCta}>View cart</Text>
-            <Ionicons name="bag-handle" size={18} color="#fff" style={{ marginLeft: 8 }} />
+            <PackIcon name="bag" size={18} color="#fff" style={{ marginLeft: 8 }} />
           </View>
         </PressableScale>
       </Animated.View>
@@ -577,6 +628,32 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: COLORS.border,
     ...SHADOW.md,
+  },
+  menuCardHighlighted: {
+    borderColor: COLORS.primary,
+    borderWidth: 1.5,
+    backgroundColor: "#FFF9F5",
+    ...SHADOW.lg,
+  },
+  highlightBadge: {
+    position: "absolute",
+    top: 6,
+    left: 6,
+    backgroundColor: COLORS.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 6,
+    paddingVertical: 2.5,
+    borderRadius: 8,
+    gap: 3,
+  },
+  highlightBadgeText: {
+    color: "#fff",
+    fontSize: 9.5,
+    fontWeight: "900",
+  },
+  addBtnHighlighted: {
+    backgroundColor: COLORS.primary,
   },
   menuImg: { width: 96, height: 96, borderRadius: 16 },
   menuBody: { flex: 1, marginLeft: 12, justifyContent: "space-between" },

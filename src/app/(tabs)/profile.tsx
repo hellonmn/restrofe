@@ -11,13 +11,13 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { PackIcon } from "@/components/pack-icon";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
 import { useCart } from "@/context/cart";
 import { COLORS, PressableScale, SHADOW, fire } from "@/components/restro-ui";
 
-type IconName = string;
+type IconName = keyof typeof Ionicons.glyphMap;
 
 type Row = {
   icon: IconName;
@@ -28,7 +28,7 @@ type Row = {
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { orders, favList, selectedAddress, payment, user, logout: signOut, couponCode, notifs, unreadCount } = useCart();
+  const { orders, favList, selectedAddress, payment, user, logout: signOut, couponCode, notifs, unreadCount, walletBalance } = useCart();
 
   const [notifications, setNotifications] = useState(true);
   const [vegOnly, setVegOnly] = useState(false);
@@ -37,6 +37,7 @@ export default function ProfileScreen() {
     Alert.alert(title, "This screen is coming soon.", [{ text: "OK" }]);
 
   const account: Row[] = [
+    { icon: "wallet-outline", label: "Restrofe Wallet", sub: `Balance ₹${walletBalance}`, onPress: () => router.push("/wallet" as any) },
     { icon: "bag-handle-outline", label: "Your Orders", sub: "Track and reorder", onPress: () => router.push("/orders" as any) },
     { icon: "heart-outline", label: "Favourites", sub: "Places you saved", onPress: () => router.push("/favourites" as any) },
     { icon: "location-outline", label: "Saved Addresses", sub: selectedAddress ? `${selectedAddress.label} • ${selectedAddress.line}` : "Add an address", onPress: () => router.push("/addresses" as any) },
@@ -82,13 +83,13 @@ export default function ProfileScreen() {
         ]}
       >
         <View style={styles.rowIcon}>
-          <PackIcon name={r.icon} size={20} color={COLORS.primary} />
+          <Ionicons name={r.icon} size={20} color={COLORS.primary} />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.rowLabel}>{r.label}</Text>
           {r.sub ? <Text style={styles.rowSub}>{r.sub}</Text> : null}
         </View>
-        <PackIcon name="chevron-forward" size={18} color={COLORS.muted} />
+        <Ionicons name="chevron-forward" size={18} color={COLORS.muted} />
       </Pressable>
     ));
 
@@ -105,7 +106,7 @@ export default function ProfileScreen() {
         {/* Profile card */}
         <View style={styles.profileCard}>
           <View style={styles.avatar}>
-            <PackIcon name="user" size={34} color={COLORS.primary} />
+            <Ionicons name="person" size={34} color={COLORS.primary} />
           </View>
           <View style={{ flex: 1, marginLeft: 14 }}>
             <Text style={styles.name}>Foodie</Text>
@@ -119,7 +120,7 @@ export default function ProfileScreen() {
             onPress={() => soon("Edit profile")}
             style={styles.editBtn}
           >
-            <PackIcon name="edit" size={18} color={COLORS.primary} />
+            <Ionicons name="create-outline" size={18} color={COLORS.primary} />
           </PressableScale>
         </View>
 
@@ -128,7 +129,7 @@ export default function ProfileScreen() {
           {[
             { label: "Orders", value: String(orders.length) },
             { label: "Favourites", value: String(favList.length) },
-            { label: "Offers", value: "3" },
+            { label: "Wallet", value: `₹${walletBalance}` },
           ].map((s) => (
             <View key={s.label} style={styles.statCard}>
               <Text style={styles.statValue}>{s.value}</Text>
@@ -146,7 +147,7 @@ export default function ProfileScreen() {
         <View style={styles.group}>
           <View style={[styles.rowItem, styles.rowDivider]}>
             <View style={styles.rowIcon}>
-              <PackIcon name="bell" size={20} color={COLORS.primary} />
+              <Ionicons name="notifications-outline" size={20} color={COLORS.primary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Notifications</Text>
@@ -165,7 +166,7 @@ export default function ProfileScreen() {
           </View>
           <View style={styles.rowItem}>
             <View style={styles.rowIcon}>
-              <PackIcon name="leaf" size={20} color={COLORS.primary} />
+              <Ionicons name="leaf-outline" size={20} color={COLORS.primary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Veg only</Text>
@@ -190,7 +191,7 @@ export default function ProfileScreen() {
 
         {/* Logout */}
         <PressableScale haptic="none" scaleTo={0.97} onPress={logout} style={styles.logoutBtn}>
-          <PackIcon name="exit" size={20} color={COLORS.red} />
+          <Ionicons name="log-out-outline" size={20} color={COLORS.red} />
           <Text style={styles.logoutText}>Log out</Text>
         </PressableScale>
 

@@ -23,7 +23,7 @@ import { PackIcon } from "@/components/pack-icon";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useCart } from "@/context/cart";
-import { DISHES, RESTAURANTS, type Dish, type Restaurant } from "@/constants/catalog";
+import { DISHES, RESTAURANTS, getRestaurant, type Dish, type Restaurant } from "@/constants/catalog";
 import * as Haptics from "expo-haptics";
 
 /* -------------------------------------------------------------------------- */
@@ -303,17 +303,24 @@ export default function HomeScreen() {
     onScrollHideTabBar,
   } = useCart();
 
-  const addDish = (d: Dish) => {
-    fire("success");
-    cartAdd({ id: d.id, name: d.name, price: d.price, image: d.image, veg: d.veg });
-  };
-  const incDish = (id: string) => {
-    fire("light");
-    cartInc(id);
-  };
-  const decDish = (id: string) => {
-    fire("light");
-    cartDec(id);
+  const openDish = (d: Dish) => {
+    fire("select");
+    const r = getRestaurant(d.restaurantId);
+    if (!r) return;
+    router.push({
+      pathname: "/restaurant/[id]",
+      params: {
+        id: r.id,
+        name: r.name,
+        image: r.image,
+        rating: String(r.rating),
+        reviews: r.reviews,
+        mins: String(r.mins),
+        price: r.price,
+        cuisines: r.cuisines.join("|"),
+        highlightDish: d.name,
+      },
+    } as any);
   };
 
   /* ---- cart bar slide-in & position sync ---- */
@@ -518,73 +525,65 @@ export default function HomeScreen() {
           }}
         />
 
-        {/* 4 — Popular dishes */}
-        <SectionTitle title="Popular dishes" action="See all" style={{ marginTop: 6 }} />
+        {/* 4 — Signature dishes */}
+        <SectionTitle title="Signature dishes" action="See all" style={{ marginTop: 6 }} />
         <FlatList
           data={DISHES}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(i) => i.id}
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 26 }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 22 }}
           ItemSeparatorComponent={() => <View style={{ width: 14 }} />}
           renderItem={({ item }) => {
-            const qty = cartItems[item.id]?.qty ?? 0;
             return (
-              <View style={styles.dishCard}>
-                <View>
+              <PressableScale
+                haptic="select"
+                scaleTo={0.96}
+                style={styles.dishCard}
+                onPress={() => openDish(item)}
+              >
+                <View style={styles.dishImgWrap}>
                   <Image source={{ uri: item.image }} style={styles.dishImg} />
                   <LinearGradient
-                    colors={["transparent", "rgba(0,0,0,0.35)"]}
+                    colors={["transparent", "rgba(0,0,0,0.55)"]}
                     style={styles.dishShade}
                   />
-                  {/* ADD / stepper */}
-                  <View style={styles.addWrap}>
-                    {qty === 0 ? (
-                      <PressableScale
-                        haptic="none"
-                        scaleTo={0.92}
-                        onPress={() => addDish(item)}
-                        style={styles.addBtn}
-                      >
-                        <Text style={styles.addText}>ADD</Text>
-                        <PackIcon
-                          name="plus"
-                          size={14}
-                          color={COLORS.primary}
-                          style={styles.addPlus}
-                        />
-                      </PressableScale>
-                    ) : (
-                      <View style={styles.stepper}>
-                        <Pressable onPress={() => decDish(item.id)} hitSlop={8}>
-                          <PackIcon name="minus" size={18} color="#fff" />
-                        </Pressable>
-                        <Text style={styles.stepperQty}>{qty}</Text>
-                        <Pressable onPress={() => incDish(item.id)} hitSlop={8}>
-                          <PackIcon name="plus" size={18} color="#fff" />
-                        </Pressable>
-                      </View>
-                    )}
+
+                  {/* Rating badge */}
+                  <View style={styles.dishRatingBadge}>
+                    <Text style={styles.dishRatingText}>{item.rating}</Text>
+                    <PackIcon name="star" size={10} color="#fff" />
+                  </View>
+
+                  {/* Price pill */}
+                  <View style={styles.dishPricePill}>
+                    <Text style={styles.dishPricePillText}>₹{item.price}</Text>
                   </View>
                 </View>
 
                 <View style={styles.dishInfo}>
-                  <View style={styles.row}>
+                  <View style={styles.dishTitleRow}>
                     <VegBadge veg={item.veg} />
-                    <PackIcon
-                      name="star"
-                      size={12}
-                      color={COLORS.star}
-                      style={{ marginLeft: 8 }}
-                    />
-                    <Text style={styles.dishRating}>{item.rating}</Text>
+                    <Text style={styles.dishName} numberOfLines={1}>
+                      {item.name}
+                    </Text>
                   </View>
-                  <Text style={styles.dishName} numberOfLines={1}>
-                    {item.name}
-                  </Text>
-                  <Text style={styles.dishPrice}>₹{item.price}</Text>
+
+                  {/* Restaurant name */}
+                  <View style={styles.dishRestRow}>
+                    <PackIcon name="utensils" size={11} color={COLORS.primary} />
+                    <Text style={styles.dishRestName} numberOfLines={1}>
+                      {item.restaurantName}
+                    </Text>
+                  </View>
+
+                  {/* Explore & order CTA */}
+                  <View style={styles.exploreAction}>
+                    <Text style={styles.exploreActionText}>Explore & order</Text>
+                    <PackIcon name="chevron-right" size={10} color={COLORS.primary} />
+                  </View>
                 </View>
-              </View>
+              </PressableScale>
             );
           }}
         />
@@ -987,52 +986,99 @@ const styles = StyleSheet.create({
 
   /* dishes */
   dishCard: {
-    width: 156,
+    width: 172,
     backgroundColor: COLORS.card,
     borderRadius: 20,
-    paddingBottom: 14,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
     borderColor: COLORS.border,
-    ...SHADOW.md,
+    overflow: "hidden",
+    ...SHADOW.sm,
   },
-  dishImg: { width: "100%", height: 132, borderTopLeftRadius: 20, borderTopRightRadius: 20 },
+  dishImgWrap: {
+    width: "100%",
+    height: 122,
+    position: "relative",
+  },
+  dishImg: { width: "100%", height: "100%" },
   dishShade: {
     position: "absolute",
     left: 0,
     right: 0,
     bottom: 0,
-    height: 60,
+    height: 48,
   },
-  addWrap: { position: "absolute", left: 0, right: 0, bottom: -16, alignItems: "center" },
-  addBtn: {
-    width: 100,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: "#fff",
+  dishRatingBadge: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "#F0DCD0",
-    ...SHADOW.md,
+    backgroundColor: "rgba(0,0,0,0.68)",
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 12,
+    gap: 3,
   },
-  addText: { fontSize: 14.5, fontWeight: "900", color: COLORS.primary, letterSpacing: 0.5 },
-  addPlus: { position: "absolute", top: 3, right: 5 },
-  stepper: {
-    width: 100,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: COLORS.primary,
+  dishRatingText: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "800",
+  },
+  dishPricePill: {
+    position: "absolute",
+    bottom: 8,
+    left: 8,
+    backgroundColor: "rgba(255,255,255,0.95)",
+    paddingHorizontal: 7,
+    paddingVertical: 2.5,
+    borderRadius: 8,
+    ...SHADOW.sm,
+  },
+  dishPricePillText: {
+    color: COLORS.text,
+    fontSize: 11.5,
+    fontWeight: "900",
+  },
+  dishInfo: {
+    padding: 10,
+  },
+  dishTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  dishName: {
+    fontSize: 13,
+    fontWeight: "800",
+    color: COLORS.text,
+    flex: 1,
+  },
+  dishRestRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginTop: 4,
+  },
+  dishRestName: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: COLORS.subtext,
+    flex: 1,
+  },
+  exploreAction: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 10,
-    ...SHADOW.lg,
+    marginTop: 8,
+    paddingTop: 6,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: COLORS.border,
   },
-  stepperQty: { color: "#fff", fontSize: 15, fontWeight: "900" },
-  dishInfo: { paddingHorizontal: 12, paddingTop: 26 },
-  dishName: { fontSize: 14.5, fontWeight: "700", color: COLORS.text, marginTop: 6 },
-  dishPrice: { fontSize: 14, fontWeight: "800", color: COLORS.text, marginTop: 2 },
-  dishRating: { fontSize: 12, fontWeight: "700", color: COLORS.subtext, marginLeft: 3 },
+  exploreActionText: {
+    fontSize: 10.5,
+    fontWeight: "700",
+    color: COLORS.primary,
+  },
   vegBox: {
     width: 16,
     height: 16,

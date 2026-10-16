@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Animated,
   Image,
   Platform,
@@ -166,14 +167,20 @@ function BillRow({
 export default function CartScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { list, count, total: itemTotal, inc, dec, placeOrder: saveOrder, payment, selectedAddress, couponCode, setCoupon } = useCart();
+  const { list, count, total: itemTotal, inc, dec, placeOrder: saveOrder, payment, selectedAddress, couponCode, setCoupon, walletBalance } = useCart();
 
   const [ordered, setOrdered] = useState(false);
   const [paid, setPaid] = useState(0);
+  const [paidVia, setPaidVia] = useState("");
 
   const offer = evaluateCoupon(couponCode, itemTotal, DELIVERY_FEE);
   const discount = offer.valid ? offer.discount : 0;
   const grandTotal = itemTotal > 0 ? itemTotal + DELIVERY_FEE + PLATFORM_FEE - discount : 0;
+
+  // wallet checkout
+  const usingWallet = payment.id === "wallet";
+  const shortBy = usingWallet ? Math.max(0, grandTotal - walletBalance) : 0;
+  const insufficient = shortBy > 0;
 
   /* success pop animation */
   const pop = useRef(new Animated.Value(0)).current;
@@ -195,9 +202,26 @@ export default function CartScreen() {
   };
 
   const placeOrder = () => {
+    if (insufficient) {
+      fire("medium");
+      Alert.alert(
+        "Insufficient wallet balance",
+        `You need ₹${shortBy} more in your wallet to place this order.`,
+        [
+          { text: "Pay another way", onPress: () => router.push("/payments" as any) },
+          { text: "Add money", onPress: () => router.push("/wallet" as any) },
+        ]
+      );
+      return;
+    }
+    const ok = saveOrder(grandTotal, payment.id);
+    if (!ok) {
+      fire("medium");
+      return;
+    }
     fire("success");
     setPaid(grandTotal);
-    saveOrder(grandTotal);
+    setPaidVia(payment.label);
     setOrdered(true);
   };
 
@@ -225,7 +249,7 @@ export default function CartScreen() {
           <Text style={styles.successSub}>
             Your food is being prepared and will arrive in about 25 min.
           </Text>
-          <Text style={styles.successAmount}>Total paid: ₹{paid}</Text>
+          <Text style={styles.successAmount}>Total paid: ₹{paid} • {paidVia}</Text>
           <PressableScale
             haptic="medium"
             onPress={trackOrder}
@@ -407,11 +431,39 @@ export default function CartScreen() {
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.infoLabel}>Pay using</Text>
-              <Text style={styles.infoValue} numberOfLines={1}>{payment.label}</Text>
+              <Text
+                style={[styles.infoValue, insufficient && { color: COLORS.red }]}
+                numberOfLines={1}
+              >
+                {usingWallet
+                  ? `${payment.label} • ₹${walletBalance}${insufficient ? " (low)" : ""}`
+                  : payment.label}
+              </Text>
             </View>
             <Text style={styles.infoChange}>Change</Text>
           </Pressable>
         </View>
+
+        {/* Low wallet balance */}
+        {insufficient && (
+          <View style={styles.lowCard}>
+            <View style={styles.lowIcon}>
+              <Ionicons name="wallet-outline" size={20} color={COLORS.red} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.lowTitle}>Add ₹{shortBy} to pay with wallet</Text>
+              <Text style={styles.lowSub}>Or choose another payment method.</Text>
+            </View>
+            <PressableScale
+              haptic="medium"
+              scaleTo={0.94}
+              onPress={() => router.push("/wallet" as any)}
+              style={styles.lowBtn}
+            >
+              <Text style={styles.lowBtnText}>Add money</Text>
+            </PressableScale>
+          </View>
+        )}
 
         {/* Bill */}
         <View style={styles.billCard}>
@@ -567,6 +619,39 @@ const styles = StyleSheet.create({
   infoValue: { fontSize: 14.5, color: COLORS.text, fontWeight: "700", marginTop: 2 },
   infoChange: { fontSize: 13, fontWeight: "800", color: COLORS.primary },
   infoDivider: { height: StyleSheet.hairlineWidth, backgroundColor: COLORS.border, marginHorizontal: 14 },
+
+  /* low wallet */
+  lowCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FDECEC",
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#F8CFCF",
+  },
+  lowIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  lowTitle: { fontSize: 14, fontWeight: "800", color: COLORS.text },
+  lowSub: { fontSize: 12, color: COLORS.subtext, marginTop: 2 },
+  lowBtn: {
+    paddingHorizontal: 12,
+    height: 34,
+    borderRadius: 10,
+    backgroundColor: COLORS.red,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 8,
+  },
+  lowBtnText: { color: "#fff", fontSize: 12.5, fontWeight: "800" },
 
   /* bill */
   billCard: {

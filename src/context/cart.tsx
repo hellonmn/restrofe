@@ -7,6 +7,9 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { PackIcon } from "@/components/pack-icon";
+import { DISHES, getRestaurant } from "@/constants/catalog";
 
 /* --------------------------- persistence --------------------------------
  * Saves everything to the phone so login, cart, favourites, orders etc. survive
@@ -57,6 +60,8 @@ export type CartItem = {
   image: string;
   veg: boolean;
   qty: number;
+  restaurantId?: string;
+  restaurantName?: string;
 };
 
 export type Order = {
@@ -64,7 +69,31 @@ export type Order = {
   items: CartItem[];
   total: number;
   placedAt: number;
+  restaurantId?: string;
+  restaurantName?: string;
+  restaurantImage?: string;
+  address?: string;
+  paymentMethod?: string;
+  paidWith?: string;
+  status?: string;
+  discount?: number;
+  itemTotal?: number;
+  deliveryFee?: number;
 };
+
+export type WalletTxn = {
+  id: string;
+  type: "credit" | "debit";
+  title: string;
+  amount: number;
+  at: number;
+  orderId?: string;
+};
+
+export const WALLET_MIN_ADD = 100;
+export const WALLET_MAX_ADD = 10000;
+export const WALLET_BONUS_MIN = 500;
+export const WALLET_BONUS = 50;
 
 export type FavPlace = {
   id: string;
@@ -162,13 +191,18 @@ type CartContextValue = {
   list: CartItem[];
   count: number;
   total: number;
+  cartRestaurant: { id: string; name: string; image?: string } | null;
   add: (item: Omit<CartItem, "qty">) => void;
   inc: (id: string) => void;
   dec: (id: string) => void;
   clear: () => void;
   /* orders */
   orders: Order[];
-  placeOrder: (paidTotal: number) => void;
+  placeOrder: (paidTotal: number, extra?: Partial<Order> | string) => Order | undefined;
+  /* wallet */
+  walletBalance: number;
+  walletTxns: WalletTxn[];
+  addMoney: (amount: number) => void;
   /* favourites */
   favs: Record<string, FavPlace>;
   favList: FavPlace[];
@@ -202,6 +236,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   ]);
   const [selectedId, setSelectedId] = useState("a1");
   const [paymentId, setPaymentId] = useState("upi");
+  const [walletBalance, setWalletBalance] = useState<number>(250);
+  const [walletTxns, setWalletTxns] = useState<WalletTxn[]>(() => {
+    const now = Date.now();
+    const d = 86400000;
+    return [
+      {
+        id: "tx-init-1",
+        type: "credit",
+        title: "Welcome Bonus 🎉",
+        amount: 250,
+        at: now - 3 * d,
+      },
+    ];
+  });
   const [user, setUser] = useState<User | null>({ phone: "+91 9876543210" });
   const [tabBarVisible, setTabBarVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -264,6 +312,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           }
           if (d.selectedId !== undefined) setSelectedId(d.selectedId);
           if (d.paymentId) setPaymentId(d.paymentId);
+          if (typeof d.walletBalance === "number") setWalletBalance(d.walletBalance);
+          if (Array.isArray(d.walletTxns)) setWalletTxns(d.walletTxns);
           if (d.couponCode !== undefined) setCouponCode(d.couponCode);
           if (d.notifs) setNotifs(d.notifs);
         }
@@ -288,6 +338,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             STORAGE_KEY,
             JSON.stringify({
               user, items, orders, favs, addresses, selectedId, paymentId, couponCode, notifs,
+              walletBalance, walletTxns,
             })
           )
         ).catch(() => {});
@@ -296,14 +347,82 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     }, 300);
     return () => clearTimeout(t);
-  }, [hydrated, user, items, orders, favs, addresses, selectedId, paymentId, couponCode, notifs]);
+  }, [hydrated, user, items, orders, favs, addresses, selectedId, paymentId, couponCode, notifs, walletBalance, walletTxns]);
+
+  /* conflict dialog for single-restaurant rule */
+  const [conflict, setConflict] = useState<{
+    pendingItem: Omit<CartItem, "qty">;
+    currentRestaurantName: string;
+    newRestaurantName: string;
+  } | null>(null);
+
+  const cartRestaurant = useMemo(() => {
+    const list = Object.values(items);
+    if (list.length === 0) return null;
+    const withRest = list.find((i) => i.restaurantId);
+    if (withRest && withRest.restaurantId) {
+      const restData = getRestaurant(withRest.restaurantId);
+      return {
+        id: withRest.restaurantId,
+        name: withRest.restaurantName || restData?.name || "Restaurant",
+        image: restData?.image,
+      };
+    }
+    return null;
+  }, [items]);
 
   /* cart */
   const add = useCallback((item: Omit<CartItem, "qty">) => {
+    let enrichedItem = { ...item };
+    if (!enrichedItem.restaurantId) {
+      const match = DISHES.find(
+        (d) => d.id === item.id || d.name.toLowerCase() === item.name.toLowerCase()
+      );
+      if (match) {
+        enrichedItem.restaurantId = match.restaurantId;
+        enrichedItem.restaurantName = match.restaurantName;
+      }
+    }
+
+    const currentList = Object.values(itemsRef.current);
+    const existingRestId = currentList.find((i) => i.restaurantId)?.restaurantId;
+    const existingRestName =
+      currentList.find((i) => i.restaurantName)?.restaurantName || "previous restaurant";
+
+    if (
+      currentList.length > 0 &&
+      existingRestId &&
+      enrichedItem.restaurantId &&
+      existingRestId !== enrichedItem.restaurantId
+    ) {
+      setConflict({
+        pendingItem: enrichedItem,
+        currentRestaurantName: existingRestName,
+        newRestaurantName: enrichedItem.restaurantName || "this restaurant",
+      });
+      return;
+    }
+
     setItems((prev) => ({
       ...prev,
-      [item.id]: { ...item, qty: (prev[item.id]?.qty ?? 0) + 1 },
+      [enrichedItem.id]: { ...enrichedItem, qty: (prev[enrichedItem.id]?.qty ?? 0) + 1 },
     }));
+  }, []);
+
+  const confirmDiscardAndAdd = useCallback(() => {
+    if (!conflict) return;
+    const itemToAdd = conflict.pendingItem;
+    setItems({
+      [itemToAdd.id]: {
+        ...itemToAdd,
+        qty: 1,
+      },
+    });
+    setConflict(null);
+  }, [conflict]);
+
+  const cancelConflict = useCallback(() => {
+    setConflict(null);
   }, []);
 
   const inc = useCallback((id: string) => {
@@ -326,25 +445,120 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clear = useCallback(() => setItems({}), []);
 
   /* orders */
-  const placeOrder = useCallback((paidTotal: number) => {
-    const list = Object.values(itemsRef.current);
-    if (list.length === 0) return;
-    const order: Order = {
-      id: `RF${orderSeq.current++}`,
-      items: list,
-      total: paidTotal,
-      placedAt: Date.now(),
-    };
-    setOrders((o) => [order, ...o]);
-    setItems({});
-    setCouponCode(null);
+  const placeOrder = useCallback(
+    (paidTotal: number, extra?: Partial<Order> | string) => {
+      const list = Object.values(itemsRef.current);
+      if (list.length === 0) return undefined;
+
+      const extraObj: Partial<Order> =
+        typeof extra === "string" ? { paymentMethod: extra } : extra ?? {};
+
+      const curAddress = addresses.find((a) => a.id === selectedId);
+      const curPayment = PAYMENT_METHODS.find((p) => p.id === paymentId) ?? PAYMENT_METHODS[0];
+
+      const pMethod = extraObj.paymentMethod || curPayment.id;
+      const isWallet = pMethod === "wallet" || pMethod === "Wallets";
+
+      if (isWallet && walletBalance < paidTotal) {
+        return undefined;
+      }
+
+      const restId = extraObj.restaurantId || list[0]?.restaurantId || "1";
+      const restData = restId ? getRestaurant(restId) : undefined;
+      const restName =
+        extraObj.restaurantName ||
+        list[0]?.restaurantName ||
+        restData?.name ||
+        "The Burger House";
+
+      const order: Order = {
+        id: `RF${orderSeq.current++}`,
+        items: list,
+        total: paidTotal,
+        placedAt: Date.now(),
+        restaurantId: restId || "1",
+        restaurantName: restName,
+        restaurantImage: extraObj.restaurantImage || restData?.image || list[0]?.image || "",
+        address: extraObj.address || curAddress?.line || "Jaipur, Rajasthan",
+        paymentMethod: isWallet ? "Wallet" : (curPayment.label || "UPI"),
+        paidWith: isWallet ? "wallet" : (curPayment.id || "upi"),
+        status: "Preparing",
+        discount: extraObj.discount ?? 0,
+        deliveryFee: extraObj.deliveryFee ?? 30,
+        itemTotal: extraObj.itemTotal ?? list.reduce((s, i) => s + i.price * i.qty, 0),
+      };
+
+      if (isWallet) {
+        setWalletBalance((prev) => Math.max(0, prev - paidTotal));
+        setWalletTxns((prev) => [
+          {
+            id: `tx-order-${order.id}`,
+            type: "debit",
+            title: `Order #${order.id} payment`,
+            amount: paidTotal,
+            at: order.placedAt,
+            orderId: order.id,
+          },
+          ...prev,
+        ]);
+      }
+
+      setOrders((o) => [order, ...o]);
+      setItems({});
+      setCouponCode(null);
+      setNotifs((n) => [
+        {
+          id: `n-${order.id}`,
+          type: "order",
+          title: `Order #${order.id} placed`,
+          body: `₹${paidTotal} • ${restName} is preparing your food.`,
+          at: order.placedAt,
+          read: false,
+        },
+        ...n,
+      ]);
+      return order;
+    },
+    [addresses, selectedId, paymentId, walletBalance]
+  );
+
+  /* wallet */
+  const addMoney = useCallback((amount: number) => {
+    const now = Date.now();
+    const willGetBonus = amount >= WALLET_BONUS_MIN;
+    const bonus = willGetBonus ? WALLET_BONUS : 0;
+    const totalAdded = amount + bonus;
+
+    const newTxns: WalletTxn[] = [
+      {
+        id: `tx-${now}`,
+        type: "credit",
+        title: "Added to wallet",
+        amount,
+        at: now,
+      },
+    ];
+
+    if (willGetBonus) {
+      newTxns.push({
+        id: `tx-b-${now}`,
+        type: "credit",
+        title: "Cashback bonus 🎉",
+        amount: bonus,
+        at: now + 1,
+      });
+    }
+
+    setWalletBalance((prev) => prev + totalAdded);
+    setWalletTxns((prev) => [...newTxns, ...prev]);
+
     setNotifs((n) => [
       {
-        id: `n-${order.id}`,
-        type: "order",
-        title: `Order #${order.id} placed`,
-        body: `₹${paidTotal} • The restaurant is preparing your food.`,
-        at: order.placedAt,
+        id: `n-wallet-${now}`,
+        type: "info",
+        title: "Wallet updated 💳",
+        body: `₹${totalAdded} added to your Restrofe Wallet.`,
+        at: now,
         read: false,
       },
       ...n,
@@ -412,12 +626,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       list,
       count: list.reduce((n, i) => n + i.qty, 0),
       total: list.reduce((sum, i) => sum + i.qty * i.price, 0),
+      cartRestaurant,
       add,
       inc,
       dec,
       clear,
       orders,
       placeOrder,
+      walletBalance,
+      walletTxns,
+      addMoney,
       favs,
       favList: Object.values(favs),
       toggleFav,
@@ -437,11 +655,140 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     hydrated, couponCode, notifs, markAllRead, markRead,
     user, items, orders, favs, addresses, selectedId, paymentId,
     login, logout, add, inc, dec, clear, placeOrder, toggleFav, addAddress, removeAddress,
-    tabBarVisible, onScrollHideTabBar,
+    tabBarVisible, onScrollHideTabBar, cartRestaurant, walletBalance, walletTxns, addMoney,
   ]);
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      {conflict && (
+        <Modal
+          transparent
+          visible={Boolean(conflict)}
+          animationType="fade"
+          onRequestClose={cancelConflict}
+        >
+          <View style={conflictStyles.overlay}>
+            <View style={conflictStyles.dialog}>
+              <View style={conflictStyles.iconCircle}>
+                <PackIcon name="utensils" size={26} color="#FF5A1F" />
+              </View>
+              <Text style={conflictStyles.title}>Replace cart items?</Text>
+              <Text style={conflictStyles.desc}>
+                Your cart contains dishes from{" "}
+                <Text style={conflictStyles.bold}>
+                  {conflict.currentRestaurantName}
+                </Text>
+                . A single order can only be from one restaurant.
+                {"\n\n"}
+                Do you want to discard your cart and add items from{" "}
+                <Text style={conflictStyles.bold}>
+                  {conflict.newRestaurantName}
+                </Text>
+                ?
+              </Text>
+
+              <View style={conflictStyles.actions}>
+                <Pressable
+                  style={[conflictStyles.btn, conflictStyles.btnCancel]}
+                  onPress={cancelConflict}
+                >
+                  <Text style={conflictStyles.btnCancelText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={[conflictStyles.btn, conflictStyles.btnConfirm]}
+                  onPress={confirmDiscardAndAdd}
+                >
+                  <Text style={conflictStyles.btnConfirmText}>
+                    Discard & Add
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+    </CartContext.Provider>
+  );
 }
+
+const conflictStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.55)",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+  },
+  dialog: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    padding: 22,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 8,
+  },
+  iconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#FFEDE4",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 14,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#1C1C1E",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  desc: {
+    fontSize: 14,
+    color: "#6B6B73",
+    lineHeight: 20,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  bold: {
+    fontWeight: "700",
+    color: "#1C1C1E",
+  },
+  actions: {
+    flexDirection: "row",
+    width: "100%",
+    gap: 12,
+  },
+  btn: {
+    flex: 1,
+    height: 46,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  btnCancel: {
+    backgroundColor: "#F2F2F7",
+  },
+  btnCancelText: {
+    fontSize: 14.5,
+    fontWeight: "700",
+    color: "#6B6B73",
+  },
+  btnConfirm: {
+    backgroundColor: "#FF5A1F",
+  },
+  btnConfirmText: {
+    fontSize: 14.5,
+    fontWeight: "800",
+    color: "#FFFFFF",
+  },
+});
 
 export function useCart() {
   const ctx = useContext(CartContext);

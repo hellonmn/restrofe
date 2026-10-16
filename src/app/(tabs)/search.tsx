@@ -105,6 +105,25 @@ export default function SearchScreen() {
     } as any);
   };
 
+  const openDish = (d: (typeof DISHES)[0]) => {
+    remember(query);
+    const p = PLACES.find((pl) => pl.id === d.restaurantId) || PLACES[0];
+    router.push({
+      pathname: "/restaurant/[id]",
+      params: {
+        id: p.id,
+        name: p.name,
+        image: p.image,
+        rating: String(p.rating),
+        reviews: p.reviews,
+        mins: String(p.mins),
+        price: p.price,
+        cuisines: p.cuisines.join("|"),
+        highlightDish: d.name,
+      },
+    } as any);
+  };
+
   const hasResults = placeResults.length > 0 || dishResults.length > 0;
 
   return (
@@ -257,9 +276,14 @@ export default function SearchScreen() {
                   Dishes ({dishResults.length})
                 </Text>
                 {dishResults.map((d) => {
-                  const qty = items[d.id]?.qty ?? 0;
                   return (
-                    <View key={d.id} style={styles.dishCard}>
+                    <PressableScale
+                      key={d.id}
+                      haptic="light"
+                      scaleTo={0.98}
+                      onPress={() => openDish(d)}
+                      style={styles.dishCard}
+                    >
                       <Image source={{ uri: d.image }} style={styles.dishImg} />
                       <View style={{ flex: 1, marginLeft: 12 }}>
                         <View style={styles.row}>
@@ -268,44 +292,18 @@ export default function SearchScreen() {
                             {d.name}
                           </Text>
                         </View>
+                        {d.restaurantName ? (
+                          <Text style={styles.dishRestName} numberOfLines={1}>
+                            From {d.restaurantName}
+                          </Text>
+                        ) : null}
                         <Text style={styles.dishPrice}>₹{d.price}</Text>
                       </View>
-                      {qty === 0 ? (
-                        <PressableScale
-                          haptic="none"
-                          scaleTo={0.92}
-                          onPress={() => {
-                            fire("success");
-                            add({ id: d.id, name: d.name, price: d.price, image: d.image, veg: d.veg });
-                          }}
-                          style={styles.addBtn}
-                        >
-                          <Text style={styles.addText}>ADD</Text>
-                        </PressableScale>
-                      ) : (
-                        <View style={styles.stepper}>
-                          <Pressable
-                            hitSlop={8}
-                            onPress={() => {
-                              fire("light");
-                              dec(d.id);
-                            }}
-                          >
-                            <PackIcon name="minus" size={18} color="#fff" />
-                          </Pressable>
-                          <Text style={styles.stepperQty}>{qty}</Text>
-                          <Pressable
-                            hitSlop={8}
-                            onPress={() => {
-                              fire("light");
-                              inc(d.id);
-                            }}
-                          >
-                            <PackIcon name="plus" size={18} color="#fff" />
-                          </Pressable>
-                        </View>
-                      )}
-                    </View>
+                      <View style={styles.dishAction}>
+                        <Text style={styles.dishActionText}>View</Text>
+                        <PackIcon name="chevron-right" size={12} color={COLORS.primary} />
+                      </View>
+                    </PressableScale>
                   );
                 })}
               </>
@@ -451,7 +449,22 @@ const styles = StyleSheet.create({
   },
   dishImg: { width: 62, height: 62, borderRadius: 14 },
   dishName: { flex: 1, marginLeft: 8, fontSize: 15, fontWeight: "800", color: COLORS.text },
-  dishPrice: { marginTop: 6, fontSize: 14.5, fontWeight: "800", color: COLORS.text },
+  dishRestName: { fontSize: 12, color: COLORS.subtext, marginTop: 2, marginLeft: 8 },
+  dishPrice: { marginTop: 4, marginLeft: 8, fontSize: 14, fontWeight: "800", color: COLORS.text },
+  dishAction: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.primarySoft,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  dishActionText: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: COLORS.primary,
+    marginRight: 2,
+  },
   addBtn: {
     width: 78,
     height: 34,

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Pressable,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -16,7 +17,7 @@ import { COLORS, PressableScale, SHADOW, fire } from "@/components/restro-ui";
 export default function PaymentsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { paymentId, setPaymentId } = useCart();
+  const { paymentId, setPaymentId, walletBalance } = useCart();
 
   const goBack = () => {
     fire("light");
@@ -61,7 +62,20 @@ export default function PaymentsScreen() {
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.cardTitle}>{m.label}</Text>
-                <Text style={styles.cardSub}>{m.sub}</Text>
+                <Text style={styles.cardSub}>
+                  {m.id === "wallet" ? `Balance ₹${walletBalance}` : m.sub}
+                </Text>
+                {m.id === "wallet" && (
+                  <Pressable
+                    hitSlop={8}
+                    onPress={() => {
+                      fire("light");
+                      router.push("/wallet" as any);
+                    }}
+                  >
+                    <Text style={styles.walletLink}>+ Add money</Text>
+                  </Pressable>
+                )}
               </View>
               <View style={[styles.radio, on && styles.radioOn]}>
                 {on && <View style={styles.radioDot} />}
@@ -147,6 +161,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: { fontSize: 16, fontWeight: "800", color: COLORS.text },
   cardSub: { fontSize: 12.5, color: COLORS.subtext, marginTop: 3 },
+
+  walletLink: { marginTop: 6, fontSize: 13, fontWeight: "800", color: COLORS.primary },
 
   radio: {
     width: 24,
